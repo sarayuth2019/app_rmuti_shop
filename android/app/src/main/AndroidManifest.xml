@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app_rmuti_shop">
+    <uses-permission android:name="android.permission.INTERNET"/>
+
    <application
         android:label="app_rmuti_shop"
         android:icon="@mipmap/ic_launcher">
