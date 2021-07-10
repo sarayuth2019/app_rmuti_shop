@@ -290,12 +290,12 @@ class _SingUp extends State {
 
   void saveToDB() async {
     Map params = Map();
-    params['image'] = imageData.toString();
+    params['imageUser'] = imageData.toString();
     params['email'] = email.toString();
     params['password'] = password.toString();
     params['name'] = name.toString();
     params['surname'] = surname.toString();
-    params['phone_number'] = number.toString();
+    params['phoneNumber'] = number.toString();
 
     http.post(Uri.parse(urlSingUp), body: params).then((res) {
       print(res.body);

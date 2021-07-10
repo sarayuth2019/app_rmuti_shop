@@ -135,7 +135,7 @@ class _SingIn extends State {
       var _accountData = resData['data'];
       setState(() {
         if (_resStatus == 1) {
-          accountID = _accountData['id'];
+          accountID = _accountData['userId'];
           print("Account ID : ${accountID}");
           saveUserIDToDevice();
           Navigator.pushAndRemoveUntil(

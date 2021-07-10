@@ -53,42 +53,35 @@ class _EditAccount extends State {
         iconTheme: IconThemeData(color: Colors.teal),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text("Edit Market ID : ${accountData.id}",style: TextStyle(color: Colors.teal),),
+        title: Text(
+          "แก้ไขข้อมูลผู้ใช้",
+          style: TextStyle(color: Colors.teal),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Stack(
-              children: [
-                Container(
-                  child: image == null
+            GestureDetector(
+              onTap: () {
+                _showAlertSelectImage(context);
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Container(
+                  height: 200,
+                  width: 200,
+                  child: image == "null"
                       ? Icon(
-                          Icons.image,
-                          size: 30,
+                          Icons.person,
+                          size: 70,
+                          color: Colors.blueGrey,
                         )
                       : Image.memory(
                           base64Decode(image!),
                           fit: BoxFit.fill,
                         ),
-                  color: Colors.blueGrey,
-                  height: 270,
-                  width: double.infinity,
                 ),
-                Positioned(
-                  top: 10,
-                  right: 10,
-                  child: GestureDetector(
-                    onTap: () {
-                      print("edit image");
-                      _showAlertSelectImage(context);
-                    },
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.teal,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -215,13 +208,13 @@ class _EditAccount extends State {
   void saveToDB() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarEdit);
     Map params = Map();
-    params['id'] = accountData.id.toString();
-    params['image'] = image.toString();
+    params['userId'] = accountData.id.toString();
+    params['imageUser'] = image.toString();
     params['email'] = email.toString();
     params['password'] = accountData.password.toString();
     params['name'] = name.toString();
     params['surname'] = surname.toString();
-    params['phone_number'] = phone_number.toString();
+    params['phoneNumber'] = phone_number.toString();
 
     http.post(Uri.parse(urlSingUp), body: params).then((res) {
       print(res.body);

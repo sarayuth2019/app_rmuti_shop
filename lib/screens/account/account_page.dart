@@ -28,9 +28,21 @@ class _AccountPage extends State {
 
   @override
   Widget build(BuildContext context) {
-    print("Market ID : ${accountID.toString()}");
+    print("user ID : ${accountID.toString()}");
     // TODO: implement build
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            TextButton(
+                onPressed: logout,
+                child: Text(
+                  "ออกจากระบบ",
+                  style: TextStyle(color: Colors.teal,fontWeight: FontWeight.bold),
+                ))
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.teal,
           child: Icon(Icons.edit),
@@ -51,14 +63,22 @@ class _AccountPage extends State {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      child: Image.memory(
-                        base64Decode(snapshot.data.image),
-                        fit: BoxFit.fill,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        height: 200,
+                        width: 200,
+                        child: snapshot.data.image == "null"
+                            ? Icon(
+                          Icons.person,
+                          size: 70,
+                          color: Colors.blueGrey,
+                        )
+                            : Image.memory(
+                          base64Decode(snapshot.data.image!),
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                      color: Colors.blueGrey,
-                      height: 270,
-                      width: double.infinity,
                     ),
                     SizedBox(
                       height: 15,
@@ -105,11 +125,6 @@ class _AccountPage extends State {
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: Colors.teal),
-                      onPressed: logout,
-                      child: Text("ออกจากระบบ"),
-                    )
                   ],
                 ),
               );
@@ -123,19 +138,19 @@ class _AccountPage extends State {
     params['id'] = accountID.toString();
     await http.post(Uri.parse(urlSendAccountById), body: params).then((res) {
       print("Send Market Data...");
+      print(res.body);
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _dataAccount = _jsonRes['data'];
       print("data Market : ${_dataAccount.toString()}");
-
       _AccountData = AccountData(
-          _dataAccount['id'],
+          _dataAccount['userId'],
           _dataAccount['password'],
           _dataAccount['name'],
           _dataAccount['surname'],
           _dataAccount['email'],
-          _dataAccount['phone_number'],
+          _dataAccount['phoneNumber'],
           _dataAccount['dateRegister'],
-          _dataAccount['image']);
+          _dataAccount['imageUser']);
       print("market data : ${_AccountData}");
     });
     return _AccountData!;
@@ -148,7 +163,6 @@ class _AccountPage extends State {
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
   }
-
 }
 
 class AccountData {
