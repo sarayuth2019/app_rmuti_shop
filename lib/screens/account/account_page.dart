@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/account/edit_account_page.dart';
 import 'package:app_rmuti_shop/screens/sing_in_up/sing_in.dart';
@@ -8,27 +9,30 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountPage extends StatefulWidget {
-  AccountPage(this.accountID);
+  AccountPage(this.userID, this.token);
 
-  final accountID;
+  final userID;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _AccountPage(accountID);
+    return _AccountPage(userID, token);
   }
 }
 
 class _AccountPage extends State {
-  _AccountPage(this.accountID);
+  _AccountPage(this.userID, this.token);
 
-  final accountID;
-  final String urlSendAccountById = "${Config.API_URL}/User/list/id";
-  AccountData? _AccountData;
+  final userID;
+  final token;
+
+  final String urlSendAccountById = "${Config.API_URL}/User/list";
+  UserData? _userData;
 
   @override
   Widget build(BuildContext context) {
-    print("user ID : ${accountID.toString()}");
+    print("user ID : ${userID.toString()}");
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
@@ -39,7 +43,8 @@ class _AccountPage extends State {
                 onPressed: logout,
                 child: Text(
                   "ออกจากระบบ",
-                  style: TextStyle(color: Colors.teal,fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.teal, fontWeight: FontWeight.bold),
                 ))
           ],
         ),
@@ -50,7 +55,7 @@ class _AccountPage extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EditAccount(_AccountData)));
+                    builder: (context) => EditAccount(_userData,token)));
           },
         ),
         body: FutureBuilder(
@@ -70,14 +75,14 @@ class _AccountPage extends State {
                         width: 200,
                         child: snapshot.data.image == "null"
                             ? Icon(
-                          Icons.person,
-                          size: 70,
-                          color: Colors.blueGrey,
-                        )
+                                Icons.person,
+                                size: 70,
+                                color: Colors.blueGrey,
+                              )
                             : Image.memory(
-                          base64Decode(snapshot.data.image!),
-                          fit: BoxFit.fill,
-                        ),
+                                base64Decode(snapshot.data.image!),
+                                fit: BoxFit.fill,
+                              ),
                       ),
                     ),
                     SizedBox(
@@ -100,14 +105,6 @@ class _AccountPage extends State {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "ชื่อผู้ใช้ : ${snapshot.data.name} ${snapshot.data.surname}",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
                                 "อีเมล : ${snapshot.data.email}",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
@@ -116,7 +113,15 @@ class _AccountPage extends State {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                "เบอร์ติดต่อ : ${snapshot.data.phone_number}",
+                                "ชื่อผู้ใช้ : ${snapshot.data.name}  ${snapshot.data.surname}",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "เบอร์ติดต่อ : ${snapshot.data.phoneNumber}",
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
@@ -133,48 +138,48 @@ class _AccountPage extends State {
         ));
   }
 
-  Future<AccountData> sendDataMarketByUser() async {
-    Map params = Map();
-    params['id'] = accountID.toString();
-    await http.post(Uri.parse(urlSendAccountById), body: params).then((res) {
-      print("Send Market Data...");
+  Future<UserData> sendDataMarketByUser() async {
+    print("Send user Data...");
+    await http.post(Uri.parse(urlSendAccountById), headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       print(res.body);
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _dataAccount = _jsonRes['data'];
-      print("data Market : ${_dataAccount.toString()}");
-      _AccountData = AccountData(
-          _dataAccount['userId'],
-          _dataAccount['password'],
-          _dataAccount['name'],
-          _dataAccount['surname'],
-          _dataAccount['email'],
-          _dataAccount['phoneNumber'],
-          _dataAccount['dateRegister'],
-          _dataAccount['imageUser']);
-      print("market data : ${_AccountData}");
+      var _dataUser = _jsonRes['data'];
+      print("data User : ${_dataUser.toString()}");
+      _userData = UserData(
+          _dataUser['userId'],
+          _dataUser['password'],
+          _dataUser['name'],
+          _dataUser['surname'],
+          _dataUser['email'],
+          _dataUser['phoneNumber'],
+          _dataUser['dateRegister'],
+          _dataUser['imageUser']);
+      print("user data : ${_userData}");
     });
-    return _AccountData!;
+    return _userData!;
   }
 
   Future logout() async {
-    final SharedPreferences _accountID = await SharedPreferences.getInstance();
-    _accountID.clear();
-    print("account logout ! ${_accountID.toString()}");
+    final SharedPreferences _userData = await SharedPreferences.getInstance();
+    _userData.clear();
+    print("user logout ! ${_userData.toString()}");
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
   }
 }
 
-class AccountData {
+class UserData {
   final int id;
   final String password;
   final String name;
   final String surname;
   final String email;
-  final String phone_number;
+  final String phoneNumber;
   final String dateRegister;
-  final String image;
+  final String? image;
 
-  AccountData(this.id, this.password, this.name, this.surname, this.email,
-      this.phone_number, this.dateRegister, this.image);
+  UserData(this.id, this.password, this.name, this.surname, this.email,
+      this.phoneNumber, this.dateRegister, this.image);
 }

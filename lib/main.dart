@@ -10,21 +10,23 @@ void main() =>
     runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SingIn()));
 
 class MainPage extends StatefulWidget {
-  MainPage(this.accountID);
+  MainPage(this.accountID,this.token);
 
   final int accountID;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _MainPage(accountID);
+    return _MainPage(accountID,token);
   }
 }
 
 class _MainPage extends State {
-  _MainPage(this.accountID);
+  _MainPage(this.userID,this.token);
 
-  final int accountID;
+  final int userID;
+  final token;
 
   final testSnackBar = SnackBar(content: Text("เทสๆสแนคบา"));
   PageController _pageController = PageController();
@@ -34,7 +36,7 @@ class _MainPage extends State {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Market account ID : ${accountID.toString()}");
+    print("Market account ID : ${userID.toString()}");
   }
 
   @override
@@ -45,9 +47,9 @@ class _MainPage extends State {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          HomePage(accountID),
-          NotifyPage(accountID),
-          AccountPage(accountID)
+          HomePage(userID,token),
+          NotifyPage(userID),
+          AccountPage(userID,token)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

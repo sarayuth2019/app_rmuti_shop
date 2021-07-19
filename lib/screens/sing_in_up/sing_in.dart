@@ -20,9 +20,11 @@ class _SingIn extends State {
       SnackBar(content: Text("กำลังเข้าสู้ระบบ กรุณารอซักครู่..."));
   final snackBarSingInFail =
       SnackBar(content: Text("กรุณาตรวจสอบ Email หรือ Password"));
-  final urlSingIn = "${Config.API_URL}/User/Login";
+  final urlSingIn = "${Config.API_URL}/authorizeShop";
 
-  int? accountID;
+  int? userID;
+  var token;
+
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -130,19 +132,20 @@ class _SingIn extends State {
     params['email'] = email.text;
     params['password'] = password.text;
     http.post(Uri.parse(urlSingIn), body: params).then((res) {
+      print(res);
       Map resData = jsonDecode(res.body) as Map;
-      var _resStatus = resData['status'];
-      var _accountData = resData['data'];
+      var _userData = resData['data'];
       setState(() {
-        if (_resStatus == 1) {
-          accountID = _accountData['userId'];
-          print("Account ID : ${accountID}");
+        if (_userData == 1) {
+          userID = resData['userId'];
+          token = resData['token'];
+          print("User ID : ${userID}");
           saveUserIDToDevice();
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => MainPage(accountID!)),
+              MaterialPageRoute(builder: (context) => MainPage(userID!, token)),
               (route) => false);
-        } else if (_resStatus == 0) {
+        } else if (_userData == 0) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarSingInFail);
         }
       });
@@ -150,21 +153,24 @@ class _SingIn extends State {
   }
 
   Future saveUserIDToDevice() async {
-    final SharedPreferences _accountID = await SharedPreferences.getInstance();
-    _accountID.setInt('accountID', accountID!);
-    print("save accountID to device : aid ${_accountID.toString()}");
+    final SharedPreferences _userData = await SharedPreferences.getInstance();
+    _userData.setInt('userID', userID!);
+    _userData.setString('token', token);
+    print("save accountID to device : aid ${_userData.toString()}");
   }
 
   Future autoLogin() async {
-    final SharedPreferences _accountID = await SharedPreferences.getInstance();
-    final accountIDInDevice = _accountID.getInt('accountID');
-    if (accountIDInDevice != null) {
+    final SharedPreferences _userData = await SharedPreferences.getInstance();
+    final _userIDInDevice = _userData.getInt('userID');
+    final _tokenInDevice = _userData.getString('token');
+    if (_userIDInDevice != null) {
       setState(() {
-        accountID = accountIDInDevice;
-        print("account login future: accountID ${accountID.toString()}");
+        userID = _userIDInDevice;
+        token = _tokenInDevice;
+        print("account login future: accountID ${userID.toString()}");
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MainPage(accountID!)),
+            MaterialPageRoute(builder: (context) => MainPage(userID!, token)),
             (route) => false);
       });
     } else {

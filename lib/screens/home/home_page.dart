@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/home/joinGroup_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,21 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  HomePage(this.accountID);
+  HomePage(this.userID, this.token);
 
-  final accountID;
+  final userID;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _HomePage(accountID);
+    return _HomePage(userID, token);
   }
 }
 
 class _HomePage extends State {
-  _HomePage(this.accountID);
+  _HomePage(this.userID, this.token);
 
-  final accountID;
+  final userID;
+  final token;
 
   final urlListAllItems = "${Config.API_URL}/Item/list";
   final snackBarOnFall = SnackBar(content: Text("ผิดพลาด !"));
@@ -91,7 +94,7 @@ class _HomePage extends State {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          "${snapshot.data[index].deal_begin} - ${snapshot.data[index].deal_final}",
+                                          "${snapshot.data[index].dealBegin} - ${snapshot.data[index].dealFinal}",
                                           style: TextStyle(color: Colors.white),
                                         )
                                       ],
@@ -108,13 +111,13 @@ class _HomePage extends State {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "ราคา ${snapshot.data[index].price_sell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].count_request} มีคนลงแล้ว ${snapshot.data[index].count}",
+                                          "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         Container(
                                           child: snapshot.data[index].count ==
                                                   snapshot
-                                                      .data[index].count_request
+                                                      .data[index].countRequest
                                               ? Container()
                                               : Container(
                                                   height: 20,
@@ -167,10 +170,10 @@ class _HomePage extends State {
   }
 
   Future<List<_Items>> listItemByUser() async {
-    Map params = Map();
     List<_Items> listItem = [];
-    params['user'] = accountID.toString();
-    await http.get(Uri.parse(urlListAllItems)).then((res) {
+    await http.get(Uri.parse(urlListAllItems), headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
@@ -185,12 +188,12 @@ class _HomePage extends State {
           i['priceSell'],
           i['count'],
           i['countRequest'],
-          i['userId'],
+          i['marketId'],
           i['dateBegin'],
           i['dateFinal'],
           i['dealBegin'],
           i['dealFinal'],
-          i['date'],
+          i['createDate'],
         );
         listItem.insert(0, _items);
       }
@@ -206,14 +209,14 @@ class _Items {
   final String image;
   final int group;
   final int price;
-  final int price_sell;
+  final int priceSell;
   final int count;
-  final int count_request;
-  final int user;
-  final String date_begin;
-  final String date_final;
-  final String deal_begin;
-  final String deal_final;
+  final int countRequest;
+  final int marketID;
+  final String dateBegin;
+  final String dateFinal;
+  final String dealBegin;
+  final String dealFinal;
   final String date;
 
   _Items(
@@ -222,13 +225,13 @@ class _Items {
       this.image,
       this.group,
       this.price,
-      this.price_sell,
+      this.priceSell,
       this.count,
-      this.count_request,
-      this.user,
-      this.date_begin,
-      this.date_final,
-      this.deal_begin,
-      this.deal_final,
+      this.countRequest,
+      this.marketID,
+      this.dateBegin,
+      this.dateFinal,
+      this.dealBegin,
+      this.dealFinal,
       this.date);
 }

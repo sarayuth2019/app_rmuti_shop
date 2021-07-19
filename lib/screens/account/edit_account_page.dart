@@ -7,22 +7,25 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class EditAccount extends StatefulWidget {
-  EditAccount(this.accountData);
+  EditAccount(this.userData, this.token);
 
-  final accountData;
+  final userData;
+  final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _EditAccount(accountData);
+    return _EditAccount(userData, token);
   }
 }
 
 class _EditAccount extends State {
-  _EditAccount(this.accountData);
+  _EditAccount(this.userData, this.token);
 
-  var accountData;
-  final urlSingUp = "${Config.API_URL}/User/update";
+  final userData;
+  final token;
+
+  final urlUpDate = "${Config.API_URL}/User/update";
   final snackBarEdit = SnackBar(content: Text("กำลังบันทึกการแก้ไข..."));
   final snackBarEditSuccess = SnackBar(content: Text("แก้ไขสำเร็จ"));
   final snackBarEditFall = SnackBar(content: Text("แก้ไขผิดพลาด"));
@@ -30,7 +33,7 @@ class _EditAccount extends State {
   String? name;
   String? surname;
   String? email;
-  String? phone_number;
+  String? phoneNumber;
   String? image;
   File? imageFile;
 
@@ -38,11 +41,11 @@ class _EditAccount extends State {
   void initState() {
     // TODO: implement initState
     super.initState();
-    name = accountData.name;
-    surname = accountData.surname;
-    email = accountData.email;
-    phone_number = accountData.phone_number;
-    image = accountData.image;
+    name = userData.name;
+    surname = userData.surname;
+    email = userData.email;
+    phoneNumber = userData.phoneNumber;
+    image = userData.image;
   }
 
   @override
@@ -90,7 +93,7 @@ class _EditAccount extends State {
                   TextField(
                     maxLength: 32,
                     decoration: InputDecoration(
-                        hintText: " ชื่อผู้ใช้ : ${accountData.name}"),
+                        hintText: " ชื่อผู้ใช้ : ${userData.name}"),
                     onChanged: (text) {
                       setState(() {
                         name = text;
@@ -100,7 +103,7 @@ class _EditAccount extends State {
                   TextField(
                     maxLength: 32,
                     decoration: InputDecoration(
-                        hintText: " นามสกุล : ${accountData.surname}"),
+                        hintText: " นามสกุล : ${userData.surname}"),
                     onChanged: (text) {
                       setState(() {
                         surname = text;
@@ -111,11 +114,10 @@ class _EditAccount extends State {
                     maxLength: 10,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                        hintText:
-                            " เบอร์โทรติดต่อ : ${accountData.phone_number}"),
+                        hintText: " เบอร์โทรติดต่อ : ${userData.phoneNumber}"),
                     onChanged: (text) {
                       setState(() {
-                        phone_number = text;
+                        phoneNumber = text;
                       });
                     },
                   ),
@@ -197,26 +199,28 @@ class _EditAccount extends State {
   }
 
   void editMarketData() {
-    print("account ID : ${accountData.id.toString()}");
+    print("account ID : ${userData.id.toString()}");
     print("ชื่อ : ${name.toString()}");
     print("นามสกุล : ${surname.toString()}");
     print("อีเมล : ${email.toString()}");
-    print("เบอร์โทร : ${phone_number.toString()}");
+    print("เบอร์โทร : ${phoneNumber.toString()}");
     saveToDB();
   }
 
   void saveToDB() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarEdit);
     Map params = Map();
-    params['userId'] = accountData.id.toString();
+    params['userId'] = userData.id.toString();
     params['imageUser'] = image.toString();
     params['email'] = email.toString();
-    params['password'] = accountData.password.toString();
+    params['password'] = userData.password.toString();
     params['name'] = name.toString();
     params['surname'] = surname.toString();
-    params['phoneNumber'] = phone_number.toString();
+    params['phoneNumber'] = phoneNumber.toString();
 
-    http.post(Uri.parse(urlSingUp), body: params).then((res) {
+    http.post(Uri.parse(urlUpDate), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       print(res.body);
       Map resBody = jsonDecode(res.body) as Map;
       var _resStatus = resBody['status'];
