@@ -86,43 +86,85 @@ class _EditAccount extends State {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  TextField(
-                    maxLength: 32,
-                    decoration: InputDecoration(
-                        hintText: " ชื่อผู้ใช้ : ${userData.name}"),
-                    onChanged: (text) {
-                      setState(() {
-                        name = text;
-                      });
-                    },
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('ชื่อผู้ใช้'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          child: TextField(
+                            decoration: InputDecoration(
+                                border: InputBorder.none),
+                            controller: TextEditingController(text: name),
+                            onChanged: (text) {
+
+                                name = text;
+
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  TextField(
-                    maxLength: 32,
-                    decoration: InputDecoration(
-                        hintText: " นามสกุล : ${userData.surname}"),
-                    onChanged: (text) {
-                      setState(() {
-                        surname = text;
-                      });
-                    },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('นามสกุล'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          child: TextField(
+                            decoration: InputDecoration(
+                                border: InputBorder.none),
+                            controller: TextEditingController(text: surname),
+                            onChanged: (text) {
+
+                                surname = text;
+
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  TextField(
-                    maxLength: 10,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        hintText: " เบอร์โทรติดต่อ : ${userData.phoneNumber}"),
-                    onChanged: (text) {
-                      setState(() {
-                        phoneNumber = text;
-                      });
-                    },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('เบอร์โทร'),
+                      Container(
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          child: TextField(
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(
+                                border: InputBorder.none),
+                            controller: TextEditingController(text: phoneNumber.toString()),
+                            onChanged: (text) {
+
+                                phoneNumber = text;
+
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             ElevatedButton(
                 onPressed: () {
@@ -222,6 +264,9 @@ class _EditAccount extends State {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
       print(res.body);
+
+      Navigator.of(context).pop();
+
       Map resBody = jsonDecode(res.body) as Map;
       var _resStatus = resBody['status'];
       print("Sing Up Status : ${_resStatus}");
