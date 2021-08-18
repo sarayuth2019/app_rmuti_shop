@@ -25,6 +25,7 @@ dependencies:
   http:
   shared_preferences:
   image_picker:
+  carousel_slider:
 
   flutter:
     sdk: flutter

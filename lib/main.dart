@@ -1,4 +1,5 @@
 import 'package:app_rmuti_shop/screens/account/account_page.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_page.dart';
 import 'package:app_rmuti_shop/screens/home/home_page.dart';
 import 'package:app_rmuti_shop/screens/notify/notify_page.dart';
 import 'package:app_rmuti_shop/screens/sing_in_up/sing_in.dart';
@@ -10,7 +11,7 @@ void main() =>
     runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SingIn()));
 
 class MainPage extends StatefulWidget {
-  MainPage(this.accountID,this.token);
+  MainPage(this.accountID, this.token);
 
   final int accountID;
   final token;
@@ -18,14 +19,14 @@ class MainPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _MainPage(accountID,token);
+    return _MainPage(accountID, token);
   }
 }
 
 class _MainPage extends State {
-  _MainPage(this.userID,this.token);
+  _MainPage(this.userId, this.token);
 
-  final int userID;
+  final int userId;
   final token;
 
   final testSnackBar = SnackBar(content: Text("เทสๆสแนคบา"));
@@ -36,7 +37,7 @@ class _MainPage extends State {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Market account ID : ${userID.toString()}");
+    print("Market account ID : ${userId.toString()}");
   }
 
   @override
@@ -47,15 +48,18 @@ class _MainPage extends State {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          HomePage(userID,token),
-          NotifyPage(userID),
-          AccountPage(userID,token)
+          HomePage(userId, token),
+          CartPage(token, userId),
+          NotifyPage(userId,token),
+          AccountPage(userId, token)
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.teal,
-        currentIndex: tabNum,
+        unselectedItemColor: Colors.grey,
+        unselectedLabelStyle: TextStyle(color: Colors.grey),
         backgroundColor: Colors.white,
+        currentIndex: tabNum,
         onTap: (index) {
           setState(() {
             tabNum = index;
@@ -64,8 +68,8 @@ class _MainPage extends State {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_active), label: "Notification"),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications_active), label: "Notification"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "User"),
         ],
       ),

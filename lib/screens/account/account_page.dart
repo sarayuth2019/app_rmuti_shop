@@ -88,9 +88,11 @@ class _AccountPage extends State {
                     SizedBox(
                       height: 15,
                     ),
-                    Card(
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Container(
                         width: double.infinity,
+                        decoration: BoxDecoration(border: Border.all()),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

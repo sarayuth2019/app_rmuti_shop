@@ -20,7 +20,7 @@ class _SingIn extends State {
       SnackBar(content: Text("กำลังเข้าสู้ระบบ กรุณารอซักครู่..."));
   final snackBarSingInFail =
       SnackBar(content: Text("กรุณาตรวจสอบ Email หรือ Password"));
-  final urlSingIn = "${Config.API_URL}/authorizeShop";
+  final urlSingIn = "${Config.API_URL}/authorizeUser";
 
   int? userID;
   var token;
