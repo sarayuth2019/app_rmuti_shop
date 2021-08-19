@@ -31,6 +31,7 @@ class _JoinGroupPage extends State {
   final urlSaveJoinGroup = "${Config.API_URL}/Cart/save";
   final snackBarOnJoinGroup = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น'));
   final snackBarOnJoinGroupSuccess = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น สำเร็จ !'));
+  final snackBarOnJoinGroupSuccess2 = SnackBar(content: Text('กรุณาชำระเงินในหน้ารถเข็น เพื่อยืนยันการลงทะเบียน !'));
   final snackBarOnJoinGroupFall = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น ผิดพลาด !'));
 
 
@@ -213,6 +214,11 @@ class _JoinGroupPage extends State {
     params['priceSell'] = itemData.priceSell.toString();
     params['status'] = statusCart.toString();
     params['userId'] = userId.toString();
+    params['dealBegin'] = itemData.dealBegin.toString();
+    params['dealFinal'] = itemData.dealFinal.toString();
+    params['dateBegin'] = itemData.dateBegin.toString();
+    params['dateFinal'] = itemData.dateFinal.toString();
+
     await http.post(Uri.parse(urlSaveJoinGroup), body: params,
         headers: {
           HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
@@ -223,6 +229,7 @@ class _JoinGroupPage extends State {
           if(resStatus == 1 ){
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess);
+            ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess2);
           }
           else{
             ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupFall);

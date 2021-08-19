@@ -50,7 +50,7 @@ class _MainPage extends State {
         children: [
           HomePage(userId, token),
           CartPage(token, userId),
-          NotifyPage(userId,token),
+          NotifyPage(userId, token),
           AccountPage(userId, token)
         ],
       ),
@@ -68,8 +68,10 @@ class _MainPage extends State {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: "Cart"),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications_active), label: "Notification"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart), label: "Cart"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_active), label: "Notification"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "User"),
         ],
       ),
