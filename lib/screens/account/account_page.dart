@@ -90,45 +90,46 @@ class _AccountPage extends State {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "Account ID : ${snapshot.data.id}",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                      child: Card(
+                        child: Container(
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Account ID : ${snapshot.data.id}",
+                                  style: TextStyle(
+                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "อีเมล : ${snapshot.data.email}",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "อีเมล : ${snapshot.data.email}",
+                                  style: TextStyle(
+                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "ชื่อผู้ใช้ : ${snapshot.data.name}  ${snapshot.data.surname}",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "ชื่อผู้ใช้ : ${snapshot.data.name}  ${snapshot.data.surname}",
+                                  style: TextStyle(
+                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "เบอร์ติดต่อ : ${snapshot.data.phoneNumber}",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "เบอร์ติดต่อ : ${snapshot.data.phoneNumber}",
+                                  style: TextStyle(
+                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

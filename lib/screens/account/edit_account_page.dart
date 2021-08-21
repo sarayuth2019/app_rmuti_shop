@@ -95,7 +95,7 @@ class _EditAccount extends State {
                     children: [
                       Text('ชื่อผู้ใช้'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8,right: 8),
                           child: TextField(
@@ -120,7 +120,7 @@ class _EditAccount extends State {
                     children: [
                       Text('นามสกุล'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8,right: 8),
                           child: TextField(
@@ -145,7 +145,7 @@ class _EditAccount extends State {
                     children: [
                       Text('เบอร์โทร'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8,right: 8),
                           child: TextField(
