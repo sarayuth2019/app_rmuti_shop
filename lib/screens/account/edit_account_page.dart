@@ -30,6 +30,10 @@ class _EditAccount extends State {
   final snackBarEditSuccess = SnackBar(content: Text("แก้ไขสำเร็จ"));
   final snackBarEditFall = SnackBar(content: Text("แก้ไขผิดพลาด"));
 
+  BoxDecoration _boxDecorationGrey = BoxDecoration(
+      border: Border.all(color: Colors.grey[350]!),
+      borderRadius: BorderRadius.circular(5));
+
   String? name;
   String? surname;
   String? email;
@@ -95,17 +99,15 @@ class _EditAccount extends State {
                     children: [
                       Text('ชื่อผู้ใช้'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             controller: TextEditingController(text: name),
                             onChanged: (text) {
-
-                                name = text;
-
+                              name = text;
                             },
                           ),
                         ),
@@ -120,17 +122,15 @@ class _EditAccount extends State {
                     children: [
                       Text('นามสกุล'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
-                            decoration: InputDecoration(
-                                border: InputBorder.none),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
                             controller: TextEditingController(text: surname),
                             onChanged: (text) {
-
-                                surname = text;
-
+                              surname = text;
                             },
                           ),
                         ),
@@ -145,18 +145,17 @@ class _EditAccount extends State {
                     children: [
                       Text('เบอร์โทร'),
                       Container(
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey),borderRadius: BorderRadius.circular(5)),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8,right: 8),
+                          padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
                             keyboardType: TextInputType.phone,
-                            decoration: InputDecoration(
-                                border: InputBorder.none),
-                            controller: TextEditingController(text: phoneNumber.toString()),
+                            decoration:
+                                InputDecoration(border: InputBorder.none),
+                            controller: TextEditingController(
+                                text: phoneNumber.toString()),
                             onChanged: (text) {
-
-                                phoneNumber = text;
-
+                              phoneNumber = text;
                             },
                           ),
                         ),

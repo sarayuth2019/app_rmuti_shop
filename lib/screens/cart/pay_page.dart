@@ -54,6 +54,10 @@ class _PayPage extends State {
   String? _dateTransfer;
   String? _timeNow;
 
+  BoxDecoration _boxDecorationGrey = BoxDecoration(
+      border: Border.all(color: Colors.grey[400]!),
+      borderRadius: BorderRadius.circular(5));
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -103,7 +107,7 @@ class _PayPage extends State {
                           child: Container(
                             height: 300,
                             width: 190,
-                            decoration: BoxDecoration(border: Border.all()),
+                            decoration: _boxDecorationGrey,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -195,7 +199,7 @@ class _PayPage extends State {
                   child: Container(
                     height: 40,
                     width: double.infinity,
-                    decoration: BoxDecoration(border: Border.all()),
+                    decoration: _boxDecorationGrey,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -224,7 +228,7 @@ class _PayPage extends State {
                   child: Container(
                     height: 40,
                     width: double.infinity,
-                    decoration: BoxDecoration(border: Border.all()),
+                    decoration: _boxDecorationGrey,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -246,10 +250,11 @@ class _PayPage extends State {
                 SizedBox(
                   height: 10,
                 ),
+                Text('จำนวนเงิน : บาท'),
                 Container(
                   height: 40,
                   width: double.infinity,
-                  decoration: BoxDecoration(border: Border.all()),
+                  decoration: _boxDecorationGrey,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: TextField(
@@ -259,7 +264,7 @@ class _PayPage extends State {
                         print('จำนวนเงิน : ${amount.toString()}');
                       },
                       decoration: InputDecoration(
-                          hintText: 'จำนวนเงิน : บาท',
+                          hintText: 'จำนวนเงิน',
                           border: InputBorder.none),
                     ),
                   ),
@@ -267,25 +272,22 @@ class _PayPage extends State {
                 SizedBox(
                   height: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text('เลขบัญชี : '),
-                      Text('xxxxxx '),
-                      Text(
-                        'xxxx',
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
+                Row(
+                  children: [
+                    Text('เลขบัญชี : '),
+                    Text('xxxxxx '),
+                    Text(
+                      'xxxx',
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
                 ),
                 Container(
                   height: 40,
                   width: double.infinity,
-                  decoration: BoxDecoration(border: Border.all()),
+                  decoration: _boxDecorationGrey,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: TextField(

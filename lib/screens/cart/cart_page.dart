@@ -28,6 +28,10 @@ class _CartPage extends State {
   final urlGetCartByUserId = "${Config.API_URL}/Cart/find/user";
   final urlDeleteByCartId = "${Config.API_URL}/Cart/delete";
 
+  BoxDecoration _boxDecorationGrey = BoxDecoration(
+      border: Border.all(color: Colors.grey),
+      borderRadius: BorderRadius.circular(5));
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -54,7 +58,7 @@ class _CartPage extends State {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         width: double.infinity,
-                        decoration: BoxDecoration(border: Border.all()),
+                        decoration: _boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: ListTile(

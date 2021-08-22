@@ -24,6 +24,10 @@ class _SearchPage extends State {
   final List _listItem;
   List _listItemSearch = [];
 
+  BoxDecoration _boxDecorationGrey = BoxDecoration(
+      border: Border.all(color: Colors.grey[400]!),
+      borderRadius: BorderRadius.circular(5));
+
   @override
   void initState() {
     // TODO: implement initState
@@ -48,9 +52,9 @@ class _SearchPage extends State {
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: Container(
                 width: double.infinity,
-                decoration: BoxDecoration(border: Border.all()),
+                decoration: _boxDecorationGrey,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                   child: TextField(
                     decoration: InputDecoration(
                         hintText: "กรอกสินค้าที่ต้องการค้นหา",
@@ -86,7 +90,7 @@ class _SearchPage extends State {
                         },
                         child: Container(
                           width: double.infinity,
-                          decoration: BoxDecoration(border: Border.all()),
+                          decoration: _boxDecorationGrey,
                           child: ListTile(
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

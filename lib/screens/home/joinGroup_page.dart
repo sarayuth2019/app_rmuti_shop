@@ -34,6 +34,10 @@ class _JoinGroupPage extends State {
   final snackBarOnJoinGroupSuccess2 = SnackBar(content: Text('กรุณาชำระเงินในหน้ารถเข็น เพื่อยืนยันการลงทะเบียน !'));
   final snackBarOnJoinGroupFall = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น ผิดพลาด !'));
 
+  BoxDecoration _boxDecorationGrey = BoxDecoration(
+      border: Border.all(color: Colors.grey[350]!),
+      borderRadius: BorderRadius.circular(5));
+
 
 
   @override
@@ -60,7 +64,7 @@ class _JoinGroupPage extends State {
                   return Container(
                       height: 150,
                       width: double.infinity,
-                      decoration: BoxDecoration(border: Border.all()),
+                      decoration: _boxDecorationGrey,
                       child: Center(child: Text('กำลังโหลดภาพ...')));
                 } else {
                   return Container(
@@ -98,7 +102,7 @@ class _JoinGroupPage extends State {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: double.infinity,
-                decoration: BoxDecoration(border: Border.all()),
+                decoration: _boxDecorationGrey,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -134,7 +138,7 @@ class _JoinGroupPage extends State {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: double.infinity,
-                decoration: BoxDecoration(border: Border.all()),
+                decoration: _boxDecorationGrey,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
