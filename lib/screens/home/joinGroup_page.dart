@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
+import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +36,6 @@ class _JoinGroupPage extends State {
   final snackBarOnJoinGroupSuccess2 = SnackBar(content: Text('กรุณาชำระเงินในหน้ารถเข็น เพื่อยืนยันการลงทะเบียน !'));
   final snackBarOnJoinGroupFall = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น ผิดพลาด !'));
 
-  BoxDecoration _boxDecorationGrey = BoxDecoration(
-      border: Border.all(color: Colors.grey[350]!),
-      borderRadius: BorderRadius.circular(5));
 
 
 
@@ -64,7 +63,7 @@ class _JoinGroupPage extends State {
                   return Container(
                       height: 150,
                       width: double.infinity,
-                      decoration: _boxDecorationGrey,
+                      decoration: boxDecorationGrey,
                       child: Center(child: Text('กำลังโหลดภาพ...')));
                 } else {
                   return Container(
@@ -102,7 +101,7 @@ class _JoinGroupPage extends State {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: double.infinity,
-                decoration: _boxDecorationGrey,
+                decoration: boxDecorationGrey,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -138,7 +137,7 @@ class _JoinGroupPage extends State {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: double.infinity,
-                decoration: _boxDecorationGrey,
+                decoration: boxDecorationGrey,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -208,7 +207,7 @@ class _JoinGroupPage extends State {
 
   void _onJoinGroup() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroup);
-    String statusCart = "รอดำเนินการ";
+    String statusCart = statusCartJoin;
     Map params = Map();
     params['itemId'] = itemData.itemId.toString();
     params['marketId'] = itemData.marketId.toString();

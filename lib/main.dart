@@ -1,4 +1,5 @@
 import 'package:app_rmuti_shop/screens/account/account_page.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_main.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_page.dart';
 import 'package:app_rmuti_shop/screens/home/home_page.dart';
 import 'package:app_rmuti_shop/screens/notify/notify_page.dart';
@@ -49,7 +50,8 @@ class _MainPage extends State {
         physics: NeverScrollableScrollPhysics(),
         children: [
           HomePage(userId, token),
-          CartPage(token, userId),
+          //CartPage(userId, token),
+          CartMain(userId, token),
           NotifyPage(userId, token),
           AccountPage(userId, token)
         ],

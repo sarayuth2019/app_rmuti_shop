@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 
 class EditAccount extends StatefulWidget {
   EditAccount(this.userData, this.token);
@@ -30,9 +31,6 @@ class _EditAccount extends State {
   final snackBarEditSuccess = SnackBar(content: Text("แก้ไขสำเร็จ"));
   final snackBarEditFall = SnackBar(content: Text("แก้ไขผิดพลาด"));
 
-  BoxDecoration _boxDecorationGrey = BoxDecoration(
-      border: Border.all(color: Colors.grey[350]!),
-      borderRadius: BorderRadius.circular(5));
 
   String? name;
   String? surname;
@@ -99,7 +97,7 @@ class _EditAccount extends State {
                     children: [
                       Text('ชื่อผู้ใช้'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
@@ -122,7 +120,7 @@ class _EditAccount extends State {
                     children: [
                       Text('นามสกุล'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(
@@ -145,7 +143,7 @@ class _EditAccount extends State {
                     children: [
                       Text('เบอร์โทร'),
                       Container(
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
                           child: TextField(

@@ -1,36 +1,33 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/cart/pay_page.dart';
+import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CartPage extends StatefulWidget {
-  CartPage(this.token, this.userId);
+  CartPage(this.userId, this.token);
 
-  final token;
   final userId;
+  final token;
+
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _CartPage(token, userId);
+    return _CartPage(userId,token);
   }
 }
 
 class _CartPage extends State {
-  _CartPage(this.token, this.userId);
+  _CartPage(this.userId, this.token);
 
-  final token;
   final userId;
+  final token;
   final urlGetCartByUserId = "${Config.API_URL}/Cart/find/user";
   final urlDeleteByCartId = "${Config.API_URL}/Cart/delete";
-
-  BoxDecoration _boxDecorationGrey = BoxDecoration(
-      border: Border.all(color: Colors.grey),
-      borderRadius: BorderRadius.circular(5));
 
   @override
   Widget build(BuildContext context) {
@@ -58,78 +55,92 @@ class _CartPage extends State {
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         width: double.infinity,
-                        decoration: _boxDecorationGrey,
+                        decoration: boxDecorationGrey,
                         child: Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: ListTile(
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${snapshot.data[index].nameItem}",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        "จากราคา ${snapshot.data[index].price} บาท"),
-                                    Icon(
-                                      Icons.arrow_forward_outlined,
-                                      color: Colors.teal,
-                                    ),
-                                    Text(
-                                        "ลดเหลือ ${snapshot.data[index].priceSell} บาท"),
-                                  ],
-                                ),
-                                Text(
-                                  'ควรชำระเงินเพื่อยืนยันการลงทะเบียนภายในวันที่',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('${snapshot.data[index].dealBegin}'),
-                                    Icon(
-                                      Icons.arrow_forward,
-                                      color: Colors.teal,
-                                    ),
-                                    Text('${snapshot.data[index].dealFinal}'),
-                                  ],
-                                ),
-                                Text(
-                                  'ระยะเวลาการใช้สิทธิ์ลดราคา',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('${snapshot.data[index].dateBegin}'),
-                                    Icon(
-                                      Icons.arrow_forward,
-                                      color: Colors.teal,
-                                    ),
-                                    Text('${snapshot.data[index].dateFinal}'),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            subtitle: ElevatedButton(
-                                style: ElevatedButton.styleFrom(primary: Colors.teal),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => PayPage(token,
-                                              userId, snapshot.data[index])));
-                                },
-                                child: Text('ชำระเงิน')),
-                          ),
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${snapshot.data[index].nameItem}",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          "จากราคา ${snapshot.data[index].price} บาท"),
+                                      Icon(
+                                        Icons.arrow_forward_outlined,
+                                        color: Colors.teal,
+                                      ),
+                                      Text(
+                                          "ลดเหลือ ${snapshot.data[index].priceSell} บาท"),
+                                    ],
+                                  ),
+                                  Text(
+                                    'ควรชำระเงินเพื่อยืนยันการลงทะเบียนภายในวันที่',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('${snapshot.data[index].dealBegin}'),
+                                      Icon(
+                                        Icons.arrow_forward,
+                                        color: Colors.teal,
+                                      ),
+                                      Text('${snapshot.data[index].dealFinal}'),
+                                    ],
+                                  ),
+                                  Text(
+                                    'ระยะเวลาการใช้สิทธิ์ลดราคา',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('${snapshot.data[index].dateBegin}'),
+                                      Icon(
+                                        Icons.arrow_forward,
+                                        color: Colors.teal,
+                                      ),
+                                      Text('${snapshot.data[index].dateFinal}'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              subtitle: Container(
+                                child: snapshot.data[index].status ==
+                                        'ชำระเงินแล้ว'
+                                    ? Center(
+                                      child: Text(
+                                          '${snapshot.data[index].status} รอการตรวจสอบ',
+                                          style: TextStyle(color: Colors.amber,fontWeight: FontWeight.bold),
+                                        ),
+                                    )
+                                    : ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.teal),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => PayPage(
+                                                      token,
+                                                      userId,
+                                                      snapshot.data[index])));
+                                        },
+                                        child: Text('ชำระเงิน')),
+                              )),
                         ),
                       ),
                     ),

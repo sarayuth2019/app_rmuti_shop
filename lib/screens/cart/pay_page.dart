@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
+import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class PayPage extends StatefulWidget {
   PayPage(this.token, this.userId, this.cartData);
@@ -27,6 +30,9 @@ class _PayPage extends State {
   final userId;
   final cartData;
 
+  final String urlSavePay = '${Config.API_URL}/Pay/save';
+  final String urlSaveImagePay = '${Config.API_URL}/ImagePay/save';
+  final String urlSaveJoinGroup = "${Config.API_URL}/Cart/save";
   String _bankName = 'ธนาคารไทยพาณิชย์ SCB';
   String _bankNumber = 'xxxxxxxxxx';
   List<String> _listTransferBankName = [
@@ -46,17 +52,12 @@ class _PayPage extends State {
   File? imageFile;
   String? imageData;
   int? amount;
-  String? bankReceive;
-  String? bankTransfer;
   String? dataTransfer;
   String? _bankTransferValue;
   String? _bankReceiveValue;
   String? _dateTransfer;
-  String? _timeNow;
-
-  BoxDecoration _boxDecorationGrey = BoxDecoration(
-      border: Border.all(color: Colors.grey[400]!),
-      borderRadius: BorderRadius.circular(5));
+  String? _timeTransfer;
+  int? _lastNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,7 @@ class _PayPage extends State {
         child: Column(children: [
           Text(
             'ชำระเงินผ่านทาง',
-            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -102,19 +103,17 @@ class _PayPage extends State {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
+                  decoration: boxDecorationGrey,
+                  height: 300,
+                  width: 190,
                   child: imageFile == null
                       ? Center(
-                          child: Container(
-                            height: 300,
-                            width: 190,
-                            decoration: _boxDecorationGrey,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add),
-                                Text('เพิ่มภาพสลิปจ่ายเงิน'),
-                              ],
-                            ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.add),
+                              Text('เพิ่มภาพสลิปจ่ายเงิน'),
+                            ],
                           ),
                         )
                       : Center(
@@ -199,7 +198,7 @@ class _PayPage extends State {
                   child: Container(
                     height: 40,
                     width: double.infinity,
-                    decoration: _boxDecorationGrey,
+                    decoration: boxDecorationGrey,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -228,7 +227,7 @@ class _PayPage extends State {
                   child: Container(
                     height: 40,
                     width: double.infinity,
-                    decoration: _boxDecorationGrey,
+                    decoration: boxDecorationGrey,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -240,9 +239,9 @@ class _PayPage extends State {
                           width: 20,
                         ),
                         Container(
-                            child: _timeNow == null
+                            child: _timeTransfer == null
                                 ? Text('ชม:นาที')
-                                : Text('${_timeNow.toString()}')),
+                                : Text('${_timeTransfer.toString()}')),
                       ],
                     ),
                   ),
@@ -254,18 +253,17 @@ class _PayPage extends State {
                 Container(
                   height: 40,
                   width: double.infinity,
-                  decoration: _boxDecorationGrey,
+                  decoration: boxDecorationGrey,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: TextField(
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
-                        amount = value as int?;
+                        amount = int.parse(value);
                         print('จำนวนเงิน : ${amount.toString()}');
                       },
                       decoration: InputDecoration(
-                          hintText: 'จำนวนเงิน',
-                          border: InputBorder.none),
+                          hintText: 'จำนวนเงิน', border: InputBorder.none),
                     ),
                   ),
                 ),
@@ -287,11 +285,15 @@ class _PayPage extends State {
                 Container(
                   height: 40,
                   width: double.infinity,
-                  decoration: _boxDecorationGrey,
+                  decoration: boxDecorationGrey,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                     child: TextField(
                       keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        _lastNumber = int.parse(value);
+                        print('เลขท้าย บช. : ${_lastNumber.toString()}');
+                      },
                       decoration: InputDecoration(
                           hintText: 'เลขท้ายบัญชี 4 ตัว',
                           border: InputBorder.none),
@@ -302,7 +304,9 @@ class _PayPage extends State {
                 Center(
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(primary: Colors.teal),
-                      onPressed: () {},
+                      onPressed: () {
+                        checkNullData();
+                      },
                       child: Text('ชำระเงิน')),
                 )
               ],
@@ -332,8 +336,139 @@ class _PayPage extends State {
     TimeOfDay initialTime = TimeOfDay.now();
     showTimePicker(context: context, initialTime: initialTime).then((value) {
       setState(() {
-        _timeNow = '${value!.hour}:${value.minute}';
+        _timeTransfer = '${value!.hour}:${value.minute}';
       });
+    });
+  }
+
+  void checkNullData() {
+    if (_bankTransferValue == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('กรุณาเลือกธนาคารที่โอนเงิน')));
+    } else if (_bankReceiveValue == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('กรุณาเลือกธนาคารที่รับเงิน')));
+    } else if (_dateTransfer == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('กรุณาเพิ่มวันที่โอนเงิน')));
+    } else if (_timeTransfer == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('กรุณาเพิ่มเวลาที่โอนเงิน')));
+    } else if (amount == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('กรุณากรอกจำนวนเงินที่โอน')));
+    } else if (_lastNumber == null || _lastNumber.toString().length != 4) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('กรุณากรอกเลขท้ายบัญชีธนาคาร 4 ตัว')));
+    } else if (imageFile == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('กรุณาเพิ่มภาพสลิปการโอนเงิน')));
+    } else {
+      print(_bankTransferValue);
+      print(_bankReceiveValue);
+      print(_dateTransfer);
+      print(_timeTransfer);
+      print(amount);
+      print(_lastNumber);
+      _savePay();
+    }
+  }
+
+  void _savePay() async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
+    String status = 'รอดำเนินการ';
+    print('save pay ....');
+    Map params = Map();
+    params['userId'] = userId.toString();
+    params['marketId'] = cartData.marketId.toString();
+    params['itemId'] = cartData.itemId.toString();
+    params['bankTransfer'] = _bankTransferValue.toString();
+    params['bankReceive'] = _bankReceiveValue.toString();
+    params['date'] = _dateTransfer.toString();
+    params['time'] = '${_timeTransfer.toString()}:00';
+    params['amount'] = amount.toString();
+    params['lastNumber'] = _lastNumber.toString();
+    params['status'] = status.toString();
+    await http.post(Uri.parse(urlSavePay), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
+      print(res.body);
+      var resData = jsonDecode(utf8.decode(res.bodyBytes));
+      var resStatus = resData['status'];
+      if (resStatus == 1) {
+        var dataPay = resData['data'];
+        var payId = dataPay['payId'];
+        print(payId);
+        saveImage(payId);
+      }
+      else{
+        print('save fall !');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
+      }
+    });
+  }
+
+  void saveImage(payId) async {
+    print("payId : ${payId.toString()}");
+
+    print("save image pay Id : ${payId.toString()}");
+    print("Update image File : ${imageFile}");
+
+    var request = http.MultipartRequest('POST', Uri.parse(urlSaveImagePay));
+    request.headers.addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+
+    var _multipart = await http.MultipartFile.fromPath('picture', imageFile!.path);
+
+    request.files.add(_multipart);
+    request.fields['payId'] = payId.toString();
+
+    await http.Response.fromStream(await request.send()).then((res) {
+      print(res.body);
+      var resData = jsonDecode(res.body);
+      var statusRes = resData['status'];
+      if(statusRes == 1 ){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ชำระเงินสำเร็จ รอการตรวจสอบการชำระเงิน')));
+        _editCartStatus();
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('บันทึกภาพ ชำระเงินผิดพลาด !')));
+      }
+    });
+  }
+
+  void _editCartStatus() async {
+    String statusCart = statusCartWaitPayment;
+    Map params = Map();
+    params['cartId'] = cartData.cartId.toString();
+    params['itemId'] = cartData.itemId.toString();
+    params['marketId'] = cartData.marketId.toString();
+    params['nameCart'] = cartData.nameItem.toString();
+    params['number'] = 1.toString();
+    params['price'] = cartData.price.toString();
+    params['priceSell'] = cartData.priceSell.toString();
+    params['status'] = statusCart.toString();
+    params['userId'] = userId.toString();
+    params['dealBegin'] = cartData.dealBegin.toString();
+    params['dealFinal'] = cartData.dealFinal.toString();
+    params['dateBegin'] = cartData.dateBegin.toString();
+    params['dateFinal'] = cartData.dateFinal.toString();
+
+    await http.post(Uri.parse(urlSaveJoinGroup), body: params,
+        headers: {
+          HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
+        }).then((res){
+      print(res.body);
+      var resData = jsonDecode(utf8.decode(res.bodyBytes));
+      var resStatus = resData['status'];
+      if(resStatus == 1 ){
+        setState(() {
+          print(resData);
+        });
+        Navigator.pop(context);
+      }
+      else{
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('บันทึกสถานะ Cart ผิดพลาด !')));
+      }
     });
   }
 

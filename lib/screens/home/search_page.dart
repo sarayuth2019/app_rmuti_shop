@@ -1,4 +1,5 @@
 import 'package:app_rmuti_shop/screens/home/joinGroup_page.dart';
+import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +25,6 @@ class _SearchPage extends State {
   final List _listItem;
   List _listItemSearch = [];
 
-  BoxDecoration _boxDecorationGrey = BoxDecoration(
-      border: Border.all(color: Colors.grey[400]!),
-      borderRadius: BorderRadius.circular(5));
 
   @override
   void initState() {
@@ -52,7 +50,7 @@ class _SearchPage extends State {
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: Container(
                 width: double.infinity,
-                decoration: _boxDecorationGrey,
+                decoration: boxDecorationGrey,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                   child: TextField(
@@ -90,7 +88,7 @@ class _SearchPage extends State {
                         },
                         child: Container(
                           width: double.infinity,
-                          decoration: _boxDecorationGrey,
+                          decoration: boxDecorationGrey,
                           child: ListTile(
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
