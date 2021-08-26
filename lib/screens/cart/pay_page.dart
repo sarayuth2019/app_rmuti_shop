@@ -32,7 +32,7 @@ class _PayPage extends State {
 
   final String urlSavePay = '${Config.API_URL}/Pay/save';
   final String urlSaveImagePay = '${Config.API_URL}/ImagePay/save';
-  final String urlSaveJoinGroup = "${Config.API_URL}/Cart/save";
+  final String urlUpdateStatusCart = "${Config.API_URL}/Cart/update";
   String _bankName = 'ธนาคารไทยพาณิชย์ SCB';
   String _bankNumber = 'xxxxxxxxxx';
   List<String> _listTransferBankName = [
@@ -370,11 +370,11 @@ class _PayPage extends State {
       print(_timeTransfer);
       print(amount);
       print(_lastNumber);
-      _savePay();
+      _savePayment();
     }
   }
 
-  void _savePay() async {
+  void _savePayment() async {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
     String status = 'รอดำเนินการ';
     print('save pay ....');
@@ -453,7 +453,7 @@ class _PayPage extends State {
     params['dateBegin'] = cartData.dateBegin.toString();
     params['dateFinal'] = cartData.dateFinal.toString();
 
-    await http.post(Uri.parse(urlSaveJoinGroup), body: params,
+    await http.post(Uri.parse(urlUpdateStatusCart), body: params,
         headers: {
           HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
         }).then((res){

@@ -1,4 +1,4 @@
 
 const String statusCartJoin = "รอชำระเงิน";
-const String statusCartWaitPayment = "ตรวจสอบการชำระเงิน";
+const String statusCartWaitPayment = "รอตรวจสอบการชำระเงิน";
 const String statusCartSuccessfulPayment = "ชำระเงินสำเร็จ";
