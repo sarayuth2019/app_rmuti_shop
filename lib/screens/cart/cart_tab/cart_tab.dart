@@ -43,6 +43,14 @@ class _CartTab extends State {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.data == null) {
             return Center(child: CircularProgressIndicator());
+          } else if (snapshot.data.length == 0) {
+            return Center(
+              child: Text(
+                'ไม่มีรายการ',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+              ),
+            );
           } else {
             return Scaffold(
                 body: ListView.builder(
@@ -84,7 +92,8 @@ class _CartTab extends State {
                                                 Text(
                                                   " ${snapshot.data[index].priceSell} ",
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       fontSize: 18),
                                                 ),
                                                 Text('บาท')
@@ -101,12 +110,14 @@ class _CartTab extends State {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text('${snapshot.data[index].dateBegin}'),
+                                            Text(
+                                                '${snapshot.data[index].dateBegin}'),
                                             Icon(
                                               Icons.arrow_forward,
                                               color: Colors.teal,
                                             ),
-                                            Text('${snapshot.data[index].dateFinal}'),
+                                            Text(
+                                                '${snapshot.data[index].dateFinal}'),
                                           ],
                                         ),
                                         Text(
@@ -118,12 +129,14 @@ class _CartTab extends State {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text('${snapshot.data[index].dealBegin}'),
+                                            Text(
+                                                '${snapshot.data[index].dealBegin}'),
                                             Icon(
                                               Icons.arrow_forward,
                                               color: Colors.teal,
                                             ),
-                                            Text('${snapshot.data[index].dealFinal}'),
+                                            Text(
+                                                '${snapshot.data[index].dealFinal}'),
                                           ],
                                         ),
                                       ],
@@ -150,7 +163,8 @@ class _CartTab extends State {
                                                 child: Text(
                                                   'รอ${snapshot.data[index].status}',
                                                   style: TextStyle(
-                                                      color: Colors.indigoAccent,
+                                                      color:
+                                                          Colors.indigoAccent,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
@@ -162,11 +176,12 @@ class _CartTab extends State {
                               top: 0,
                               right: 0,
                               child: Container(
-                                  child: snapshot.data[index].status == statusCartJoin
+                                  child: snapshot.data[index].status ==
+                                          statusCartJoin
                                       ? IconButton(
                                           onPressed: () {
-                                            _showAlertDeleteCart(
-                                                context, snapshot.data[index].cartId);
+                                            _showAlertDeleteCart(context,
+                                                snapshot.data[index].cartId);
                                           },
                                           icon: Icon(
                                             Icons.highlight_remove,
@@ -221,7 +236,7 @@ class _CartTab extends State {
         });
   }
 
-  Future _onRefresh ()async{
+  Future _onRefresh() async {
     Future.delayed(Duration(seconds: 3));
     setState(() {
       _listCartByUserId();

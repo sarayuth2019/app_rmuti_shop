@@ -39,6 +39,14 @@ class _CartPaymentSuccessTab extends State {
             if (snapshot.data == null) {
               print(snapshot.data);
               return Center(child: CircularProgressIndicator());
+            } else if (snapshot.data.length == 0) {
+              return Center(
+                child: Text(
+                  'ไม่มีรายการ',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.grey),
+                ),
+              );
             } else {
               return Scaffold(
                 body: ListView.builder(
@@ -90,8 +98,7 @@ class _CartPaymentSuccessTab extends State {
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             primary: Colors.teal),
-                                        onPressed: () {
-                                        },
+                                        onPressed: () {},
                                         child: Text('ใช้สิทธิ์ซื้อสินค้า')),
                                   ),
                                 ),

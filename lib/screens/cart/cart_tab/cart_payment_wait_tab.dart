@@ -39,6 +39,14 @@ class _CartPaymentWaitTab extends State {
             if (snapshot.data == null) {
               print(snapshot.data);
               return Center(child: CircularProgressIndicator());
+            } else if (snapshot.data.length == 0) {
+              return Center(
+                child: Text(
+                  'ไม่มีรายการ',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.grey),
+                ),
+              );
             } else {
               return Scaffold(
                 body: ListView.builder(
@@ -69,7 +77,19 @@ class _CartPaymentWaitTab extends State {
                                   'โอนเงินจำนวน : ${snapshot.data[index].amount} บาท'),
                               Text(
                                   'โอนจากบัญชี : xxxxxxx ${snapshot.data[index].lastNumber}'),
-                              Text('${snapshot.data[index].bankTransfer}'),
+                              Row(
+                                children: [
+                                  Text('${snapshot.data[index].bankTransfer}'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                                    child: Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.teal,
+                                    ),
+                                  ),
+                                  Expanded(child: Text('${snapshot.data[index].bankReceive}'))
+                                ],
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
