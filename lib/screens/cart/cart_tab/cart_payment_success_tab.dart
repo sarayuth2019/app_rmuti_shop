@@ -123,20 +123,6 @@ class _CartPaymentSuccessTab extends State {
     });
   }
 
-  Future<void> getImagePay(int paymentId) async {
-    var imagePay;
-    Map params = Map();
-    params['payId'] = paymentId.toString();
-    await http.post(Uri.parse(urlGetPayImage), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
-      var imagePayData = jsonData['dataImages'];
-      imagePay = imagePayData;
-    });
-    return imagePay;
-  }
-
   Future<List<_Payment>> _listPayment() async {
     List<_Payment> listPayment = [];
     List<_Payment> listPaymentWait = [];
