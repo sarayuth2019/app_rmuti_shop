@@ -27,6 +27,8 @@ dependencies:
   image_picker:
   carousel_slider:
   clipboard:
+  qr_flutter:
+
 
   flutter:
     sdk: flutter

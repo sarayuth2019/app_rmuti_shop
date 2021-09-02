@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_tab/create_qr_core_page.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:qr_flutter/qr_flutter.dart';
 
 class CartPaymentSuccessTab extends StatefulWidget {
   CartPaymentSuccessTab(this.token, this.userId);
@@ -98,8 +100,21 @@ class _CartPaymentSuccessTab extends State {
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                             primary: Colors.teal),
-                                        onPressed: () {},
-                                        child: Text('ใช้สิทธิ์ซื้อสินค้า')),
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CreateQRCode(snapshot
+                                                          .data[index].payId)));
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.qr_code),
+                                            Text('สร้าง QR Code รับสินค้า'),
+                                          ],
+                                        )),
                                   ),
                                 ),
                               ),
