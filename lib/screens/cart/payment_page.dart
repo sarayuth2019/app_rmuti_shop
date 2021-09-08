@@ -476,7 +476,7 @@ class _PayPage extends State {
     print('Select Gallery');
     // ignore: deprecated_member_use
     var _imageGallery = await ImagePicker()
-        .getImage(source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
+        .getImage(source: ImageSource.gallery,maxWidth: 1000,imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
