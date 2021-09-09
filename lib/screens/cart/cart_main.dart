@@ -39,7 +39,7 @@ class _CartMain extends State {
               labelColor: Colors.teal,
               tabs: [
                 Tab(text: statusCartJoin),
-                Tab(text: statusCartWaitPayment),
+                Tab(text: 'รอตรวจสอบ'),
                 Tab(text: statusCartSuccessfulPayment,)
               ],
             ),

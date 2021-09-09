@@ -70,6 +70,23 @@ class _PayPage extends State {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'ราคาสินค้า',
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                ' ${cartData.priceSell.toString()} ',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              Text(
+                'บาท',
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
           Text(
             'ชำระเงินผ่านทาง',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -357,6 +374,9 @@ class _PayPage extends State {
     } else if (amount == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กรุณากรอกจำนวนเงินที่โอน')));
+    } else if (amount != cartData.priceSell) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง')));
     } else if (_lastNumber == null || _lastNumber.toString().length != 4) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('กรุณากรอกเลขท้ายบัญชีธนาคาร 4 ตัว')));
@@ -375,7 +395,8 @@ class _PayPage extends State {
   }
 
   void _savePayment() async {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
     String status = 'รอดำเนินการ';
     print('save pay ....');
     Map params = Map();
@@ -400,10 +421,10 @@ class _PayPage extends State {
         var payId = dataPay['payId'];
         print(payId);
         saveImage(payId);
-      }
-      else{
+      } else {
         print('save fall !');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
       }
     });
   }
@@ -415,9 +436,11 @@ class _PayPage extends State {
     print("Update image File : ${imageFile}");
 
     var request = http.MultipartRequest('POST', Uri.parse(urlSaveImagePay));
-    request.headers.addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+    request.headers.addAll(
+        {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
 
-    var _multipart = await http.MultipartFile.fromPath('picture', imageFile!.path);
+    var _multipart =
+        await http.MultipartFile.fromPath('picture', imageFile!.path);
 
     request.files.add(_multipart);
     request.fields['payId'] = payId.toString();
@@ -426,12 +449,13 @@ class _PayPage extends State {
       print(res.body);
       var resData = jsonDecode(res.body);
       var statusRes = resData['status'];
-      if(statusRes == 1 ){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ชำระเงินสำเร็จ รอการตรวจสอบการชำระเงิน')));
+      if (statusRes == 1) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('ชำระเงินสำเร็จ รอการตรวจสอบการชำระเงิน')));
         _editCartStatus();
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('บันทึกภาพ ชำระเงินผิดพลาด !')));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('บันทึกภาพ ชำระเงินผิดพลาด !')));
       }
     });
   }
@@ -453,21 +477,20 @@ class _PayPage extends State {
     params['dateBegin'] = cartData.dateBegin.toString();
     params['dateFinal'] = cartData.dateFinal.toString();
 
-    await http.post(Uri.parse(urlUpdateStatusCart), body: params,
-        headers: {
-          HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
-        }).then((res){
+    await http.post(Uri.parse(urlUpdateStatusCart), body: params, headers: {
+      HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
+    }).then((res) {
       print(res.body);
       var resData = jsonDecode(utf8.decode(res.bodyBytes));
       var resStatus = resData['status'];
-      if(resStatus == 1 ){
+      if (resStatus == 1) {
         setState(() {
           print(resData);
         });
         Navigator.pop(context);
-      }
-      else{
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('บันทึกสถานะ Cart ผิดพลาด !')));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('บันทึกสถานะ Cart ผิดพลาด !')));
       }
     });
   }
@@ -475,8 +498,8 @@ class _PayPage extends State {
   _onGallery() async {
     print('Select Gallery');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker()
-        .getImage(source: ImageSource.gallery,maxWidth: 1000,imageQuality: 100);
+    var _imageGallery = await ImagePicker().getImage(
+        source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);

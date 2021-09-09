@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class _CartPaymentWaitTab extends State {
 
   final String urlGetPaymentByUserId = '${Config.API_URL}/Pay/user';
   final String urlGetPayImage = '${Config.API_URL}/ImagePay/listId';
+  String _status = 'รอดำเนินการ';
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class _CartPaymentWaitTab extends State {
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: FutureBuilder(
-          future: _listPaymentWait(),
+          future: listPaymentByStatus(token, userId, _status),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.data == null) {
               print(snapshot.data);
@@ -81,13 +83,16 @@ class _CartPaymentWaitTab extends State {
                                 children: [
                                   Text('${snapshot.data[index].bankTransfer}'),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0),
                                     child: Icon(
                                       Icons.arrow_forward,
                                       color: Colors.teal,
                                     ),
                                   ),
-                                  Expanded(child: Text('${snapshot.data[index].bankReceive}'))
+                                  Expanded(
+                                      child: Text(
+                                          '${snapshot.data[index].bankReceive}'))
                                 ],
                               ),
                               Row(
@@ -134,7 +139,7 @@ class _CartPaymentWaitTab extends State {
   Future<void> _onRefresh() async {
     Future.delayed(Duration(seconds: 3));
     setState(() {
-      _listPaymentWait();
+      listPaymentByStatus(token, userId, _status);
     });
   }
 
@@ -180,69 +185,4 @@ class _CartPaymentWaitTab extends State {
     });
     return imagePay;
   }
-
-  Future<List<_Payment>> _listPaymentWait() async {
-    List<_Payment> listPayment = [];
-    List<_Payment> listPaymentWait = [];
-    Map params = Map();
-    params['userId'] = userId.toString();
-    await http.post(Uri.parse(urlGetPaymentByUserId), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
-      print(jsonData);
-      var resData = jsonData['data'];
-      for (var i in resData) {
-        _Payment _payment = _Payment(
-            i['payId'],
-            i['status'],
-            i['userId'],
-            i['marketId'],
-            i['itemId'],
-            i['amount'],
-            i['lastNumber'],
-            i['bankTransfer'],
-            i['bankReceive'],
-            i['date'],
-            i['time'],
-            i['dataTransfer']);
-        listPayment.add(_payment);
-      }
-      String status = 'รอดำเนินการ';
-      listPaymentWait = listPayment
-          .where((element) =>
-              element.status.toLowerCase().contains(status.toLowerCase()))
-          .toList();
-    });
-    return listPaymentWait;
-  }
-}
-
-class _Payment {
-  final int payId;
-  final String status;
-  final int userId;
-  final int marketId;
-  final int itemId;
-  final int amount;
-  final int lastNumber;
-  final String bankTransfer;
-  final String bankReceive;
-  final String date;
-  final String time;
-  final String dataTransfer;
-
-  _Payment(
-      this.payId,
-      this.status,
-      this.userId,
-      this.marketId,
-      this.itemId,
-      this.amount,
-      this.lastNumber,
-      this.bankTransfer,
-      this.bankReceive,
-      this.date,
-      this.time,
-      this.dataTransfer);
 }

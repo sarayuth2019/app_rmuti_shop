@@ -161,7 +161,7 @@ class _CartTab extends State {
                                                 child: Text('ชำระเงิน'))
                                             : Center(
                                                 child: Text(
-                                                  'รอ${snapshot.data[index].status}',
+                                                  'รอ${snapshot.data[index]._status}',
                                                   style: TextStyle(
                                                       color:
                                                           Colors.indigoAccent,
