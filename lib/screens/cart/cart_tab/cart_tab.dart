@@ -143,7 +143,7 @@ class _CartTab extends State {
                                     ),
                                     subtitle: Container(
                                         child: snapshot.data[index].status ==
-                                                statusCartJoin
+                                                statusAddToCart
                                             ? ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
                                                     primary: Colors.teal),
@@ -177,7 +177,7 @@ class _CartTab extends State {
                               right: 0,
                               child: Container(
                                   child: snapshot.data[index].status ==
-                                          statusCartJoin
+                                          statusAddToCart
                                       ? IconButton(
                                           onPressed: () {
                                             _showAlertDeleteCart(context,
@@ -291,7 +291,7 @@ class _CartTab extends State {
     });
     listCartTab = _listCart
         .where((element) =>
-            element.status.toLowerCase().contains(statusCartJoin.toLowerCase()))
+            element.status.toLowerCase().contains(statusAddToCart.toLowerCase()))
         .toList();
     return listCartTab;
   }

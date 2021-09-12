@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_tab/create_qr_core_page.dart';
 import 'package:app_rmuti_shop/screens/method/method_get_item_data.dart';
@@ -7,8 +6,7 @@ import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:qr_flutter/qr_flutter.dart';
+
 
 class CartPaymentSuccessTab extends StatefulWidget {
   CartPaymentSuccessTab(this.token, this.userId);
@@ -31,9 +29,8 @@ class _CartPaymentSuccessTab extends State {
 
   final String urlGetPaymentByUserId = '${Config.API_URL}/Pay/user';
   final String urlGetPayImage = '${Config.API_URL}/ImagePay/listId';
-  var dayNow = DateTime.now();
+  DateTime _dayNow = DateTime.now();
   String _status = 'ชำระเงินสำเร็จ';
-  
 
   @override
   Widget build(BuildContext context) {
@@ -102,46 +99,78 @@ class _CartPaymentSuccessTab extends State {
                                     token, snapshot.data[index].itemId),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<dynamic> snapshotItem) {
+                                  // var testDay = DateTime.parse('2021-09-15');
+
+                                  var stringDateBegin =
+                                      '${snapshotItem.data.dateBegin.split('/')[2]}-${snapshotItem.data.dateBegin.split('/')[1]}-${snapshotItem.data.dateBegin.split('/')[0]}';
+                                  DateTime _dateBegin =
+                                      DateTime.parse(stringDateBegin);
+
+                                  var stringDateFinal =
+                                      '${snapshotItem.data.dateFinal.split('/')[2]}-${snapshotItem.data.dateFinal.split('/')[1]}-${snapshotItem.data.dateFinal.split('/')[0]}';
+                                  DateTime _dateFinal =
+                                      DateTime.parse(stringDateFinal);
+
                                   if (snapshotItem.data == null) {
                                     return Center(child: Text('กำลังโหลด...'));
                                   } else if (snapshotItem.data.count !=
                                       snapshotItem.data.countRequest) {
                                     return Center(
-                                      child: Text(
-                                          'ผู้ลงทะเบียนยังไม่ครบตามจำนวน'),
-                                    );
-                                  }
-                                  else {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Center(
-                                        child: Container(
-                                          height: 25,
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Colors.teal),
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CreateQRCode(
-                                                                snapshot
-                                                                    .data[index]
-                                                                    .payId)));
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.qr_code),
-                                                  Text(
-                                                      'สร้าง QR Code รับสินค้า'),
-                                                ],
-                                              )),
-                                        ),
+                                      child: Column(
+                                        children: [
+                                          Text('ผู้ลงทะเบียนยังไม่ครบตามจำนวน'),
+                                        ],
                                       ),
                                     );
+                                  } else {
+                                    if (_dayNow.isAfter(_dateBegin
+                                                .subtract(Duration(days: 0))) ==
+                                            true &&
+                                        _dayNow.isBefore(_dateFinal
+                                                .add(Duration(days: 1))) ==
+                                            true) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 25,
+                                                child: ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary:
+                                                                Colors.teal),
+                                                    onPressed: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  CreateQRCode(snapshot
+                                                                      .data[
+                                                                          index]
+                                                                      .payId)));
+                                                    },
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(Icons.qr_code),
+                                                        Text(
+                                                            'สร้าง QR Code รับสินค้า'),
+                                                      ],
+                                                    )),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Center(
+                                          child: Text(
+                                              'สามารถใช้สิทธิ์ได้ภายในวันที่ ${snapshotItem.data.dateBegin} - ${snapshotItem.data.dateFinal}'));
+                                    }
                                   }
                                 },
                               )

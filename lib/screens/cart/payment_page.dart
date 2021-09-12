@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
@@ -433,7 +432,7 @@ class _PayPage extends State {
     print("payId : ${payId.toString()}");
 
     print("save image pay Id : ${payId.toString()}");
-    print("Update image File : ${imageFile}");
+    print("Update image File : ${imageFile.toString()}");
 
     var request = http.MultipartRequest('POST', Uri.parse(urlSaveImagePay));
     request.headers.addAll(
@@ -461,7 +460,16 @@ class _PayPage extends State {
   }
 
   void _editCartStatus() async {
-    String statusCart = statusCartWaitPayment;
+    var _dealBegin =
+        '${cartData.dealBegin.split('/')[1]}/${cartData.dealBegin.split('/')[0]}/${cartData.dealBegin.split('/')[2]}';
+    var _dealFinal =
+        '${cartData.dealFinal.split('/')[1]}/${cartData.dealFinal.split('/')[0]}/${cartData.dealFinal.split('/')[2]}';
+    var _dateBegin =
+        '${cartData.dateBegin.split('/')[1]}/${cartData.dateBegin.split('/')[0]}/${cartData.dateBegin.split('/')[2]}';
+    var _dateFinal =
+        '${cartData.dateFinal.split('/')[1]}/${cartData.dateFinal.split('/')[0]}/${cartData.dateFinal.split('/')[2]}';
+
+    String statusCart = 'ชำระเงินแล้ว';
     Map params = Map();
     params['cartId'] = cartData.cartId.toString();
     params['itemId'] = cartData.itemId.toString();
@@ -472,10 +480,10 @@ class _PayPage extends State {
     params['priceSell'] = cartData.priceSell.toString();
     params['status'] = statusCart.toString();
     params['userId'] = userId.toString();
-    params['dealBegin'] = cartData.dealBegin.toString();
-    params['dealFinal'] = cartData.dealFinal.toString();
-    params['dateBegin'] = cartData.dateBegin.toString();
-    params['dateFinal'] = cartData.dateFinal.toString();
+    params['dealBegin'] = _dealBegin.toString();
+    params['dealFinal'] = _dealFinal.toString();
+    params['dateBegin'] = _dateBegin.toString();
+    params['dateFinal'] = _dateFinal.toString();
 
     await http.post(Uri.parse(urlUpdateStatusCart), body: params, headers: {
       HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"

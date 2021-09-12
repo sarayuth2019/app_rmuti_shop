@@ -30,14 +30,14 @@ class _JoinGroupPage extends State {
   final userId;
 
   final urlGetImageByItemId = "${Config.API_URL}/images/";
-  final urlSaveJoinGroup = "${Config.API_URL}/Cart/save";
-  final snackBarOnJoinGroup = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น'));
-  final snackBarOnJoinGroupSuccess = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น สำเร็จ !'));
-  final snackBarOnJoinGroupSuccess2 = SnackBar(content: Text('กรุณาชำระเงินในหน้ารถเข็น เพื่อยืนยันการลงทะเบียน !'));
-  final snackBarOnJoinGroupFall = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น ผิดพลาด !'));
-
-
-
+  final urlSaveToCart = "${Config.API_URL}/Cart/save";
+  final snackBarOnSaveToCart = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น'));
+  final snackBarOnJoinGroupSuccess =
+      SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น สำเร็จ !'));
+  final snackBarOnJoinGroupSuccess2 = SnackBar(
+      content: Text('กรุณาชำระเงินในหน้ารถเข็น เพื่อยืนยันการลงทะเบียน !'));
+  final snackBarOnJoinGroupFall =
+      SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น ผิดพลาด !'));
 
   @override
   Widget build(BuildContext context) {
@@ -80,14 +80,14 @@ class _JoinGroupPage extends State {
                         return Container(
                             child: snapshotImage.data.length == 0
                                 ? Container(
-                                child:
-                                Center(child: Text('กำลังโหลดภาพ...')))
+                                    child:
+                                        Center(child: Text('กำลังโหลดภาพ...')))
                                 : Container(
-                                height: 150,
-                                width: double.infinity,
-                                child: Image.memory(
-                                    base64Decode(snapshotImage.data[index]),
-                                    fit: BoxFit.fill)));
+                                    height: 150,
+                                    width: double.infinity,
+                                    child: Image.memory(
+                                        base64Decode(snapshotImage.data[index]),
+                                        fit: BoxFit.fill)));
                       },
                     ),
                   );
@@ -173,7 +173,7 @@ class _JoinGroupPage extends State {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.teal),
                 onPressed: () {
-                  _onJoinGroup();
+                  _onSaveToCart();
                 },
                 child: Text("ลงทะเบียนเข้าร่วม"),
               ),
@@ -205,9 +205,18 @@ class _JoinGroupPage extends State {
     return _resData;
   }
 
-  void _onJoinGroup() async {
-    ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroup);
-    String statusCart = statusCartJoin;
+  void _onSaveToCart() async {
+    var _dealBegin =
+        '${itemData.dealBegin.split('/')[1]}/${itemData.dealBegin.split('/')[0]}/${itemData.dealBegin.split('/')[2]}';
+    var _dealFinal =
+        '${itemData.dealFinal.split('/')[1]}/${itemData.dealFinal.split('/')[0]}/${itemData.dealFinal.split('/')[2]}';
+    var _dateBegin =
+        '${itemData.dateBegin.split('/')[1]}/${itemData.dateBegin.split('/')[0]}/${itemData.dateBegin.split('/')[2]}';
+    var _dateFinal =
+        '${itemData.dateFinal.split('/')[1]}/${itemData.dateFinal.split('/')[0]}/${itemData.dateFinal.split('/')[2]}';
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBarOnSaveToCart);
+    String statusCart = statusAddToCart;
     Map params = Map();
     params['itemId'] = itemData.itemId.toString();
     params['marketId'] = itemData.marketId.toString();
@@ -217,26 +226,24 @@ class _JoinGroupPage extends State {
     params['priceSell'] = itemData.priceSell.toString();
     params['status'] = statusCart.toString();
     params['userId'] = userId.toString();
-    params['dealBegin'] = itemData.dealBegin.toString();
-    params['dealFinal'] = itemData.dealFinal.toString();
-    params['dateBegin'] = itemData.dateBegin.toString();
-    params['dateFinal'] = itemData.dateFinal.toString();
+    params['dealBegin'] = _dealBegin.toString();
+    params['dealFinal'] = _dealFinal.toString();
+    params['dateBegin'] = _dateBegin.toString();
+    params['dateFinal'] = _dateFinal.toString();
 
-    await http.post(Uri.parse(urlSaveJoinGroup), body: params,
-        headers: {
-          HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
-        }).then((res){
-          print(res.body);
-          var resData = jsonDecode(utf8.decode(res.bodyBytes));
-          var resStatus = resData['status'];
-          if(resStatus == 1 ){
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess);
-            ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess2);
-          }
-          else{
-            ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupFall);
-          }
+    await http.post(Uri.parse(urlSaveToCart), body: params, headers: {
+      HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
+    }).then((res) {
+      print(res.body);
+      var resData = jsonDecode(utf8.decode(res.bodyBytes));
+      var resStatus = resData['status'];
+      if (resStatus == 1) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess);
+        ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess2);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupFall);
+      }
     });
   }
 }

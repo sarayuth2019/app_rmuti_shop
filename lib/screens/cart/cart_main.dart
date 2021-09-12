@@ -38,14 +38,14 @@ class _CartMain extends State {
             appBar: TabBar(
               labelColor: Colors.teal,
               tabs: [
-                Tab(text: statusCartJoin),
+                Tab(text: statusAddToCart),
                 Tab(text: 'รอตรวจสอบ'),
-                Tab(text: statusCartSuccessfulPayment,)
+                Tab(text: 'ชำระเงินสำเร็จ',)
               ],
             ),
             body: TabBarView(
               children: [
-                CartTab(token, userId, statusCartJoin),
+                CartTab(token, userId, statusAddToCart),
                 CartPaymentWaitTab(token, userId),
                 CartPaymentSuccessTab(token, userId)
               ],

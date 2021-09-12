@@ -28,6 +28,7 @@ dependencies:
   carousel_slider:
   clipboard:
   qr_flutter:
+  intl:
 
 
   flutter:
