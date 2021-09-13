@@ -1,4 +1,3 @@
-
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_tab/create_qr_core_page.dart';
 import 'package:app_rmuti_shop/screens/method/method_get_item_data.dart';
@@ -6,7 +5,6 @@ import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 class CartPaymentSuccessTab extends StatefulWidget {
   CartPaymentSuccessTab(this.token, this.userId);
@@ -101,16 +99,6 @@ class _CartPaymentSuccessTab extends State {
                                     AsyncSnapshot<dynamic> snapshotItem) {
                                   // var testDay = DateTime.parse('2021-09-15');
 
-                                  var stringDateBegin =
-                                      '${snapshotItem.data.dateBegin.split('/')[2]}-${snapshotItem.data.dateBegin.split('/')[1]}-${snapshotItem.data.dateBegin.split('/')[0]}';
-                                  DateTime _dateBegin =
-                                      DateTime.parse(stringDateBegin);
-
-                                  var stringDateFinal =
-                                      '${snapshotItem.data.dateFinal.split('/')[2]}-${snapshotItem.data.dateFinal.split('/')[1]}-${snapshotItem.data.dateFinal.split('/')[0]}';
-                                  DateTime _dateFinal =
-                                      DateTime.parse(stringDateFinal);
-
                                   if (snapshotItem.data == null) {
                                     return Center(child: Text('กำลังโหลด...'));
                                   } else if (snapshotItem.data.count !=
@@ -123,6 +111,16 @@ class _CartPaymentSuccessTab extends State {
                                       ),
                                     );
                                   } else {
+                                    var stringDateBegin =
+                                        '${snapshotItem.data.dateBegin.split('/')[2]}-${snapshotItem.data.dateBegin.split('/')[1]}-${snapshotItem.data.dateBegin.split('/')[0]}';
+                                    DateTime _dateBegin =
+                                        DateTime.parse(stringDateBegin);
+
+                                    var stringDateFinal =
+                                        '${snapshotItem.data.dateFinal.split('/')[2]}-${snapshotItem.data.dateFinal.split('/')[1]}-${snapshotItem.data.dateFinal.split('/')[0]}';
+                                    DateTime _dateFinal =
+                                        DateTime.parse(stringDateFinal);
+
                                     if (_dayNow.isAfter(_dateBegin
                                                 .subtract(Duration(days: 0))) ==
                                             true &&

@@ -194,7 +194,7 @@ class _AccountPage extends State {
                                         '${snapshot.data[index].status}',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.green),
+                                            color: Colors.blue),
                                       ),
                                     ],
                                   ),

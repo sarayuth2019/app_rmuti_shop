@@ -169,15 +169,29 @@ class _JoinGroupPage extends State {
             SizedBox(
               height: 10,
             ),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.teal),
-                onPressed: () {
-                  _onSaveToCart();
-                },
-                child: Text("ลงทะเบียนเข้าร่วม"),
-              ),
-            )
+            Container(
+                child: itemData.count == itemData.countRequest
+                    ? Card(
+                        color: Colors.red,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'จำนวนผู้ลงทะเบียนครบแล้ว',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(primary: Colors.teal),
+                          onPressed: () {
+                            _onSaveToCart();
+                          },
+                          child: Text("ลงทะเบียนเข้าร่วม"),
+                        ),
+                      ))
           ],
         ),
       ),
