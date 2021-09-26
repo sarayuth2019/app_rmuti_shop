@@ -31,7 +31,6 @@ class _EditAccount extends State {
   final snackBarEditSuccess = SnackBar(content: Text("แก้ไขสำเร็จ"));
   final snackBarEditFall = SnackBar(content: Text("แก้ไขผิดพลาด"));
 
-
   String? name;
   String? surname;
   String? email;
@@ -206,8 +205,8 @@ class _EditAccount extends State {
   _onGallery() async {
     print('Select Gallery');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker()
-        .getImage(source: ImageSource.gallery,maxWidth: 1000,imageQuality: 100);
+    var _imageGallery = await ImagePicker().pickImage(
+        source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
@@ -223,8 +222,8 @@ class _EditAccount extends State {
   _onCamera() async {
     print('Select Camera');
     // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker()
-        .getImage(source: ImageSource.camera,maxWidth: 1000,imageQuality: 100);
+    var _imageGallery = await ImagePicker().pickImage(
+        source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
