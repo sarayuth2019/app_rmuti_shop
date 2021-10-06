@@ -23,6 +23,7 @@ class _SingUp extends State {
   final singUpSnackBar =
       SnackBar(content: Text("กำลังสมัคสมาชิก กรุณารอซักครู่..."));
   final singUpFail = SnackBar(content: Text("Email นี้มีผู้ใช้แล้ว"));
+  final onImageSnackBar = SnackBar(content: Text("กรุณาเพิ่มภาพผู้ใช้"));
   bool _checkText = false;
   String? email;
   String? password;
@@ -239,9 +240,8 @@ class _SingUp extends State {
 
   _onGallery() async {
     print('Select Gallery');
-    // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker()
-        .pickImage(source: ImageSource.gallery,maxWidth: 1000,imageQuality: 100);
+    var _imageGallery = await ImagePicker().pickImage(
+        source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
       setState(() {
         imageFile = File(_imageGallery.path);
@@ -256,12 +256,11 @@ class _SingUp extends State {
 
   _onCamera() async {
     print('Select Camera');
-    // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker()
-        .pickImage(source: ImageSource.camera,maxWidth: 1000,imageQuality: 100);
-    if (_imageGallery != null) {
+    var _imageCamera = await ImagePicker().pickImage(
+        source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
+    if (_imageCamera != null) {
       setState(() {
-        imageFile = File(_imageGallery.path);
+        imageFile = File(_imageCamera.path);
       });
       imageData = base64Encode(imageFile!.readAsBytesSync());
       Navigator.of(context).pop();
@@ -272,23 +271,55 @@ class _SingUp extends State {
   }
 
   void onSingUp() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(singUpSnackBar);
-      //_snackBarKey.currentState.showSnackBar(singUpSnackBar);
-      _formKey.currentState!.save();
-      print(email);
-      print(password);
-      print(name);
-      print(number);
-      saveToDB();
+    if (imageFile != null) {
+      if (_formKey.currentState!.validate()) {
+        ScaffoldMessenger.of(context).showSnackBar(singUpSnackBar);
+        _formKey.currentState!.save();
+        print(email);
+        print(password);
+        print(name);
+        print(number);
+        _saveToDB();
+      } else {
+        setState(() {
+          _checkText = true;
+        });
+      }
     } else {
-      setState(() {
-        _checkText = true;
-      });
+      ScaffoldMessenger.of(context).showSnackBar(onImageSnackBar);
     }
   }
 
-  void saveToDB() async {
+  void _saveToDB() async {
+    var request = http.MultipartRequest('POST', Uri.parse(urlSingUp));
+    //request.headers.addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+    var _multipart =
+        await http.MultipartFile.fromPath('userImage', imageFile!.path);
+    request.files.add(_multipart);
+
+    request.fields['email'] = email.toString();
+    request.fields['password'] = password.toString();
+    request.fields['name'] = name.toString();
+    request.fields['surname'] = surname.toString();
+    request.fields['phoneNumber'] = number.toString();
+
+    await http.Response.fromStream(await request.send()).then((res) {
+      print(res.body);
+      Map resBody = jsonDecode(res.body) as Map;
+      var _resStatus = resBody['status'];
+      print("Sing Up Status : ${_resStatus}");
+      setState(() {
+        if (_resStatus == 1) {
+          Navigator.pop(
+              context, MaterialPageRoute(builder: (context) => SingIn()));
+        } else if (_resStatus == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(singUpFail);
+        }
+      });
+    });
+  }
+
+/*void saveToDB() async {
     Map params = Map();
     params['imageUser'] = imageData.toString();
     params['email'] = email.toString();
@@ -314,4 +345,6 @@ class _SingUp extends State {
       });
     });
   }
+
+   */
 }

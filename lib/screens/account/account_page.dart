@@ -32,6 +32,7 @@ class _AccountPage extends State {
   final String urlSendAccountById = "${Config.API_URL}/User/list";
   UserData? _userData;
   String _status = 'รับสินค้าสำเร็จ';
+  var _imageUser;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +89,7 @@ class _AccountPage extends State {
                                       color: Colors.grey,
                                     )
                                   : Image.memory(
-                                      base64Decode(snapshot.data.image!),
+                                      base64Decode(_imageUser),
                                       fit: BoxFit.fill,
                                     ),
                             ),
@@ -154,7 +155,12 @@ class _AccountPage extends State {
                   if (snapshot.data == null) {
                     return Center(child: CircularProgressIndicator());
                   } else if (snapshot.data.length == 0) {
-                    return Center(child: Text('ไม่มีประวัติการซื้อ',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),));
+                    return Center(
+                        child: Text(
+                      'ไม่มีประวัติการซื้อ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.grey),
+                    ));
                   } else {
                     return ListView.builder(
                       itemCount: snapshot.data.length,
@@ -220,7 +226,8 @@ class _AccountPage extends State {
     }).then((res) {
       print(res.body);
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
-      var _dataUser = _jsonRes['data'];
+      var _dataUser = _jsonRes['dataId'];
+      _imageUser = _jsonRes['dataImages'];
       print("data User : ${_dataUser.toString()}");
       _userData = UserData(
           _dataUser['userId'],
@@ -228,9 +235,9 @@ class _AccountPage extends State {
           _dataUser['name'],
           _dataUser['surname'],
           _dataUser['email'],
+          _dataUser['imageUser'],
           _dataUser['phoneNumber'],
-          _dataUser['dateRegister'],
-          _dataUser['imageUser']);
+          _dataUser['dateRegister']);
       print("user data : ${_userData}");
     });
     return _userData!;
@@ -251,10 +258,10 @@ class UserData {
   final String name;
   final String surname;
   final String email;
+  final String? image;
   final String phoneNumber;
   final String dateRegister;
-  final String? image;
 
   UserData(this.id, this.password, this.name, this.surname, this.email,
-      this.phoneNumber, this.dateRegister, this.image);
+      this.image, this.phoneNumber, this.dateRegister);
 }
