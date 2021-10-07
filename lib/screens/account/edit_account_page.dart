@@ -8,28 +8,33 @@ import 'package:image_picker/image_picker.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 
 class EditAccount extends StatefulWidget {
-  EditAccount(this.userData, this.token);
+  EditAccount(this.userData, this.imageUser, this.token);
 
   final userData;
+  final imageUser;
   final token;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _EditAccount(userData, token);
+    return _EditAccount(userData, imageUser, token);
   }
 }
 
 class _EditAccount extends State {
-  _EditAccount(this.userData, this.token);
+  _EditAccount(this.userData, this.imageUser, this.token);
 
   final userData;
+  final imageUser;
   final token;
 
   final urlUpDate = "${Config.API_URL}/User/update";
   final snackBarEdit = SnackBar(content: Text("กำลังบันทึกการแก้ไข..."));
   final snackBarEditSuccess = SnackBar(content: Text("แก้ไขสำเร็จ"));
   final snackBarEditFall = SnackBar(content: Text("แก้ไขผิดพลาด"));
+  final snackBarPhoneNumber =
+      SnackBar(content: Text("หมายเลขโทรศัพท์ต้องมี 10 ตัว"));
+  final snackBarNoText = SnackBar(content: Text("กรุณากรอกข้อมูลให้ครบ"));
 
   String? name;
   String? surname;
@@ -46,7 +51,7 @@ class _EditAccount extends State {
     surname = userData.surname;
     email = userData.email;
     phoneNumber = userData.phoneNumber;
-    image = userData.image;
+    image = imageUser;
   }
 
   @override
@@ -204,7 +209,6 @@ class _EditAccount extends State {
 
   _onGallery() async {
     print('Select Gallery');
-    // ignore: deprecated_member_use
     var _imageGallery = await ImagePicker().pickImage(
         source: ImageSource.gallery, maxWidth: 1000, imageQuality: 100);
     if (_imageGallery != null) {
@@ -221,12 +225,11 @@ class _EditAccount extends State {
 
   _onCamera() async {
     print('Select Camera');
-    // ignore: deprecated_member_use
-    var _imageGallery = await ImagePicker().pickImage(
+    var _imageCamera = await ImagePicker().pickImage(
         source: ImageSource.camera, maxWidth: 1000, imageQuality: 100);
-    if (_imageGallery != null) {
+    if (_imageCamera != null) {
       setState(() {
-        imageFile = File(_imageGallery.path);
+        imageFile = File(_imageCamera.path);
       });
       image = base64Encode(imageFile!.readAsBytesSync());
       Navigator.of(context).pop();
@@ -242,39 +245,77 @@ class _EditAccount extends State {
     print("นามสกุล : ${surname.toString()}");
     print("อีเมล : ${email.toString()}");
     print("เบอร์โทร : ${phoneNumber.toString()}");
-    saveToDB();
+    print("Image : ${imageFile}");
+
+    if (name!.length != 0 &&
+        surname!.length != 0 &&
+        phoneNumber!.length == 10) {
+      _upDateToDB();
+    } else if (phoneNumber!.length < 10 || phoneNumber!.length > 10) {
+      ScaffoldMessenger.of(context).showSnackBar(snackBarPhoneNumber);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(snackBarNoText);
+    }
   }
 
-  void saveToDB() async {
+ void _upDateToDB() async {
     ScaffoldMessenger.of(context).showSnackBar(snackBarEdit);
-    Map params = Map();
-    params['userId'] = userData.id.toString();
-    params['imageUser'] = image.toString();
-    params['email'] = email.toString();
-    params['password'] = userData.password.toString();
-    params['name'] = name.toString();
-    params['surname'] = surname.toString();
-    params['phoneNumber'] = phoneNumber.toString();
+    if (imageFile != null) {
+      print('imageFile != null');
+      var request = http.MultipartRequest('POST', Uri.parse(urlUpDate));
+      request.headers.addAll(
+          {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
 
-    http.post(Uri.parse(urlUpDate), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      print(res.body);
+      var _multipart = await http.MultipartFile.fromPath('file', imageFile!.path);
+      print(_multipart.filename);
 
-      Navigator.of(context).pop();
+      request.files.add(_multipart);
+      request.fields['id'] = userData.id.toString();
+      //request.fields['email'] = userData.email.toString();
+      //request.fields['password'] = userData.password.toString();
+      request.fields['name'] = name.toString();
+      request.fields['surname'] = surname.toString();
+      request.fields['phoneNumber'] = phoneNumber.toString();
 
-      Map resBody = jsonDecode(res.body) as Map;
-      var _resStatus = resBody['status'];
-      print("Sing Up Status : ${_resStatus}");
-
-      setState(() {
-        if (_resStatus == 1) {
-          ScaffoldMessenger.of(context).showSnackBar(snackBarEditSuccess);
-        } else if (_resStatus == 0) {
-          ScaffoldMessenger.of(context).showSnackBar(snackBarEditFall);
-          //_snackBarKey.currentState.showSnackBar(singUpFail);
-        }
+      await http.Response.fromStream(await request.send()).then((res) {
+        print(res.body);
+        Map resBody = jsonDecode(res.body) as Map;
+        var _resStatus = resBody['status'];
+        print("Sing Up Status : ${_resStatus}");
+        setState(() {
+          if (_resStatus == 1) {
+            ScaffoldMessenger.of(context).showSnackBar(snackBarEditSuccess);
+          } else if (_resStatus == 0) {
+            ScaffoldMessenger.of(context).showSnackBar(snackBarEditFall);
+          }
+        });
       });
-    });
+    } else if(imageFile == null) {
+      print('imageFile == null');
+      var request =  http.MultipartRequest('POST', Uri.parse(urlUpDate));
+      request.headers.addAll(
+          {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+
+      request.fields['id'] = userData.id.toString();
+      //request.fields['email'] = userData.email.toString();
+      //request.fields['password'] = userData.password.toString();
+      request.fields['name'] = name.toString();
+      request.fields['surname'] = surname.toString();
+      request.fields['phoneNumber'] = phoneNumber.toString();
+
+      await http.Response.fromStream(await request.send()).then((res) {
+        print(res.body);
+        Map resBody = jsonDecode(res.body) as Map;
+        var _resStatus = resBody['status'];
+        print("Sing Up Status : ${_resStatus}");
+        setState(() {
+          if (_resStatus == 1) {
+            ScaffoldMessenger.of(context).showSnackBar(snackBarEditSuccess);
+          } else if (_resStatus == 0) {
+            ScaffoldMessenger.of(context).showSnackBar(snackBarEditFall);
+          }
+        });
+      });
+    }
   }
 }

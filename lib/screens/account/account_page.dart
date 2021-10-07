@@ -59,7 +59,7 @@ class _AccountPage extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EditAccount(_userData, token)));
+                    builder: (context) => EditAccount(_userData,_imageUser, token)));
           },
         ),
         body: Column(
