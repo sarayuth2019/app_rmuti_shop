@@ -96,13 +96,10 @@ class _NotifyPage extends State {
                                           'จำนวนเงิน : ${snapshot.data[index].amount} บาท'),
                                     ],
                                   ),
+                                  Text(
+                                      '${snapshot.data[index].status.split(" ")[1]}'),
                                   Row(
                                     children: [
-                                      Text(
-                                          '${snapshot.data[index].status.split(" ")[1]}'),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
                                       Text(
                                           '${snapshot.data[index].status.split(" ")[2]}'),
                                       Padding(

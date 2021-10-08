@@ -147,7 +147,7 @@ class _CartPaymentSuccessTab extends State {
                                                                   CreateQRCode(snapshot
                                                                       .data[
                                                                           index]
-                                                                      .payId)));
+                                                                      .payId,snapshot.data[index].marketId,token)));
                                                     },
                                                     child: Row(
                                                       mainAxisAlignment:
