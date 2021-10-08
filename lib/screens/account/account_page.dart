@@ -31,7 +31,7 @@ class _AccountPage extends State {
 
   final String urlSendAccountById = "${Config.API_URL}/User/list";
   UserData? _userData;
-  String _status = 'รับสินค้าสำเร็จ';
+  String _status = 'รีวิวสำเร็จ';
   var _imageUser;
 
   @override
@@ -59,7 +59,8 @@ class _AccountPage extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EditAccount(_userData,_imageUser, token)));
+                    builder: (context) =>
+                        EditAccount(_userData, _imageUser, token)));
           },
         ),
         body: Column(

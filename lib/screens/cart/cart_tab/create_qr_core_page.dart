@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,20 +62,22 @@ class _CreateQRCode extends State {
                 if (snapshot.data == null) {
                   return CircularProgressIndicator();
                 } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('ชื่อร้าน : ${snapshot.data.nameMarket}'),
-                        Text('เบอร์โทรติดต่อ : ${snapshot.data.phoneNumber}'),
-                        Text('ที่อยู่ร้าน : ${snapshot.data.descriptionMarket}'),
-                        SizedBox(height: 20,),
-                        Text(
-                          '*หมายเหตุ หากไม่ไปรับสินค้าในวันที่กำหนดทางร้านจะถือว่าท่านสละสิทธิ์',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('ชื่อร้าน : ${snapshot.data.nameMarket}'),
+                          Text('เบอร์โทรติดต่อ : ${snapshot.data.phoneNumber}'),
+                          Text('ที่อยู่ร้าน : ${snapshot.data.descriptionMarket}'),
+                          SizedBox(height: 20,),
+                          Text(
+                            '*หมายเหตุ หากไม่ไปรับสินค้าในวันที่กำหนดทางร้านจะถือว่าท่านสละสิทธิ์',
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }

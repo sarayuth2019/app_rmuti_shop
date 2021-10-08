@@ -1,6 +1,7 @@
 
 import 'package:app_rmuti_shop/screens/cart/cart_tab/cart_payment_success_tab.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_tab/cart_tab.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_tab/received_products_success_tab.dart';
 import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _CartMain extends State {
   Widget build(BuildContext context) {
     // TODO: implement build
     return DefaultTabController(
-        length: 3,
+        length: 4,
         initialIndex: 0,
         child: SafeArea(
           child: Scaffold(
@@ -40,14 +41,16 @@ class _CartMain extends State {
               tabs: [
                 Tab(text: statusAddToCart),
                 Tab(text: 'รอตรวจสอบ'),
-                Tab(text: 'ชำระเงินสำเร็จ',)
+                Tab(text: 'ชำระเงินสำเร็จ',),
+                Tab(text: 'รีวิวร้านค้า',)
               ],
             ),
             body: TabBarView(
               children: [
                 CartTab(token, userId, statusAddToCart),
                 CartPaymentWaitTab(token, userId),
-                CartPaymentSuccessTab(token, userId)
+                CartPaymentSuccessTab(token, userId),
+                ReceivedProductSuccessTab(token, userId)
               ],
             ),
           ),

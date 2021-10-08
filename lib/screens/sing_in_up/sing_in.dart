@@ -3,7 +3,6 @@ import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/main.dart';
 import 'package:app_rmuti_shop/screens/sing_in_up/sing_up.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';

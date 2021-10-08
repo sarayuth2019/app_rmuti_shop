@@ -9,8 +9,6 @@ import 'package:app_rmuti_shop/screens/sing_in_up/sing_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:app_rmuti_shop/main.dart';
-
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
