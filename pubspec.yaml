@@ -29,6 +29,7 @@ dependencies:
   clipboard:
   qr_flutter:
   intl:
+  flutter_rating_bar:
 
 
   flutter:
