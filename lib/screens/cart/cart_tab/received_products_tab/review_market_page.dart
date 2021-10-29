@@ -104,7 +104,7 @@ class _ReviewProductPage extends State {
     print("content : ${content.text}");
 
     Map params = Map();
-    params['user'] = userId.toString();
+    params['userId'] = userId.toString();
     params['marketId'] = marketId.toString();
     params['rating'] = _rating.toString();
     params['content'] = content.text;
@@ -114,6 +114,7 @@ class _ReviewProductPage extends State {
       var statusData = jsonDataRes['status'];
       if (statusData == 1) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarOnReviewSuccess);
+        Navigator.of(context).pop();
         _saveStatusPayment(paymentData);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(snackBarOnReviewFall);

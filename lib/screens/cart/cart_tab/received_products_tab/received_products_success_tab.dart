@@ -1,6 +1,6 @@
 
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/account/review_market_page.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_tab/received_products_tab/review_market_page.dart';
 import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,7 +104,7 @@ class _ReceivedProductSuccessTab extends State {
                                                           .data[index].marketId,
                                                       snapshot.data[index])));
                                     },
-                                    child: Text('รีวิวร้านค้า'),
+                                    child: Text('รีวิวร้านค้า',style: TextStyle(fontWeight: FontWeight.bold),),
                                   )
                                 ],
                               ),

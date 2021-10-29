@@ -1,7 +1,7 @@
 
 import 'package:app_rmuti_shop/screens/cart/cart_tab/cart_payment_success_tab.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_tab/cart_tab.dart';
-import 'package:app_rmuti_shop/screens/cart/cart_tab/received_products_success_tab.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_tab/received_products_tab/received_products_success_tab.dart';
 import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

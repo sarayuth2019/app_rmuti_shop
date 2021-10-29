@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/home/search_page.dart';
-import 'package:app_rmuti_shop/screens/home/joinGroup_page.dart';
+import 'package:app_rmuti_shop/screens/home/joinGroup_page/joinGroup_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -45,7 +45,11 @@ class _HomePage extends State {
           child: Icon(Icons.search),
           backgroundColor: Colors.teal,
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchPage(token,userId,_listItem)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SearchPage(token, userId, _listItem)));
           },
         ),
         body: RefreshIndicator(
@@ -147,32 +151,41 @@ class _HomePage extends State {
                                                           snapshot.data[index]
                                                               .countRequest
                                                       ? Container()
-                                                      : Container(
-                                                          height: 20,
-                                                          child: ElevatedButton(
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) => JoinGroupPage(
-                                                                          snapshot
-                                                                              .data[index],
-                                                                          token,
-                                                                          userId)));
-                                                            },
-                                                            child: Text(
-                                                              'เข้าร่วม',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                            style: ElevatedButton
-                                                                .styleFrom(
-                                                                    primary: Colors
-                                                                        .orange),
+                                                      : GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) => JoinGroupPage(
+                                                                        snapshot
+                                                                            .data[index],
+                                                                        token,
+                                                                        userId)));
+                                                          },
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            child: Container(
+                                                                color: Colors
+                                                                    .orange,
+                                                                height: 20,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left: 5.0,
+                                                                      right:
+                                                                          5.0),
+                                                                  child: Text(
+                                                                    'เข้าร่วม',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ),
+                                                                )),
                                                           ),
                                                         ),
                                             )

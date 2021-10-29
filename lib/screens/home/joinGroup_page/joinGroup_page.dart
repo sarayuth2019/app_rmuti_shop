@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
+import 'package:app_rmuti_shop/screens/home/joinGroup_page/show_review_page.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/screens/method/review_market_method.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 
 class JoinGroupPage extends StatefulWidget {
@@ -94,8 +97,59 @@ class _JoinGroupPage extends State {
                 }
               },
             ),
-            SizedBox(
-              height: 15,
+            FutureBuilder(
+              future: listReviewByMarketId(token, itemData.marketId),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.data == null) {
+                  return Text('กำลังโหลด...');
+                } else {
+                  var _sumRating = snapshot.data
+                      .map((r) => r.rating)
+                      .reduce((value, element) => value + element);
+                  var _countRating = snapshot.data.length;
+
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ShowReviewPage(
+                                    snapshot.data,
+                                    (_sumRating / _countRating),
+                                    _countRating)));
+                      },
+                      child: Container(
+                          decoration: boxDecorationGrey,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'รีวิวของทางร้าน : ${(_sumRating / _countRating).toStringAsFixed(1)}',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                RatingBar.builder(
+                                    itemSize: 30,
+                                    ignoreGestures: true,
+                                    allowHalfRating: true,
+                                    itemCount: 5,
+                                    initialRating: _sumRating / _countRating,
+                                    itemBuilder: (context, r) {
+                                      return Icon(
+                                        Icons.star_rounded,
+                                        color: Colors.amber,
+                                      );
+                                    },
+                                    onRatingUpdate: (value) {}),
+                              ],
+                            ),
+                          )),
+                    ),
+                  );
+                }
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
