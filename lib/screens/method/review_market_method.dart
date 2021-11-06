@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<_ReviewData>> listReviewByMarketId(String token, int marketId) async {
+Future<List<_ReviewData>> listReviewByMarketId(
+    String token, int marketId) async {
   final String urlReviewByItems = '${Config.API_URL}/Review/find/MarketId';
   List<_ReviewData> listReview = [];
-  var _sumRating;
-  var _countRating;
-  var _meanRating;
 
   Map params = Map();
   params['marketId'] = marketId.toString();
@@ -27,17 +25,7 @@ Future<List<_ReviewData>> listReviewByMarketId(String token, int marketId) async
       listReview.insert(0, _reviewData);
       print("list review success");
     }
-    _sumRating = listReview
-        .map((r) => r.rating)
-        .reduce((value, element) => value + element);
-    _countRating = listReview.length;
   });
-  _countRating = listReview.length;
-  print("Review length : ${_countRating.toString()}");
-
-  print("sum rating : ${_sumRating.toString()}");
-  _meanRating = _sumRating! / _countRating!;
-  print("rating เฉลี่ย : ${_meanRating.toString()}");
   return listReview;
 }
 

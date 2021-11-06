@@ -99,14 +99,28 @@ class _JoinGroupPage extends State {
             ),
             FutureBuilder(
               future: listReviewByMarketId(token, itemData.marketId),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.data == null) {
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshotReview) {
+                if (snapshotReview.data == null) {
                   return Text('กำลังโหลด...');
+                } else if (snapshotReview.data.length == 0) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        width: double.infinity,
+                        decoration: boxDecorationGrey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'ยังไม่มีการรีวิวร้านค้า',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                  );
                 } else {
-                  var _sumRating = snapshot.data
+                  var _sumRating = snapshotReview.data
                       .map((r) => r.rating)
                       .reduce((value, element) => value + element);
-                  var _countRating = snapshot.data.length;
+                  var _countRating = snapshotReview.data.length;
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -116,7 +130,7 @@ class _JoinGroupPage extends State {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ShowReviewPage(
-                                    snapshot.data,
+                                    snapshotReview.data,
                                     (_sumRating / _countRating),
                                     _countRating)));
                       },
