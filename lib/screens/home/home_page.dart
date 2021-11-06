@@ -29,6 +29,7 @@ class _HomePage extends State {
   final urlListAllItems = "${Config.API_URL}/Item/list";
   final urlGetImageByItemId = "${Config.API_URL}/images/";
   final snackBarOnFall = SnackBar(content: Text("ผิดพลาด !"));
+  DateTime _dayNow = DateTime.now();
 
   @override
   void initState() {
@@ -69,9 +70,16 @@ class _HomePage extends State {
                       fontWeight: FontWeight.bold),
                 ));
               } else {
+                print('/////////////////// ${_dayNow} /////////////////////');
                 return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (BuildContext context, index) {
+                      var stringDealFinal =
+                          '${snapshot.data[index].dealFinal.split('/')[2]}-${snapshot.data[index].dealFinal.split('/')[1]}-${snapshot.data[index].dealFinal.split('/')[0]}';
+                      DateTime _dealFinal = DateTime.parse(stringDealFinal);
+                      print(
+                          '/////////////////// ${_dealFinal} /////////////////////');
+                      print(_dayNow.isAfter(_dealFinal));
                       return Padding(
                         padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                         child: Container(
@@ -146,48 +154,54 @@ class _HomePage extends State {
                                                   color: Colors.white),
                                             ),
                                             Container(
-                                              child:
-                                                  snapshot.data[index].count ==
+                                              child: snapshot.data[index]
+                                                              .count ==
                                                           snapshot.data[index]
-                                                              .countRequest
-                                                      ? Container()
-                                                      : GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) => JoinGroupPage(
+                                                              .countRequest ||
+                                                      _dayNow.isAfter(_dealFinal
+                                                              .add(Duration(
+                                                                  days: 1))) ==
+                                                          true
+                                                  ? Container()
+                                                  : GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    JoinGroupPage(
                                                                         snapshot
                                                                             .data[index],
                                                                         token,
                                                                         userId)));
-                                                          },
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        5),
-                                                            child: Container(
-                                                                color: Colors
-                                                                    .orange,
-                                                                height: 20,
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets
+                                                      },
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        child: Container(
+                                                            color:
+                                                                Colors.orange,
+                                                            height: 20,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
                                                                           .only(
                                                                       left: 5.0,
                                                                       right:
                                                                           5.0),
-                                                                  child: Text(
-                                                                    'เข้าร่วม',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontWeight:
-                                                                            FontWeight.bold),
-                                                                  ),
-                                                                )),
-                                                          ),
-                                                        ),
+                                                              child: Text(
+                                                                'เข้าร่วม',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            )),
+                                                      ),
+                                                    ),
                                             )
                                           ],
                                         ),
