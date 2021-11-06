@@ -90,22 +90,26 @@ class _SearchPage extends State {
                           width: double.infinity,
                           decoration: boxDecorationGrey,
                           child: ListTile(
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   "${_listItemSearch[index].nameItem}",
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                Text(
-                                    "จากราคา ${_listItemSearch[index]
-                                        .price} บาท"),
-                                Icon(Icons.arrow_forward_outlined,color: Colors.teal,),
-                                Text(
-                                    "ลดเหลือ ${_listItemSearch[index]
-                                        .priceSell} บาท"),
+                                Row(
+                                  children: [
+                                    Text(
+                                        "จากราคา ${_listItemSearch[index]
+                                            .price} บาท"),
+                                    Icon(Icons.arrow_forward_outlined,color: Colors.teal,),
+                                    Text(
+                                        "ลดเหลือ ${_listItemSearch[index]
+                                            .priceSell} บาท"),
+                                  ],
+                                ),
                               ],
                             ),
                             subtitle: Column(
