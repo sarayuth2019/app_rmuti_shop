@@ -45,6 +45,10 @@ class _JoinGroupPage extends State {
   @override
   Widget build(BuildContext context) {
     print(itemData);
+    DateTime _dayNow = DateTime.now();
+    var stringDealFinal =
+        '${itemData.dealFinal.split('/')[2]}-${itemData.dealFinal.split('/')[1]}-${itemData.dealFinal.split('/')[0]}';
+    DateTime _dealFinal = DateTime.parse(stringDealFinal);
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -99,7 +103,8 @@ class _JoinGroupPage extends State {
             ),
             FutureBuilder(
               future: listReviewByMarketId(token, itemData.marketId),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshotReview) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<dynamic> snapshotReview) {
                 if (snapshotReview.data == null) {
                   return Text('กำลังโหลด...');
                 } else if (snapshotReview.data.length == 0) {
@@ -239,13 +244,24 @@ class _JoinGroupPage extends State {
             ),
             Container(
                 child: itemData.count == itemData.countRequest
+                    ? Text('* จำนวนผู้ลงทะเบียนครบแล้ว')
+                    : Container()),
+            Container(
+                child:
+                    _dayNow.isAfter(_dealFinal.add(Duration(days: 1))) == true
+                        ? Text('* สิ้นสุดระยะเวลาการลงทะเบียนแล้ว')
+                        : Container()),
+            Container(
+                child: itemData.count == itemData.countRequest ||
+                        _dayNow.isAfter(_dealFinal.add(Duration(days: 1))) ==
+                            true
                     ? Card(
                         color: Colors.red,
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'จำนวนผู้ลงทะเบียนครบแล้ว',
+                              'ไม่สามารถลงทะเบียนเข้าร่วมได้',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),

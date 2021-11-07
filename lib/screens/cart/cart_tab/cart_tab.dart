@@ -4,6 +4,7 @@ import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/cart/payment_page.dart';
 import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/screens/method/item_data_by_itemId.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -141,34 +142,97 @@ class _CartTab extends State {
                                         ),
                                       ],
                                     ),
-                                    subtitle: Container(
-                                        child: snapshot.data[index].status ==
-                                                statusAddToCart
-                                            ? ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Colors.teal),
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              PayPage(
-                                                                  token,
-                                                                  userId,
-                                                                  snapshot.data[
-                                                                      index])));
-                                                },
-                                                child: Text('ชำระเงิน'))
-                                            : Center(
-                                                child: Text(
-                                                  'รอ${snapshot.data[index]._status}',
-                                                  style: TextStyle(
-                                                      color:
-                                                          Colors.indigoAccent,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ))),
+                                    subtitle: FutureBuilder(
+                                      future: listItemDataByItemId(
+                                          token, snapshot.data[index].itemId),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<dynamic>
+                                              snapshotItemData) {
+                                        if (snapshotItemData.data == null) {
+                                          return Text('กำลังโหลด...');
+                                        } else {
+                                          DateTime _dayNow = DateTime.now();
+                                          var stringDealFinal =
+                                              '${snapshotItemData.data.dealFinal.split('/')[2]}-${snapshotItemData.data.dealFinal.split('/')[1]}-${snapshotItemData.data.dealFinal.split('/')[0]}';
+                                          DateTime _dealFinal =
+                                              DateTime.parse(stringDealFinal);
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                  child: snapshotItemData
+                                                              .data.count ==
+                                                          snapshotItemData
+                                                              .data.countRequest
+                                                      ? Text(
+                                                          '* จำนวนผู้ลงทะเบียนครบแล้ว')
+                                                      : Container()),
+                                              Container(
+                                                  child: _dayNow.isAfter(
+                                                              _dealFinal
+                                                                  .add(Duration(
+                                                                      days:
+                                                                          1))) ==
+                                                          true
+                                                      ? Text(
+                                                          '* สิ้นสุดระยะเวลาการลงทะเบียนแล้ว')
+                                                      : Container()),
+                                              Container(
+                                                  child: snapshotItemData
+                                                                  .data.count ==
+                                                              snapshotItemData
+                                                                  .data
+                                                                  .countRequest ||
+                                                          _dayNow.isAfter(_dealFinal
+                                                                  .add(Duration(
+                                                                      days:
+                                                                          1))) ==
+                                                              true
+                                                      ? Card(
+                                                          color: Colors.red,
+                                                          child: Center(
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                'ไม่สามารถชำระเงินได้',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Center(
+                                                          child: ElevatedButton(
+                                                              style: ElevatedButton
+                                                                  .styleFrom(
+                                                                      primary:
+                                                                          Colors
+                                                                              .teal),
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) => PayPage(
+                                                                            token,
+                                                                            userId,
+                                                                            snapshot.data[index])));
+                                                              },
+                                                              child: Container(
+                                                                width: double
+                                                                    .infinity,
+                                                                child: Center(
+                                                                  child: Text(
+                                                                      'ชำระเงิน'),
+                                                                ),
+                                                              )),
+                                                        ))
+                                            ],
+                                          );
+                                        }
+                                      },
+                                    )),
                               ),
                             ),
                           ),
@@ -290,8 +354,9 @@ class _CartTab extends State {
       }
     });
     listCartTab = _listCart
-        .where((element) =>
-            element.status.toLowerCase().contains(statusAddToCart.toLowerCase()))
+        .where((element) => element.status
+            .toLowerCase()
+            .contains(statusAddToCart.toLowerCase()))
         .toList();
     return listCartTab;
   }
