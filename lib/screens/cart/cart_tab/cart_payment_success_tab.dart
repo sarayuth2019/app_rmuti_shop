@@ -106,7 +106,7 @@ class _CartPaymentSuccessTab extends State {
                                     return Center(
                                       child: Column(
                                         children: [
-                                          Text('ผู้ลงทะเบียนยังไม่ครบตามจำนวน'),
+                                          Text('ผู้ลงทะเบียนยังไม่ครบตามจำนวน  ${snapshotItem.data.count}/${snapshotItem.data.countRequest}'),
                                         ],
                                       ),
                                     );

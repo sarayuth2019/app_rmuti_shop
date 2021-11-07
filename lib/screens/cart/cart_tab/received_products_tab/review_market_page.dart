@@ -114,8 +114,8 @@ class _ReviewProductPage extends State {
       var statusData = jsonDataRes['status'];
       if (statusData == 1) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarOnReviewSuccess);
-        Navigator.of(context).pop();
         _saveStatusPayment(paymentData);
+        Navigator.of(context).pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(snackBarOnReviewFall);
       }
@@ -146,7 +146,6 @@ class _ReviewProductPage extends State {
       if (resStatus == 1) {
         setState(() {
           //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('รับสินค้า สำเร็จ')));
-          Navigator.of(context).pop();
         });
       } else {
         print('save fall !');
