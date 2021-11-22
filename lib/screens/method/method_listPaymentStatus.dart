@@ -1,11 +1,10 @@
-
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:app_rmuti_shop/config/config.dart';
 
-
-Future<List<_Payment>> listPaymentByStatus(token,int userId,String status) async {
+Future<List<_Payment>> listPaymentByStatus(
+    token, int userId, String status) async {
   final String urlGetPaymentByUserId = '${Config.API_URL}/Pay/user';
   List<_Payment> listPayment = [];
   List<_Payment> listPaymentWait = [];
@@ -23,6 +22,7 @@ Future<List<_Payment>> listPaymentByStatus(token,int userId,String status) async
           i['status'],
           i['userId'],
           i['marketId'],
+          i['number'],
           i['itemId'],
           i['amount'],
           i['lastNumber'],
@@ -35,16 +35,18 @@ Future<List<_Payment>> listPaymentByStatus(token,int userId,String status) async
     }
     listPaymentWait = listPayment
         .where((element) =>
-        element.status.toLowerCase().contains(status.toLowerCase()))
+            element.status.toLowerCase().contains(status.toLowerCase()))
         .toList();
   });
   return listPaymentWait;
 }
+
 class _Payment {
   final int payId;
   final String status;
   final int userId;
   final int marketId;
+  final int number;
   final int itemId;
   final int amount;
   final int lastNumber;
@@ -59,6 +61,7 @@ class _Payment {
       this.status,
       this.userId,
       this.marketId,
+      this.number,
       this.itemId,
       this.amount,
       this.lastNumber,

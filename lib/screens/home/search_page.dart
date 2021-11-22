@@ -55,7 +55,7 @@ class _SearchPage extends State {
                   padding: const EdgeInsets.only(left: 8.0,right: 8.0),
                   child: TextField(
                     decoration: InputDecoration(
-                        hintText: "กรอกสินค้าที่ต้องการค้นหา",
+                        hintText: "กรอกชื่อสินค้าที่ต้องการค้นหา",
                         border: InputBorder.none),
                     onChanged: (textSearch) {
                       setState(() {

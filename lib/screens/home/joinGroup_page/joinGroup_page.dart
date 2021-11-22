@@ -31,12 +31,15 @@ class _JoinGroupPage extends State {
   final itemData;
   final token;
   final userId;
+  int _number = 1;
 
   final urlGetImageByItemId = "${Config.API_URL}/images/";
   final urlSaveToCart = "${Config.API_URL}/Cart/save";
   final snackBarOnSaveToCart = SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น'));
   final snackBarOnJoinGroupSuccess =
       SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น สำเร็จ !'));
+  final snackBarNumberError =
+      SnackBar(content: Text('กรุณากรอกจำนวนให้ถูกต้อง'));
   final snackBarOnJoinGroupSuccess2 = SnackBar(
       content: Text('กรุณาชำระเงินในหน้ารถเข็น เพื่อยืนยันการลงทะเบียน !'));
   final snackBarOnJoinGroupFall =
@@ -58,225 +61,299 @@ class _JoinGroupPage extends State {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder(
-              future: getImage(itemData.itemId),
-              builder:
-                  (BuildContext context, AsyncSnapshot<dynamic> snapshotImage) {
-                print(snapshotImage.data.runtimeType);
-                if (snapshotImage.data == null) {
-                  return Container(
-                      height: 150,
-                      width: double.infinity,
-                      decoration: boxDecorationGrey,
-                      child: Center(child: Text('กำลังโหลดภาพ...')));
-                } else {
-                  return Container(
-                    height: 150,
-                    width: double.infinity,
-                    child: CarouselSlider.builder(
-                      options: CarouselOptions(
-                          initialPage: 0,
-                          enlargeCenterPage: true,
-                          autoPlay: true),
-                      itemCount: snapshotImage.data.length,
-                      itemBuilder:
-                          (BuildContext context, int index, int realIndex) {
-                        return Container(
-                            child: snapshotImage.data.length == 0
-                                ? Container(
-                                    child:
-                                        Center(child: Text('กำลังโหลดภาพ...')))
-                                : Container(
-                                    height: 150,
-                                    width: double.infinity,
-                                    child: Image.memory(
-                                        base64Decode(snapshotImage.data[index]),
-                                        fit: BoxFit.fill)));
-                      },
-                    ),
-                  );
-                }
-              },
-            ),
-            FutureBuilder(
-              future: listReviewByMarketId(token, itemData.marketId),
-              builder: (BuildContext context,
-                  AsyncSnapshot<dynamic> snapshotReview) {
-                if (snapshotReview.data == null) {
-                  return Text('กำลังโหลด...');
-                } else if (snapshotReview.data.length == 0) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FutureBuilder(
+                future: getImage(itemData.itemId),
+                builder: (BuildContext context,
+                    AsyncSnapshot<dynamic> snapshotImage) {
+                  print(snapshotImage.data.runtimeType);
+                  if (snapshotImage.data == null) {
+                    return Container(
+                        height: 150,
                         width: double.infinity,
                         decoration: boxDecorationGrey,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'ยังไม่มีการรีวิวร้านค้า',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        )),
-                  );
-                } else {
-                  var _sumRating = snapshotReview.data
-                      .map((r) => r.rating)
-                      .reduce((value, element) => value + element);
-                  var _countRating = snapshotReview.data.length;
-
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ShowReviewPage(
-                                    snapshotReview.data,
-                                    (_sumRating / _countRating),
-                                    _countRating)));
-                      },
+                        child: Center(child: Text('กำลังโหลดภาพ...')));
+                  } else {
+                    return Container(
+                      height: 150,
+                      width: double.infinity,
+                      child: CarouselSlider.builder(
+                        options: CarouselOptions(
+                            initialPage: 0,
+                            enlargeCenterPage: true,
+                            autoPlay: true),
+                        itemCount: snapshotImage.data.length,
+                        itemBuilder:
+                            (BuildContext context, int index, int realIndex) {
+                          return Container(
+                              child: snapshotImage.data.length == 0
+                                  ? Container(
+                                      child: Center(
+                                          child: Text('กำลังโหลดภาพ...')))
+                                  : Container(
+                                      height: 150,
+                                      width: double.infinity,
+                                      child: Image.memory(
+                                          base64Decode(
+                                              snapshotImage.data[index]),
+                                          fit: BoxFit.fill)));
+                        },
+                      ),
+                    );
+                  }
+                },
+              ),
+              FutureBuilder(
+                future: listReviewByMarketId(token, itemData.marketId),
+                builder: (BuildContext context,
+                    AsyncSnapshot<dynamic> snapshotReview) {
+                  if (snapshotReview.data == null) {
+                    return Text('กำลังโหลด...');
+                  } else if (snapshotReview.data.length == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Container(
+                          width: double.infinity,
                           decoration: boxDecorationGrey,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'รีวิวของทางร้าน : ${(_sumRating / _countRating).toStringAsFixed(1)}',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                RatingBar.builder(
-                                    itemSize: 30,
-                                    ignoreGestures: true,
-                                    allowHalfRating: true,
-                                    itemCount: 5,
-                                    initialRating: _sumRating / _countRating,
-                                    itemBuilder: (context, r) {
-                                      return Icon(
-                                        Icons.star_rounded,
-                                        color: Colors.amber,
-                                      );
-                                    },
-                                    onRatingUpdate: (value) {}),
-                              ],
+                            child: Text(
+                              'ยังไม่มีการรีวิวร้านค้า',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           )),
+                    );
+                  } else {
+                    var _sumRating = snapshotReview.data
+                        .map((r) => r.rating)
+                        .reduce((value, element) => value + element);
+                    var _countRating = snapshotReview.data.length;
+
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ShowReviewPage(
+                                      snapshotReview.data,
+                                      (_sumRating / _countRating),
+                                      _countRating)));
+                        },
+                        child: Container(
+                            decoration: boxDecorationGrey,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'รีวิวของทางร้าน : ${(_sumRating / _countRating).toStringAsFixed(1)}',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  RatingBar.builder(
+                                      itemSize: 30,
+                                      ignoreGestures: true,
+                                      allowHalfRating: true,
+                                      itemCount: 5,
+                                      initialRating: _sumRating / _countRating,
+                                      itemBuilder: (context, r) {
+                                        return Icon(
+                                          Icons.star_rounded,
+                                          color: Colors.amber,
+                                        );
+                                      },
+                                      onRatingUpdate: (value) {}),
+                                ],
+                              ),
+                            )),
+                      ),
+                    );
+                  }
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: double.infinity,
+                  decoration: boxDecorationGrey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          itemData.nameItem,
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "ราคา ${itemData.priceSell.toString()} บาท",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Text(
+                          "ลดราคาจาก ${itemData.price.toString()} บาท",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          "จำนวนคนที่ต้องการ ${itemData.countRequest} คน",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          "มีผู้เข้าร่วมแล้ว ${itemData.count} คน",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
                     ),
-                  );
-                }
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                decoration: boxDecorationGrey,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        itemData.nameItem,
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "ราคา ${itemData.priceSell.toString()} บาท",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        "ลดราคาจาก ${itemData.price.toString()} บาท",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        "จำนวนคนที่ต้องการ ${itemData.countRequest} คน",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        "มีผู้เข้าร่วมแล้ว ${itemData.count} คน",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: double.infinity,
-                decoration: boxDecorationGrey,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "ระยะเวลาลงทะเบียนเข้าร่วม",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "${itemData.dealBegin} - ${itemData.dealFinal}",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      Text(
-                        "ระยะเวลาที่สามารถใช้สิทธิ์ได้",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "${itemData.dateBegin} - ${itemData.dateFinal}",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: double.infinity,
+                  decoration: boxDecorationGrey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "ระยะเวลาลงทะเบียนเข้าร่วม",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "${itemData.dealBegin} - ${itemData.dealFinal}",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          "ระยะเวลาที่สามารถใช้สิทธิ์ได้",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "${itemData.dateBegin} - ${itemData.dateFinal}",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-                child: itemData.count == itemData.countRequest
-                    ? Text('* จำนวนผู้ลงทะเบียนครบแล้ว')
-                    : Container()),
-            Container(
-                child:
-                    _dayNow.isAfter(_dealFinal.add(Duration(days: 1))) == true
-                        ? Text('* สิ้นสุดระยะเวลาการลงทะเบียนแล้ว')
-                        : Container()),
-            Container(
-                child: itemData.count == itemData.countRequest ||
-                        _dayNow.isAfter(_dealFinal.add(Duration(days: 1))) ==
-                            true
-                    ? Card(
-                        color: Colors.red,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'ไม่สามารถลงทะเบียนเข้าร่วมได้',
-                              style: TextStyle(color: Colors.white),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                  child: itemData.count == itemData.countRequest
+                      ? Text('* จำนวนผู้ลงทะเบียนครบแล้ว')
+                      : Container()),
+              Container(
+                  child:
+                      _dayNow.isAfter(_dealFinal.add(Duration(days: 1))) == true
+                          ? Text('* สิ้นสุดระยะเวลาการลงทะเบียนแล้ว')
+                          : Container()),
+              Container(
+                  child: itemData.count == itemData.countRequest ||
+                          _dayNow.isAfter(_dealFinal.add(Duration(days: 1))) ==
+                              true
+                      ? Card(
+                          color: Colors.red,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'ไม่สามารถลงทะเบียนเข้าร่วมได้',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    : Center(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.teal),
-                          onPressed: () {
-                            _onSaveToCart();
-                          },
-                          child: Text("ลงทะเบียนเข้าร่วม"),
-                        ),
-                      ))
-          ],
+                        )
+                      : Center(
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        print(_number);
+                                        if (_number <= 1) {
+                                          setState(() {
+                                            _number = 1;
+                                            print(_number);
+                                          });
+                                        } else {
+                                          setState(() {
+                                            _number--;
+                                            print(_number);
+                                          });
+                                        }
+                                      },
+                                      icon: Icon(
+                                        Icons.remove,
+                                        color: Colors.teal,
+                                      )),
+                                  Container(
+                                    decoration: boxDecorationGrey,
+                                    height: 30,
+                                    width: 40,
+                                    child: TextField(
+                                      keyboardType: TextInputType.number,
+                                      controller: TextEditingController(
+                                          text: _number.toString()),
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none),
+                                      onChanged: (text) {
+                                        if (text.toString().length == 0) {
+                                          setState(() {
+                                            _number = 1;
+                                            print(_number);
+                                          });
+                                        } else {
+                                          _number = int.parse(text);
+                                          print(_number);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _number++;
+                                          print(_number);
+                                        });
+                                      },
+                                      icon: Icon(
+                                        Icons.add,
+                                        color: Colors.teal,
+                                      ))
+                                ],
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.teal),
+                                onPressed: () {
+                                  if (_number == 0 ||
+                                      _number > itemData.countRequest) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBarNumberError);
+                                  } else {
+                                    print('Save to cart +++++');
+                                    _onSaveToCart();
+                                  }
+                                },
+                                child: Text("เพิ่มไปยังรถเข็น"),
+                              ),
+                            ],
+                          ),
+                        ))
+            ],
+          ),
         ),
       ),
     );
@@ -319,7 +396,7 @@ class _JoinGroupPage extends State {
     params['itemId'] = itemData.itemId.toString();
     params['marketId'] = itemData.marketId.toString();
     params['nameCart'] = itemData.nameItem.toString();
-    params['number'] = 1.toString();
+    params['number'] = _number.toString();
     params['price'] = itemData.price.toString();
     params['priceSell'] = itemData.priceSell.toString();
     params['status'] = statusCart.toString();

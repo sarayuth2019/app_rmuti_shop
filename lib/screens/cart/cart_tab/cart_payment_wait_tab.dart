@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -27,7 +28,6 @@ class _CartPaymentWaitTab extends State {
   final userId;
 
   final String urlGetPaymentByUserId = '${Config.API_URL}/Pay/user';
-  final String urlGetPayImage = '${Config.API_URL}/ImagePay/listId';
   String _status = 'รอดำเนินการ';
 
   @override
@@ -162,8 +162,26 @@ class _CartPaymentWaitTab extends State {
                     return Center(child: CircularProgressIndicator());
                   } else {
                     return Container(
-                      child: Image.memory(base64Decode(snapshot.data)),
-                    );
+                        height: 250,
+                        child: CarouselSlider.builder(
+                          options: CarouselOptions(
+                              initialPage: 0,
+                              enlargeCenterPage: true,
+                              autoPlay: false),
+                          itemCount: snapshot.data.length,
+                          itemBuilder:
+                              (BuildContext context, int index, int realIndex) {
+                            return Container(
+                                child: snapshot.data.length == 0
+                                    ? Container(
+                                        child: Center(
+                                            child: Text('กำลังโหลดสลีป...')))
+                                    : Container(
+                                        child: Image.memory(
+                                        base64Decode(snapshot.data[index]),fit: BoxFit.fill,
+                                      )));
+                          },
+                        ));
                   }
                 },
               ),
@@ -173,6 +191,7 @@ class _CartPaymentWaitTab extends State {
   }
 
   Future<void> getImagePay(int paymentId) async {
+    final String urlGetPayImage = '${Config.API_URL}/ImagePay/payId';
     var imagePay;
     Map params = Map();
     params['payId'] = paymentId.toString();
@@ -181,6 +200,7 @@ class _CartPaymentWaitTab extends State {
     }).then((res) {
       var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
       var imagePayData = jsonData['dataImages'];
+      print(imagePayData);
       imagePay = imagePayData;
     });
     return imagePay;

@@ -71,18 +71,24 @@ class _CartTab extends State {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "${snapshot.data[index].nameItem}",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "${snapshot.data[index].nameItem}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18),
+                                            ),
+                                            Text(
+                                                '  x  ${snapshot.data[index].number}')
+                                          ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                                "จากราคา ${snapshot.data[index].price} บาท"),
+                                                "จากราคา ${snapshot.data[index].price * snapshot.data[index].number} บาท"),
                                             Icon(
                                               Icons.arrow_forward_outlined,
                                               color: Colors.teal,
@@ -91,7 +97,7 @@ class _CartTab extends State {
                                               children: [
                                                 Text('ลดเหลือ'),
                                                 Text(
-                                                  " ${snapshot.data[index].priceSell} ",
+                                                  " ${snapshot.data[index].priceSell * snapshot.data[index].number} ",
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,

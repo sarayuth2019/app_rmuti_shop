@@ -77,7 +77,7 @@ class _PayPage extends State {
                 style: TextStyle(fontSize: 16),
               ),
               Text(
-                ' ${cartData.priceSell.toString()} ',
+                ' ${cartData.priceSell * cartData.number} ',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               Text(
@@ -373,7 +373,7 @@ class _PayPage extends State {
     } else if (amount == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กรุณากรอกจำนวนเงินที่โอน')));
-    } else if (amount != cartData.priceSell) {
+    } else if (amount != (cartData.priceSell* cartData.number)) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง')));
     } else if (_lastNumber == null || _lastNumber.toString().length != 4) {
@@ -401,6 +401,7 @@ class _PayPage extends State {
     Map params = Map();
     params['userId'] = userId.toString();
     params['marketId'] = cartData.marketId.toString();
+    params['number'] = cartData.number.toString();
     params['itemId'] = cartData.itemId.toString();
     params['bankTransfer'] = _bankTransferValue.toString();
     params['bankReceive'] = _bankReceiveValue.toString();
@@ -419,7 +420,7 @@ class _PayPage extends State {
         var dataPay = resData['data'];
         var payId = dataPay['payId'];
         print(payId);
-        saveImage(payId);
+        saveImagePayment(payId);
       } else {
         print('save fall !');
         ScaffoldMessenger.of(context)
@@ -428,7 +429,7 @@ class _PayPage extends State {
     });
   }
 
-  void saveImage(payId) async {
+  void saveImagePayment(payId) async {
     print("payId : ${payId.toString()}");
 
     print("save image pay Id : ${payId.toString()}");
@@ -475,7 +476,7 @@ class _PayPage extends State {
     params['itemId'] = cartData.itemId.toString();
     params['marketId'] = cartData.marketId.toString();
     params['nameCart'] = cartData.nameItem.toString();
-    params['number'] = 1.toString();
+    params['number'] = cartData.number.toString();
     params['price'] = cartData.price.toString();
     params['priceSell'] = cartData.priceSell.toString();
     params['status'] = statusCart.toString();
