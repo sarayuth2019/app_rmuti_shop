@@ -99,29 +99,51 @@ class _CartPaymentWaitTab extends State {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text('สถานะ : '),
-                                  Text(
-                                    '${snapshot.data[index].status}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.amber),
+                                  Container(
+                                    child: snapshot.data[index].status ==
+                                            'รอดำเนินการ'
+                                        ? Text(
+                                            '${snapshot.data[index].status}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.amber),
+                                          )
+                                        : Text(
+                                            '${snapshot.data[index].status}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red),
+                                          ),
                                   ),
                                 ],
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Container(
-                                    height: 25,
-                                    child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.amber),
-                                        onPressed: () {
-                                          _showPaymentImage(context,
-                                              snapshot.data[index].payId);
-                                        },
-                                        child: Text('ดูสลีปจ่ายเงิน')),
-                                  ),
-                                ),
+                                child: snapshot.data[index].status ==
+                                        'รอดำเนินการ'
+                                    ? Center(
+                                        child: Container(
+                                          height: 25,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Colors.amber),
+                                              onPressed: () {
+                                                _showPaymentImage(context,
+                                                    snapshot.data[index].payId);
+                                              },
+                                              child: Text('ดูสลีปจ่ายเงิน')),
+                                        ),
+                                      )
+                                    : Center(
+                                        child: Container(
+                                          height: 25,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Colors.amber),
+                                              onPressed: () {},
+                                              child: Text('แก้ไขการชำระเงิน')),
+                                        ),
+                                      ),
                               ),
                             ],
                           ),
@@ -178,7 +200,8 @@ class _CartPaymentWaitTab extends State {
                                             child: Text('กำลังโหลดสลีป...')))
                                     : Container(
                                         child: Image.memory(
-                                        base64Decode(snapshot.data[index]),fit: BoxFit.fill,
+                                        base64Decode(snapshot.data[index]),
+                                        fit: BoxFit.fill,
                                       )));
                           },
                         ));

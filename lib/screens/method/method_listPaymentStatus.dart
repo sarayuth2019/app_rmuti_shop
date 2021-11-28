@@ -33,10 +33,23 @@ Future<List<_Payment>> listPaymentByStatus(
           i['dataTransfer']);
       listPayment.add(_payment);
     }
-    listPaymentWait = listPayment
-        .where((element) =>
-            element.status.toLowerCase().contains(status.toLowerCase()))
-        .toList();
+    if(status == 'รอดำเนินการ'){
+      List<_Payment> listPaymentWait1 = listPayment
+          .where((element) =>
+          element.status.toLowerCase().contains(status.toLowerCase()))
+          .toList();
+      List<_Payment> listPaymentWait2 = listPayment
+          .where((element) =>
+          element.status.toLowerCase().contains('ชำระเงินผิดพลาด'.toLowerCase()))
+          .toList();
+      listPaymentWait = listPaymentWait1+listPaymentWait2;
+    }
+    else{
+      listPaymentWait = listPayment
+          .where((element) =>
+          element.status.toLowerCase().contains(status.toLowerCase()))
+          .toList();
+    }
   });
   return listPaymentWait;
 }

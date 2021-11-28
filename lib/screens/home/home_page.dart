@@ -31,6 +31,8 @@ class _HomePage extends State {
   final snackBarOnFall = SnackBar(content: Text("ผิดพลาด !"));
   DateTime _dayNow = DateTime.now();
 
+  var _fontSize = 12.0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -127,13 +129,13 @@ class _HomePage extends State {
                                               "${snapshot.data[index].nameItem}",
                                               style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 17,
+                                                  fontSize: 15.0,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
                                               "${snapshot.data[index].dealBegin} - ${snapshot.data[index].dealFinal}",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.white,fontSize: _fontSize),
                                             )
                                           ],
                                         ),
@@ -151,7 +153,7 @@ class _HomePage extends State {
                                             Text(
                                               "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.white,fontSize: _fontSize),
                                             ),
                                             Container(
                                               child: snapshot.data[index]

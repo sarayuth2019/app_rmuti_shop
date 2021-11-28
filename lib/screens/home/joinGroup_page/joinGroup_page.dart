@@ -339,7 +339,7 @@ class _JoinGroupPage extends State {
                                     primary: Colors.teal),
                                 onPressed: () {
                                   if (_number == 0 ||
-                                      _number > itemData.countRequest) {
+                                      (_number+itemData.count) > itemData.countRequest) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBarNumberError);
                                   } else {
