@@ -34,15 +34,26 @@ Future<List<_Payment>> listPaymentByStatus(
       listPayment.add(_payment);
     }
     if(status == 'รอดำเนินการ'){
-      List<_Payment> listPaymentWait1 = listPayment
+      List<_Payment> _listPaymentWait1 = listPayment
           .where((element) =>
           element.status.toLowerCase().contains(status.toLowerCase()))
           .toList();
-      List<_Payment> listPaymentWait2 = listPayment
+      List<_Payment> _listPaymentWait2 = listPayment
           .where((element) =>
           element.status.toLowerCase().contains('ชำระเงินผิดพลาด'.toLowerCase()))
           .toList();
-      listPaymentWait = listPaymentWait1+listPaymentWait2;
+      listPaymentWait = _listPaymentWait1+_listPaymentWait2;
+    }
+    else if(status == "ประวัติการซื้อ"){
+      List<_Payment> _listPaymentWait1 = listPayment
+          .where((element) =>
+          element.status.toLowerCase().contains('รับสินค้าสำเร็จ'.toLowerCase()))
+          .toList();
+      List<_Payment> _listPaymentWait2 = listPayment
+          .where((element) =>
+          element.status.toLowerCase().contains('รีวิวสำเร็จ'.toLowerCase()))
+          .toList();
+      listPaymentWait = _listPaymentWait1+_listPaymentWait2;
     }
     else{
       listPaymentWait = listPayment

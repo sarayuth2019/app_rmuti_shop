@@ -122,8 +122,6 @@ class _HomePage extends State {
                                         padding: const EdgeInsets.only(
                                             left: 8.0, right: 8.0),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               "${snapshot.data[index].nameItem}",
@@ -132,10 +130,23 @@ class _HomePage extends State {
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            Text(
-                                              "${snapshot.data[index].dealBegin} - ${snapshot.data[index].dealFinal}",
-                                              style: TextStyle(
-                                                  color: Colors.white,fontSize: _fontSize),
+                                            SizedBox(width: 8,),
+                                            Container(
+                                              child: snapshot.data[index]
+                                                          .groupItems ==
+                                                      1
+                                                  ? Text(
+                                                      "(สินค้าพร้อมขาย)",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: _fontSize),
+                                                    )
+                                                  : Text(
+                                                      "(สินค้า Pre order)",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: _fontSize),
+                                                    ),
                                             )
                                           ],
                                         ),
@@ -153,7 +164,8 @@ class _HomePage extends State {
                                             Text(
                                               "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
                                               style: TextStyle(
-                                                  color: Colors.white,fontSize: _fontSize),
+                                                  color: Colors.white,
+                                                  fontSize: _fontSize),
                                             ),
                                             Container(
                                               child: snapshot.data[index]
@@ -287,7 +299,7 @@ class _HomePage extends State {
 class _Items {
   final int itemId;
   final String nameItem;
-  final int groupItem;
+  final int groupItems;
   final int price;
   final int priceSell;
   final int count;
@@ -302,7 +314,7 @@ class _Items {
   _Items(
       this.itemId,
       this.nameItem,
-      this.groupItem,
+      this.groupItems,
       this.price,
       this.priceSell,
       this.count,

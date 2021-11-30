@@ -70,61 +70,123 @@ class _NotifyPage extends State {
                       child: Stack(
                         children: [
                           Container(
-                            decoration: boxDecorationGrey,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Payment Id : ${snapshot.data[index].payId}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${snapshot.data[index].status.split(" ")[0]}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                              child: snapshot.data[index].status
+                                          .split(" ")[0] ==
+                                      "ยืนยันการชำระเงินผิดพลาด"
+                                  ? Container(
+                                      decoration: boxDecorationGrey,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Payment Id : ${snapshot.data[index].payId}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  '${snapshot.data[index].status.split(" ")[0]}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  width: 15,
+                                                ),
+                                                Text(
+                                                    'จำนวนเงิน : ${snapshot.data[index].amount} บาท'),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                    '${snapshot.data[index].status.split(" ")[1]} '),
+                                                Text(
+                                                  ' ${snapshot.data[index].status.split(" ")[2]}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                    '${snapshot.data[index].createDate}'),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(
-                                        width: 15,
+                                    )
+                                  : Container(
+                                      decoration: boxDecorationGrey,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Payment Id : ${snapshot.data[index].payId}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  '${snapshot.data[index].status.split(" ")[0]}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  width: 15,
+                                                ),
+                                                Text(
+                                                    'จำนวนเงิน : ${snapshot.data[index].amount} บาท'),
+                                              ],
+                                            ),
+                                            Text(
+                                                '${snapshot.data[index].status.split(" ")[1]}'),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                    '${snapshot.data[index].status.split(" ")[2]}'),
+                                                Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 5, right: 5),
+                                                    child: Icon(
+                                                      Icons.arrow_forward,
+                                                      color: Colors.teal,
+                                                    )),
+                                                Text(
+                                                    '${snapshot.data[index].status.split(" ")[4]}'),
+                                              ],
+                                            ),
+                                            SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                    '${snapshot.data[index].createDate}'),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      Text(
-                                          'จำนวนเงิน : ${snapshot.data[index].amount} บาท'),
-                                    ],
-                                  ),
-                                  Text(
-                                      '${snapshot.data[index].status.split(" ")[1]}'),
-                                  Row(
-                                    children: [
-                                      Text(
-                                          '${snapshot.data[index].status.split(" ")[2]}'),
-                                      Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 5, right: 5),
-                                          child: Icon(
-                                            Icons.arrow_forward,
-                                            color: Colors.teal,
-                                          )),
-                                      Text(
-                                          '${snapshot.data[index].status.split(" ")[4]}'),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                          '${snapshot.data[index].createDate}'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                    )),
                           Positioned(
                               top: 0,
                               right: 0,

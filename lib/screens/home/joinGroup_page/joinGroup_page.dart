@@ -186,10 +186,19 @@ class _JoinGroupPage extends State {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          itemData.nameItem,
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
+                        Row(
+                          children: [
+                            Text(
+                              itemData.nameItem,
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(width: 8),
+                            Container(
+                                child: itemData.groupItems == 1
+                                    ? Text('(สินค้าพร้อมขาย)')
+                                    : Text('(สินค้า Pre order)'))
+                          ],
                         ),
                         Text(
                           "ราคา ${itemData.priceSell.toString()} บาท",
@@ -197,15 +206,15 @@ class _JoinGroupPage extends State {
                         ),
                         Text(
                           "ลดราคาจาก ${itemData.price.toString()} บาท",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 14),
                         ),
                         Text(
                           "จำนวนคนที่ต้องการ ${itemData.countRequest} คน",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 14),
                         ),
                         Text(
                           "มีผู้เข้าร่วมแล้ว ${itemData.count} คน",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
@@ -229,16 +238,16 @@ class _JoinGroupPage extends State {
                         ),
                         Text(
                           "${itemData.dealBegin} - ${itemData.dealFinal}",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 14),
                         ),
                         Text(
-                          "ระยะเวลาที่สามารถใช้สิทธิ์ได้",
+                          "ระยะเวลาที่สามารถใช้สิทธิ์รับสินค้าได้",
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           "${itemData.dateBegin} - ${itemData.dateFinal}",
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
@@ -339,7 +348,8 @@ class _JoinGroupPage extends State {
                                     primary: Colors.teal),
                                 onPressed: () {
                                   if (_number == 0 ||
-                                      (_number+itemData.count) > itemData.countRequest) {
+                                      (_number + itemData.count) >
+                                          itemData.countRequest) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(snackBarNumberError);
                                   } else {

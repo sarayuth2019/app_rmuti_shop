@@ -1,6 +1,6 @@
 
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/cart/cart_tab/received_products_tab/review_market_page.dart';
+import 'package:app_rmuti_shop/screens/cart/received_products_tab/review_market_page.dart';
 import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';

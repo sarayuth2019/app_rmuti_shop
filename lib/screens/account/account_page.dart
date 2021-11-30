@@ -31,7 +31,7 @@ class _AccountPage extends State {
 
   final String urlSendAccountById = "${Config.API_URL}/User/list";
   UserData? _userData;
-  String _status = 'รีวิวสำเร็จ';
+  String _status = 'ประวัติการซื้อ';
   var _imageUser;
 
   @override

@@ -129,6 +129,7 @@ class _ReviewProductPage extends State {
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
     params['marketId'] = _paymentData.marketId.toString();
+    params['number'] = _paymentData.number.toString();
     params['itemId'] = _paymentData.itemId.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();

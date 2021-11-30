@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/cart/payment_page.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_tab/payment_page.dart';
 import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:app_rmuti_shop/screens/method/item_data_by_itemId.dart';
