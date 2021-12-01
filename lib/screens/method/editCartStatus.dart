@@ -22,7 +22,7 @@ void editCartStatus(context,token,cartData) async {
   params['itemId'] = cartData.itemId.toString();
   params['marketId'] = cartData.marketId.toString();
   params['nameCart'] = cartData.nameItem.toString();
-  params['number'] = 1.toString();
+  params['number'] = cartData.number.toString();
   params['price'] = cartData.price.toString();
   params['priceSell'] = cartData.priceSell.toString();
   params['status'] = statusCart.toString();

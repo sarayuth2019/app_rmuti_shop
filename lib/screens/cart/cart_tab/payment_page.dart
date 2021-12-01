@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/screens/method/saveImagePayment.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +31,6 @@ class _PayPage extends State {
   final cartData;
 
   final String urlSavePay = '${Config.API_URL}/Pay/save';
-  final String urlSaveImagePay = '${Config.API_URL}/ImagePay/save';
-  final String urlUpdateStatusCart = "${Config.API_URL}/Cart/update";
   String _bankName = 'ธนาคารไทยพาณิชย์ SCB';
   String _bankNumber = 'xxxxxxxxxx';
   List<String> _listTransferBankName = [
@@ -420,86 +419,11 @@ class _PayPage extends State {
         var dataPay = resData['data'];
         var payId = dataPay['payId'];
         print(payId);
-        saveImagePayment(payId);
+        saveImagePayment(context, token, payId, imageFile!, cartData);
       } else {
         print('save fall !');
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
-      }
-    });
-  }
-
-  void saveImagePayment(payId) async {
-    print("payId : ${payId.toString()}");
-
-    print("save image pay Id : ${payId.toString()}");
-    print("Update image File : ${imageFile.toString()}");
-
-    var request = http.MultipartRequest('POST', Uri.parse(urlSaveImagePay));
-    request.headers.addAll(
-        {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
-
-    var _multipart =
-        await http.MultipartFile.fromPath('picture', imageFile!.path);
-
-    request.files.add(_multipart);
-    request.fields['payId'] = payId.toString();
-
-    await http.Response.fromStream(await request.send()).then((res) {
-      print(res.body);
-      var resData = jsonDecode(res.body);
-      var statusRes = resData['status'];
-      if (statusRes == 1) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('ชำระเงินสำเร็จ รอการตรวจสอบการชำระเงิน')));
-        _editCartStatus();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('บันทึกภาพ ชำระเงินผิดพลาด !')));
-      }
-    });
-  }
-
-  void _editCartStatus() async {
-    var _dealBegin =
-        '${cartData.dealBegin.split('/')[1]}/${cartData.dealBegin.split('/')[0]}/${cartData.dealBegin.split('/')[2]}';
-    var _dealFinal =
-        '${cartData.dealFinal.split('/')[1]}/${cartData.dealFinal.split('/')[0]}/${cartData.dealFinal.split('/')[2]}';
-    var _dateBegin =
-        '${cartData.dateBegin.split('/')[1]}/${cartData.dateBegin.split('/')[0]}/${cartData.dateBegin.split('/')[2]}';
-    var _dateFinal =
-        '${cartData.dateFinal.split('/')[1]}/${cartData.dateFinal.split('/')[0]}/${cartData.dateFinal.split('/')[2]}';
-
-    String statusCart = 'ชำระเงินแล้ว';
-    Map params = Map();
-    params['cartId'] = cartData.cartId.toString();
-    params['itemId'] = cartData.itemId.toString();
-    params['marketId'] = cartData.marketId.toString();
-    params['nameCart'] = cartData.nameItem.toString();
-    params['number'] = cartData.number.toString();
-    params['price'] = cartData.price.toString();
-    params['priceSell'] = cartData.priceSell.toString();
-    params['status'] = statusCart.toString();
-    params['userId'] = userId.toString();
-    params['dealBegin'] = _dealBegin.toString();
-    params['dealFinal'] = _dealFinal.toString();
-    params['dateBegin'] = _dateBegin.toString();
-    params['dateFinal'] = _dateFinal.toString();
-
-    await http.post(Uri.parse(urlUpdateStatusCart), body: params, headers: {
-      HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
-    }).then((res) {
-      print(res.body);
-      var resData = jsonDecode(utf8.decode(res.bodyBytes));
-      var resStatus = resData['status'];
-      if (resStatus == 1) {
-        setState(() {
-          print(resData);
-        });
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('บันทึกสถานะ Cart ผิดพลาด !')));
       }
     });
   }

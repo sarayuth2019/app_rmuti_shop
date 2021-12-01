@@ -1,12 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_payment_wait_tab/edit_payment_page.dart';
+import 'package:app_rmuti_shop/screens/method/getImagePayment.dart';
 import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 
 class CartPaymentWaitTab extends StatefulWidget {
   CartPaymentWaitTab(this.token, this.userId);
@@ -140,8 +141,18 @@ class _CartPaymentWaitTab extends State {
                                           child: ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                   primary: Colors.amber),
-                                              onPressed: () {},
-                                              child: Text('แก้ไขการชำระเงิน')),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            EditPaymentPage(
+                                                                token,
+                                                                snapshot.data[
+                                                                    index])));
+                                              },
+                                              child:
+                                                  Text('เพิ่มสลีปการโอนเงิน')),
                                         ),
                                       ),
                               ),
@@ -177,7 +188,7 @@ class _CartPaymentWaitTab extends State {
             ),
             content: SingleChildScrollView(
               child: FutureBuilder(
-                future: getImagePay(snapShotPaymentId),
+                future: getImagePay(token, snapShotPaymentId),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.data == null) {
@@ -211,21 +222,5 @@ class _CartPaymentWaitTab extends State {
             ),
           );
         });
-  }
-
-  Future<void> getImagePay(int paymentId) async {
-    final String urlGetPayImage = '${Config.API_URL}/ImagePay/payId';
-    var imagePay;
-    Map params = Map();
-    params['payId'] = paymentId.toString();
-    await http.post(Uri.parse(urlGetPayImage), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
-      var imagePayData = jsonData['dataImages'];
-      print(imagePayData);
-      imagePay = imagePayData;
-    });
-    return imagePay;
   }
 }

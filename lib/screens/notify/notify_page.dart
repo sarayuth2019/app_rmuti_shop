@@ -95,11 +95,6 @@ class _NotifyPage extends State {
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ),
-                                                SizedBox(
-                                                  width: 15,
-                                                ),
-                                                Text(
-                                                    'จำนวนเงิน : ${snapshot.data[index].amount} บาท'),
                                               ],
                                             ),
                                             Row(

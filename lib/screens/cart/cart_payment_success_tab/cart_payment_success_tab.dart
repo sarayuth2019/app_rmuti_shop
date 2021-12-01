@@ -78,6 +78,8 @@ class _CartPaymentSuccessTab extends State {
                               Text(
                                   'โอนเงินจำนวน : ${snapshot.data[index].amount} บาท'),
                               Text(
+                                  'จำนวนสินค้า : ${snapshot.data[index].number}'),
+                              Text(
                                   'โอนจากบัญชี : xxxxxxx ${snapshot.data[index].lastNumber}'),
                               Text('${snapshot.data[index].bankTransfer}'),
                               Row(
@@ -106,7 +108,8 @@ class _CartPaymentSuccessTab extends State {
                                     return Center(
                                       child: Column(
                                         children: [
-                                          Text('ผู้ลงทะเบียนยังไม่ครบตามจำนวน  ${snapshotItem.data.count}/${snapshotItem.data.countRequest}'),
+                                          Text(
+                                              'ผู้ลงทะเบียนยังไม่ครบตามจำนวน  ${snapshotItem.data.count}/${snapshotItem.data.countRequest}'),
                                         ],
                                       ),
                                     );
@@ -144,10 +147,16 @@ class _CartPaymentSuccessTab extends State {
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
-                                                                  CreateQRCode(snapshot
-                                                                      .data[
-                                                                          index]
-                                                                      .payId,snapshot.data[index].marketId,token)));
+                                                                  CreateQRCode(
+                                                                      snapshot
+                                                                          .data[
+                                                                              index]
+                                                                          .payId,
+                                                                      snapshot
+                                                                          .data[
+                                                                              index]
+                                                                          .marketId,
+                                                                      token)));
                                                     },
                                                     child: Row(
                                                       mainAxisAlignment:
