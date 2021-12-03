@@ -169,6 +169,7 @@ class _EditPaymentPage extends State {
               child: Column(
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'หมายเหตุ : ',
@@ -178,7 +179,11 @@ class _EditPaymentPage extends State {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'การชำระเงินของท่านผิดพลาด โปรดทำการชำระเงินอีกครั้ง',
+                            'การชำระเงินของท่านผิดพลาด โปรดตรวจสอบสลีปของท่าน',
+                            style: TextStyle(fontSize: _fontSize),
+                          ),
+                          Text(
+                            'หากจำนวนเงินไม่ตรงกับราคาสินค้า กรุณาโอนเพิ่ม',
                             style: TextStyle(fontSize: _fontSize),
                           ),
                           Text(

@@ -80,7 +80,26 @@ class _CartTab extends State {
                                                   fontSize: 18),
                                             ),
                                             Text(
-                                                '  x  ${snapshot.data[index].number}')
+                                                '  x  ${snapshot.data[index].number}'),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            Container(
+                                                child: snapshot
+                                                            .data[index].detail
+                                                            .split(',')[0] ==
+                                                        'null'
+                                                    ? Container()
+                                                    : Text(
+                                                        'ขนาด : ${(snapshot.data[index].detail.split(',')[0]).split(':')[0]}')),
+                                            Container(
+                                                child: snapshot
+                                                            .data[index].detail
+                                                            .split(',')[1] ==
+                                                        'null'
+                                                    ? Container()
+                                                    : Text(
+                                                        'สี : ${(snapshot.data[index].detail.split(',')[1]).split(':')[0]}')),
                                           ],
                                         ),
                                         Row(
@@ -348,6 +367,7 @@ class _CartTab extends State {
             i['number'],
             i['price'],
             i['priceSell'],
+            i['detail'],
             i['marketId'],
             i['userId'],
             i['itemId'],
@@ -375,6 +395,7 @@ class _Cart {
   final int number;
   final int price;
   final int priceSell;
+  final detail;
   final int marketId;
   final int userId;
   final int itemId;
@@ -391,6 +412,7 @@ class _Cart {
       this.number,
       this.price,
       this.priceSell,
+      this.detail,
       this.marketId,
       this.userId,
       this.itemId,

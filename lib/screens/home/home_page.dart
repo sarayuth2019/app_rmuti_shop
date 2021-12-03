@@ -130,7 +130,9 @@ class _HomePage extends State {
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            SizedBox(width: 8,),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
                                             Container(
                                               child: snapshot.data[index]
                                                           .groupItems ==
@@ -258,6 +260,8 @@ class _HomePage extends State {
           i['price'],
           i['priceSell'],
           i['count'],
+          i['size'],
+          i['colors'],
           i['countRequest'],
           i['marketId'],
           i['dateBegin'],
@@ -303,6 +307,8 @@ class _Items {
   final int price;
   final int priceSell;
   final int count;
+  final List size;
+  final List color;
   final int countRequest;
   final int marketId;
   final String dateBegin;
@@ -318,6 +324,8 @@ class _Items {
       this.price,
       this.priceSell,
       this.count,
+      this.size,
+      this.color,
       this.countRequest,
       this.marketId,
       this.dateBegin,

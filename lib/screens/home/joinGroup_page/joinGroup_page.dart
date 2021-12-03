@@ -45,9 +45,16 @@ class _JoinGroupPage extends State {
   final snackBarOnJoinGroupFall =
       SnackBar(content: Text('กำลังเพิ่มไปยังรถเข็น ผิดพลาด !'));
 
+  var size;
+  int _sizePrice = 0;
+  bool _checkSelectSize = false;
+  var color;
+  int _colorPrice = 0;
+  bool _checkSelectColor = false;
+  var textStyle = TextStyle(fontSize: 12);
+
   @override
   Widget build(BuildContext context) {
-    print(itemData);
     DateTime _dayNow = DateTime.now();
     var stringDealFinal =
         '${itemData.dealFinal.split('/')[2]}-${itemData.dealFinal.split('/')[1]}-${itemData.dealFinal.split('/')[0]}';
@@ -176,6 +183,164 @@ class _JoinGroupPage extends State {
                   }
                 },
               ),
+              Container(
+                  child: itemData.size[0] == 'null'
+                      ? Container()
+                      : Container(
+                          child: _checkSelectSize == false
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _checkSelectSize = !_checkSelectSize;
+                                    });
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            child: size == null
+                                                ? Container(
+                                                    child: Text('เลือกขนาด '),
+                                                  )
+                                                : Container(
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          'ขนาด : ${size.split(':')[0].toString()}',
+                                                          style: textStyle,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Text(
+                                                          '+${size.split(':')[1].toString()} บาท',
+                                                          style: textStyle,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )),
+                                        Icon(
+                                          Icons.arrow_right_outlined,
+                                          color: Colors.teal,
+                                          size: 35,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  decoration: boxDecorationGrey,
+                                  height: 40,
+                                  width: double.infinity,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: itemData.size.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            size = itemData.size[index];
+                                            _sizePrice = int.parse(itemData
+                                                .size[index]
+                                                .split(':')[1]);
+                                            _checkSelectSize =
+                                                !_checkSelectSize;
+                                          });
+                                        },
+                                        child: Card(
+                                            child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            '${itemData.size[index]}',
+                                            style: textStyle,
+                                          ),
+                                        )),
+                                      );
+                                    },
+                                  ),
+                                ))),
+              Container(
+                  child: itemData.color[0] == 'null'
+                      ? Container()
+                      : Container(
+                          child: _checkSelectColor == false
+                              ? GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _checkSelectColor = !_checkSelectColor;
+                                    });
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                            child: color == null
+                                                ? Container(
+                                                    child: Text('เลือกสี'),
+                                                  )
+                                                : Container(
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          'สี : ${color.split(':')[0].toString()}',
+                                                          style: textStyle,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Text(
+                                                          '+${color.split(':')[1].toString()} บาท',
+                                                          style: textStyle,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )),
+                                        Icon(
+                                          Icons.arrow_right_outlined,
+                                          color: Colors.teal,
+                                          size: 35,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  decoration: boxDecorationGrey,
+                                  height: 40,
+                                  width: double.infinity,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: itemData.color.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            color = itemData.color[index];
+                                            _colorPrice = int.parse(itemData
+                                                .color[index]
+                                                .split(':')[1]);
+                                            _checkSelectColor =
+                                                !_checkSelectColor;
+                                          });
+                                        },
+                                        child: Card(
+                                            child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            '${itemData.color[index]}',
+                                            style: textStyle,
+                                          ),
+                                        )),
+                                      );
+                                    },
+                                  ),
+                                ))),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -201,11 +366,11 @@ class _JoinGroupPage extends State {
                           ],
                         ),
                         Text(
-                          "ราคา ${itemData.priceSell.toString()} บาท",
+                          "ราคา ${((itemData.priceSell + _sizePrice + _colorPrice) * _number).toString()} บาท",
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
-                          "ลดราคาจาก ${itemData.price.toString()} บาท",
+                          "ลดราคาจาก ${((itemData.price + _sizePrice + _colorPrice) * _number).toString()} บาท",
                           style: TextStyle(fontSize: 14),
                         ),
                         Text(
@@ -407,8 +572,10 @@ class _JoinGroupPage extends State {
     params['marketId'] = itemData.marketId.toString();
     params['nameCart'] = itemData.nameItem.toString();
     params['number'] = _number.toString();
-    params['price'] = itemData.price.toString();
-    params['priceSell'] = itemData.priceSell.toString();
+    params['price'] = (itemData.price + _sizePrice + _colorPrice).toString();
+    params['priceSell'] =
+        (itemData.priceSell + _sizePrice + _colorPrice).toString();
+    params['detail'] = '${size.toString()},${color.toString()}';
     params['status'] = statusCart.toString();
     params['userId'] = userId.toString();
     params['dealBegin'] = _dealBegin.toString();
@@ -431,4 +598,10 @@ class _JoinGroupPage extends State {
       }
     });
   }
+}
+
+class CheckBox {
+  CheckBox({this.value = false});
+
+  bool value;
 }
