@@ -235,6 +235,7 @@ class _EditPaymentPage extends State {
     params['marketId'] = _paymentData.marketId.toString();
     params['number'] = _paymentData.number.toString();
     params['itemId'] = _paymentData.itemId.toString();
+    params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
     params['date'] = _paymentData.date.toString();

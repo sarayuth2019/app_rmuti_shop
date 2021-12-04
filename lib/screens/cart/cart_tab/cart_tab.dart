@@ -92,6 +92,7 @@ class _CartTab extends State {
                                                     ? Container()
                                                     : Text(
                                                         'ขนาด : ${(snapshot.data[index].detail.split(',')[0]).split(':')[0]}')),
+                                            SizedBox(width: 8,),
                                             Container(
                                                 child: snapshot
                                                             .data[index].detail

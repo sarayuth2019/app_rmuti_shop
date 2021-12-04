@@ -25,6 +25,7 @@ void editCartStatus(context,token,cartData) async {
   params['number'] = cartData.number.toString();
   params['price'] = cartData.price.toString();
   params['priceSell'] = cartData.priceSell.toString();
+  params['detail'] = cartData.detail.toString();
   params['status'] = statusCart.toString();
   params['userId'] = cartData.userId.toString();
   params['dealBegin'] = _dealBegin.toString();

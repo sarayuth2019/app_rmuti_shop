@@ -24,6 +24,7 @@ Future<List<_Payment>> listPaymentByStatus(
           i['marketId'],
           i['number'],
           i['itemId'],
+          i['detail'],
           i['amount'],
           i['lastNumber'],
           i['bankTransfer'],
@@ -33,32 +34,33 @@ Future<List<_Payment>> listPaymentByStatus(
           i['dataTransfer']);
       listPayment.add(_payment);
     }
-    if(status == 'รอดำเนินการ'){
+    if (status == 'รอดำเนินการ') {
       List<_Payment> _listPaymentWait1 = listPayment
           .where((element) =>
-          element.status.toLowerCase().contains(status.toLowerCase()))
+              element.status.toLowerCase().contains(status.toLowerCase()))
           .toList();
       List<_Payment> _listPaymentWait2 = listPayment
-          .where((element) =>
-          element.status.toLowerCase().contains('ชำระเงินผิดพลาด'.toLowerCase()))
+          .where((element) => element.status
+              .toLowerCase()
+              .contains('ชำระเงินผิดพลาด'.toLowerCase()))
           .toList();
-      listPaymentWait = _listPaymentWait1+_listPaymentWait2;
-    }
-    else if(status == "ประวัติการซื้อ"){
+      listPaymentWait = _listPaymentWait1 + _listPaymentWait2;
+    } else if (status == "ประวัติการซื้อ") {
       List<_Payment> _listPaymentWait1 = listPayment
-          .where((element) =>
-          element.status.toLowerCase().contains('รับสินค้าสำเร็จ'.toLowerCase()))
+          .where((element) => element.status
+              .toLowerCase()
+              .contains('รับสินค้าสำเร็จ'.toLowerCase()))
           .toList();
       List<_Payment> _listPaymentWait2 = listPayment
-          .where((element) =>
-          element.status.toLowerCase().contains('รีวิวสำเร็จ'.toLowerCase()))
+          .where((element) => element.status
+              .toLowerCase()
+              .contains('รีวิวสำเร็จ'.toLowerCase()))
           .toList();
-      listPaymentWait = _listPaymentWait1+_listPaymentWait2;
-    }
-    else{
+      listPaymentWait = _listPaymentWait1 + _listPaymentWait2;
+    } else {
       listPaymentWait = listPayment
           .where((element) =>
-          element.status.toLowerCase().contains(status.toLowerCase()))
+              element.status.toLowerCase().contains(status.toLowerCase()))
           .toList();
     }
   });
@@ -72,6 +74,7 @@ class _Payment {
   final int marketId;
   final int number;
   final int itemId;
+  final detail;
   final int amount;
   final int lastNumber;
   final String bankTransfer;
@@ -87,6 +90,7 @@ class _Payment {
       this.marketId,
       this.number,
       this.itemId,
+      this.detail,
       this.amount,
       this.lastNumber,
       this.bankTransfer,

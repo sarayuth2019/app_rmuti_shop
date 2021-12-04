@@ -402,6 +402,7 @@ class _PayPage extends State {
     params['marketId'] = cartData.marketId.toString();
     params['number'] = cartData.number.toString();
     params['itemId'] = cartData.itemId.toString();
+    params['detail'] = cartData.detail.toString();
     params['bankTransfer'] = _bankTransferValue.toString();
     params['bankReceive'] = _bankReceiveValue.toString();
     params['date'] = _dateTransfer.toString();
