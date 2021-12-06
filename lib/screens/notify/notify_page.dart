@@ -137,6 +137,7 @@ class _NotifyPage extends State {
                                               ),
                                             ),
                                             Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text(
                                                   '${snapshot.data[index].status.split(" ")[0]}',
@@ -147,8 +148,15 @@ class _NotifyPage extends State {
                                                 SizedBox(
                                                   width: 15,
                                                 ),
-                                                Text(
-                                                    'จำนวนเงิน : ${snapshot.data[index].amount} บาท'),
+                                                Container(
+                                                    child: snapshot.data[index]
+                                                                .status
+                                                                .split(
+                                                                    " ")[0] ==
+                                                            'จำนวนผู้ลงทะเบียนครบแล้ว'
+                                                        ? Container()
+                                                        : Text(
+                                                            'จำนวนเงิน : ${snapshot.data[index].amount} บาท'))
                                               ],
                                             ),
                                             Text(
@@ -192,7 +200,7 @@ class _NotifyPage extends State {
                                 },
                                 icon: Icon(
                                   Icons.highlight_remove,
-                                  color: Colors.red,
+                                  color: Colors.red,size: 16,
                                 ),
                               ))
                         ],
