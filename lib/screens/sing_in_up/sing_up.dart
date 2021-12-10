@@ -45,8 +45,7 @@ class _SingUp extends State {
       ),
       body: SingleChildScrollView(
         child: Form(
-          // ignore: deprecated_member_use
-          autovalidate: _checkText,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           key: _formKey,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
