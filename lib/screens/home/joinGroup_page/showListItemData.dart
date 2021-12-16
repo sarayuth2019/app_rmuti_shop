@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
 import 'package:app_rmuti_shop/screens/home/joinGroup_page/show_review_page.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:app_rmuti_shop/screens/method/review_market_method.dart';
@@ -511,7 +510,7 @@ class _ShowListItemData extends State{
         '${itemData.dateFinal.split('/')[1]}/${itemData.dateFinal.split('/')[0]}/${itemData.dateFinal.split('/')[2]}';
 
     ScaffoldMessenger.of(context).showSnackBar(snackBarOnSaveToCart);
-    String statusCart = statusAddToCart;
+    String statusCart = 'รอชำระเงิน';
     Map params = Map();
     params['itemId'] = itemData.itemId.toString();
     params['marketId'] = itemData.marketId.toString();

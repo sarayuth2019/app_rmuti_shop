@@ -2,7 +2,6 @@
 import 'package:app_rmuti_shop/screens/cart/cart_payment_success_tab/cart_payment_success_tab.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_tab/cart_tab.dart';
 import 'package:app_rmuti_shop/screens/cart/received_products_tab/received_products_success_tab.dart';
-import 'package:app_rmuti_shop/screens/cart/string_status_cart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +39,7 @@ class _CartMain extends State {
             appBar: TabBar(
               labelColor: Colors.teal,
               tabs: [
-                Tab(text: statusAddToCart),
+                Tab(text: 'รอชำระเงิน'),
                 Tab(text: 'รอตรวจสอบ'),
                 Tab(text: 'ชำระเงินสำเร็จ',),
                 Tab(text: 'รีวิวร้านค้า',)
@@ -48,7 +47,7 @@ class _CartMain extends State {
             ),
             body: TabBarView(
               children: [
-                CartTab(token, userId, statusAddToCart),
+                CartTab(token, userId,'รอชำระเงิน'),
                 CartPaymentWaitTab(token, userId),
                 CartPaymentSuccessTab(token, userId),
                 ReceivedProductSuccessTab(token, userId)
