@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:app_rmuti_shop/config/config.dart';
 
-Future<List<Cart>?> listCartByUserId(token,userId,statusTab) async {
+Future<List<Cart>?> listCartByUserId(token, userId, statusTab) async {
   List<Cart> listCartTab = [];
   final urlGetCartByUserId = "${Config.API_URL}/Cart/find/user";
   List<Cart> _listCart = [];
@@ -12,10 +12,10 @@ Future<List<Cart>?> listCartByUserId(token,userId,statusTab) async {
   await http.post(Uri.parse(urlGetCartByUserId), body: params, headers: {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
   }).then((res) {
-    print("res body : ${res.body}");
+    //print("res body : ${res.body}");
     var resData = jsonDecode(utf8.decode(res.bodyBytes));
     var _cartData = resData['data'];
-    print(_cartData);
+    //print(_cartData);
     for (var i in _cartData) {
       Cart _cart = Cart(
           i['cartId'],
@@ -38,8 +38,9 @@ Future<List<Cart>?> listCartByUserId(token,userId,statusTab) async {
   });
   listCartTab = _listCart
       .where((element) =>
-      element.status.toLowerCase().contains(statusTab.toLowerCase()))
+          element.status.toLowerCase().contains(statusTab.toLowerCase()))
       .toList();
+  print('listCart Status wait : ${listCartTab.length}');
   return listCartTab;
 }
 

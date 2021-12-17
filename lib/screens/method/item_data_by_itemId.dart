@@ -11,10 +11,10 @@ Future<_Items?> listItemDataByItemId(token, int itemId) async {
   await http.post(Uri.parse(urlGetItemDataByItemId), body: params, headers: {
     HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
   }).then((res) {
-    print("listItem By itemId Success");
+    //print("listItem By itemId Success");
     Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
     var _itemData = _jsonRes['data'];
-    print(_itemData);
+   // print(_itemData);
      _Items _item = _Items(
         _itemData['itemId'],
         _itemData['nameItems'],
@@ -31,7 +31,7 @@ Future<_Items?> listItemDataByItemId(token, int itemId) async {
         _itemData['createDate']);
      itemData = _item;
   });
-  print("Item data : ${itemData!.toString()}");
+ // print("Item data : ${itemData!.toString()}");
   return itemData!;
 }
 

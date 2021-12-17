@@ -9,6 +9,6 @@ List<Cart> listGroupCartByMarketId(List<Cart> listCartData, int marketId) {
           element.marketId.toString().contains(marketId.toString()))
       .toList();
   listCartGroupByMarket = _listCartGroupByMarket as List<Cart>;
-  //print(listCartGroupByMarket);
+  //print('listGroupCart success : ${listCartGroupByMarket.length}');
   return listCartGroupByMarket;
 }

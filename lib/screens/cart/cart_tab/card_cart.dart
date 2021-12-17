@@ -7,19 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ListGroupCart extends StatefulWidget {
-  const ListGroupCart(this.token, this.listGroupCartData,this.userId);
+  const ListGroupCart(this.token, this.listGroupCartData, this.userId);
 
   final token;
   final List<Cart> listGroupCartData;
   final int userId;
 
   @override
-  _ListGroupCartState createState() =>
-      _ListGroupCartState(token, listGroupCartData,userId);
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _ListGroupCartState(token, listGroupCartData, userId);
+  }
 }
 
-class _ListGroupCartState extends State<ListGroupCart> {
-  _ListGroupCartState(this.token, this.listGroupCartData,this.userId);
+class _ListGroupCartState extends State {
+  _ListGroupCartState(this.token, this.listGroupCartData, this.userId);
 
   final token;
   final List<Cart> listGroupCartData;
@@ -44,6 +46,7 @@ class _ListGroupCartState extends State<ListGroupCart> {
                   children: [
                     Row(
                       children: [
+                      //  Text("${listGroupCartData[index].cartId} : "),
                         Text("${listGroupCartData[index].nameItem}"),
                         Text('  x  ${listGroupCartData[index].number}'),
                         SizedBox(
@@ -69,23 +72,28 @@ class _ListGroupCartState extends State<ListGroupCart> {
                                 : Text(
                                     'สี : ${(listGroupCartData[index].detail.split(',')[1]).split(':')[0]}')),
                         SizedBox(
-                          width: 20,
+                          width: 10,
                         ),
                         Text(
                             'ราคา : ${listGroupCartData[index].priceSell} บาท'),
                         Container(
-                            child: listGroupCartData[index].status ==
-                                    'รอชำระเงิน'
-                                ? IconButton(
-                                    onPressed: () {
-                                      _showAlertDeleteCart(context,
-                                          listGroupCartData[index].cartId);
-                                    },
-                                    icon: Icon(
-                                      Icons.highlight_remove,
-                                      color: Colors.red,
-                                    ))
-                                : Container()),
+                            child:
+                                listGroupCartData[index].status == 'รอชำระเงิน'
+                                    ? IconButton(
+                                        onPressed: () {
+                                          print(
+                                              'cartId delete : ${listGroupCartData[index].cartId}');
+                                          _showAlertDeleteCart(
+                                              context,
+                                              listGroupCartData[index].cartId,
+                                              index);
+                                        },
+                                        icon: Icon(
+                                          Icons.highlight_remove,
+                                          size: 16,
+                                          color: Colors.red,
+                                        ))
+                                    : Container()),
                       ],
                     ),
                   ],
@@ -93,8 +101,7 @@ class _ListGroupCartState extends State<ListGroupCart> {
               }),
           FutureBuilder(
             future: sumPriceMarket(listGroupCartData),
-            builder:
-                (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.data == null) {
                 return Text('กำลังโหลด...');
               } else {
@@ -112,19 +119,20 @@ class _ListGroupCartState extends State<ListGroupCart> {
     print('กำลังรวมราคาของร้านค้านั้นๆ');
 
     sumPriceTotal = listGroupCartData
-        .map((e) => e.priceSell)
+        .map((e) => e.priceSell * e.number)
         .reduce((value, element) => value + element);
 
-    print('ราคารวมทั้งหมด  :  ${sumPriceTotal}');
+    print('ราคารวมทั้งหมด  :  ${sumPriceTotal.toString()}');
 
-    sumPriceMarket =
-        listGroupData.map((m) => m.priceSell).reduce((a, b) => a + b);
+    sumPriceMarket = listGroupData
+        .map((m) => m.priceSell * m.number)
+        .reduce((a, b) => a + b);
 
-    print('ราคารวมของร้านค้านั้นๆ  :  ${sumPriceMarket}');
+    print('ราคารวมของร้านค้านั้นๆ  :  ${sumPriceMarket.toString()}');
     return sumPriceMarket;
   }
 
-  void _showAlertDeleteCart(BuildContext context, snapShotId) async {
+  void _showAlertDeleteCart(BuildContext context, snapShotId, index) async {
     print('Show Alert Dialog Image !');
     return showDialog(
         context: context,
@@ -142,7 +150,7 @@ class _ListGroupCartState extends State<ListGroupCart> {
                       child: GestureDetector(
                           child: Text('ยืนยัน'),
                           onTap: () {
-                            _deleteCart(snapShotId, token);
+                            deleteCart(token, snapShotId, index);
                             setState(() {
                               Navigator.pop(context);
                             });
@@ -163,18 +171,21 @@ class _ListGroupCartState extends State<ListGroupCart> {
         });
   }
 
-  void _deleteCart(snapShotId, token) async {
+  void deleteCart(token, snapShotId, int index) async {
+    print('cartId delete : ${snapShotId.toString()}.....');
     final urlDeleteByCartId = "${Config.API_URL}/Cart/delete";
+    var statusRes;
     Map params = Map();
     params['id'] = snapShotId.toString();
     await http.post(Uri.parse(urlDeleteByCartId), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
       var resData = jsonDecode(res.body);
-      var statusRes = resData['status'];
+      statusRes = resData['status'];
       if (statusRes == 0) {
         setState(() {
           print(res.body);
+          listGroupCartData.removeAt(index);
         });
       }
     });
