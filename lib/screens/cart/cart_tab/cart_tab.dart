@@ -1,16 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/cart/cart_tab/payment_page.dart';
-import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
-import 'package:app_rmuti_shop/screens/method/item_data_by_itemId.dart';
 import 'package:app_rmuti_shop/screens/method/group_cartByMarketId.dart';
 import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'card_cart.dart';
-import 'package:http/http.dart' as http;
+
 
 class CartTab extends StatefulWidget {
   CartTab(this.token, this.userId, this.statusTab);
@@ -84,115 +78,10 @@ class _CartTab extends State {
                       //listGroupCartDataByMarket = _listGroupCart;
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: boxDecorationGrey,
-                          child: Column(
-                            children: [
-                              ListGroupCart(
-                                token,
-                                listGroupCartDataByMarket,
-                                userId,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: FutureBuilder(
-                                  future: listItemDataByItemId(
-                                      token,
-                                      snapshot.data
-                                          [indexMarket].itemId),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot<dynamic>
-                                      snapshotItemData) {
-                                    if (snapshotItemData.data == null) {
-                                      return Text('กำลังโหลด...');
-                                    } else {
-                                      DateTime _dayNow = DateTime.now();
-                                      var stringDealFinal =
-                                          '${snapshotItemData.data.dealFinal.split('/')[2]}-${snapshotItemData.data.dealFinal.split('/')[1]}-${snapshotItemData.data.dealFinal.split('/')[0]}';
-                                      DateTime _dealFinal =
-                                      DateTime.parse(stringDealFinal);
-                                      return Column(
-                                        children: [
-                                          Container(
-                                              child: snapshotItemData
-                                                  .data.count ==
-                                                  snapshotItemData
-                                                      .data
-                                                      .countRequest
-                                                  ? Text(
-                                                  '* จำนวนผู้ลงทะเบียนครบแล้ว')
-                                                  : Container()),
-                                          Container(
-                                              child: _dayNow.isAfter(
-                                                  _dealFinal.add(
-                                                      Duration(
-                                                          days:
-                                                          1))) ==
-                                                  true
-                                                  ? Text(
-                                                  '* สิ้นสุดระยะเวลาการลงทะเบียนแล้ว')
-                                                  : Container()),
-                                          Container(
-                                              child: snapshotItemData.data
-                                                  .count ==
-                                                  snapshotItemData
-                                                      .data
-                                                      .countRequest ||
-                                                  _dayNow.isAfter(_dealFinal
-                                                      .add(Duration(
-                                                      days:
-                                                      1))) ==
-                                                      true
-                                                  ? Card(
-                                                color: Colors.red,
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding:
-                                                    const EdgeInsets
-                                                        .all(
-                                                        8.0),
-                                                    child: Text(
-                                                      'ไม่สามารถชำระเงินได้',
-                                                      style: TextStyle(
-                                                          color: Colors
-                                                              .white),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                                  : Center(
-                                                child:
-                                                ElevatedButton(
-                                                    style: ElevatedButton.styleFrom(
-                                                        primary:
-                                                        Colors
-                                                            .teal),
-                                                    onPressed:
-                                                        () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) => PayPage(token, userId, listGroupCartDataByMarket[indexMarket])));
-                                                    },
-                                                    child:
-                                                    Container(
-                                                      width: double
-                                                          .infinity,
-                                                      child:
-                                                      Center(
-                                                        child: Text(
-                                                            'ชำระเงิน'),
-                                                      ),
-                                                    )),
-                                              ))
-                                        ],
-                                      );
-                                    }
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
+                        child: ListGroupCart(
+                          token,
+                          listGroupCartDataByMarket,
+                          userId,
                         ),
                       );
                     }));

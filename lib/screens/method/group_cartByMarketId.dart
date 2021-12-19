@@ -12,3 +12,15 @@ List<Cart> listGroupCartByMarketId(List<Cart> listCartData, int marketId) {
   //print('listGroupCart success : ${listCartGroupByMarket.length}');
   return listCartGroupByMarket;
 }
+
+List<Cart> listGroupCartByItemId(List<Cart> listCartData, int itemId) {
+  List<Cart> listCartGroupByMarket = [];
+  var _listCartGroupByMarket = [];
+  _listCartGroupByMarket = listCartData
+      .where((element) =>
+      element.itemId.toString().contains(itemId.toString()))
+      .toList();
+  listCartGroupByMarket = _listCartGroupByMarket as List<Cart>;
+  //print('listGroupCart success : ${listCartGroupByMarket.length}');
+  return listCartGroupByMarket;
+}
