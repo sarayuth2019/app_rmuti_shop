@@ -3,30 +3,33 @@ import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/method/item_data_by_itemId.dart';
 import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
+import 'package:app_rmuti_shop/screens/method/save_cart_data_to_order.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CardCartByItemId extends StatefulWidget {
-  CardCartByItemId(this.token, this.listCartByItemId, this.userId);
+  CardCartByItemId(this.token, this.listCartByItemId, this.userId,this.callBack);
 
   final token;
   final List<Cart> listCartByItemId;
   final int userId;
+  final Function callBack;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _CardCartByItemId(token, listCartByItemId, userId);
+    return _CardCartByItemId(token, listCartByItemId, userId,callBack);
   }
 }
 
 class _CardCartByItemId extends State {
-  _CardCartByItemId(this.token, this.listCartByItemId, this.userId);
+  _CardCartByItemId(this.token, this.listCartByItemId, this.userId,this.callBack);
 
   final token;
   final List<Cart> listCartByItemId;
   final int userId;
+  final Function callBack;
 
   int sumPriceTotal = 0;
 
@@ -162,7 +165,7 @@ class _CardCartByItemId extends State {
                                               primary: Colors.teal),
                                           onPressed: () {
                                             print('Save to Order !!!!!!');
-                                            print('${listCartByItemId.length}');
+                                            //saveCartDataToOrder(token, listCartByItemId, userId);
                                           },
                                           child: Container(
                                             width: double.infinity,
@@ -256,6 +259,7 @@ class _CardCartByItemId extends State {
         setState(() {
           print(res.body);
           listCartByItemId.removeAt(index);
+          callBack(listCartByItemId.length);
         });
       }
     });

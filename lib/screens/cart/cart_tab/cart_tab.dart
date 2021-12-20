@@ -34,6 +34,8 @@ class _CartTab extends State {
 
   List listOrder = [];
 
+  var i;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -76,19 +78,32 @@ class _CartTab extends State {
                       //var _listGroupCart;
                       listGroupCartDataByMarket = listGroupCartByMarketId(snapshot.data,listMarket[indexMarket]);
                       //listGroupCartDataByMarket = _listGroupCart;
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListGroupCart(
-                          token,
-                          listGroupCartDataByMarket,
-                          userId,
-                        ),
-                      );
+                      i = listGroupCartDataByMarket.length;
+                     if(i == 0){
+                       return Container();
+                     }
+                     else{
+                       return Padding(
+                         padding: const EdgeInsets.all(8.0),
+                         child: ListGroupCart(
+                             token,
+                             listGroupCartDataByMarket,
+                             userId,callBack
+                         ),
+                       );
+                     }
                     }));
           }
         },
       ),
     );
+  }
+
+  void callBack(value){
+    setState(() {
+      print('value CallBack : ${value.toString()}');
+      i = value;
+    });
   }
 
   Future _onRefresh() async {

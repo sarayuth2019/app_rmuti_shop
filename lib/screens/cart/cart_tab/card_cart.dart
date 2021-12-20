@@ -6,30 +6,33 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ListGroupCart extends StatefulWidget {
-  const ListGroupCart(this.token, this.listGroupCartDataByMarket, this.userId);
+  ListGroupCart(this.token, this.listGroupCartDataByMarket, this.userId,this.callBack);
 
   final token;
   final List<Cart> listGroupCartDataByMarket;
   final int userId;
+  final Function callBack;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _ListGroupCartState(token, listGroupCartDataByMarket, userId);
+    return _ListGroupCartState(token, listGroupCartDataByMarket, userId,callBack);
   }
 }
 
 class _ListGroupCartState extends State {
-  _ListGroupCartState(this.token, this.listGroupCartDataByMarket, this.userId);
+  _ListGroupCartState(this.token, this.listGroupCartDataByMarket, this.userId,this.callBack);
 
   final token;
   final List<Cart> listGroupCartDataByMarket;
   final int userId;
+  final Function callBack;
 
   int sumPriceTotal = 0;
   var listItemId = [];
   var _listItemId = [];
   var listCartByItemId;
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,7 @@ class _ListGroupCartState extends State {
                       listGroupCartDataByMarket, listItemId[indexItem]);
                   print('list CartByItemId : ${listCartByItemId.length}');
                   return CardCartByItemId(
-                      token, listCartByItemId, userId);
+                      token, listCartByItemId, userId,callBack);
                 }),
           ],
         ),
