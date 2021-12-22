@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/method/editCartStatus.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 
-
-void saveImagePayment(context,token,int payId,File imageFile,cartData) async {
+void saveImagePayment(
+    context, token, userId, int payId, File imageFile, listCartData) async {
   print("payId : ${payId.toString()}");
 
   print("save image pay Id : ${payId.toString()}");
@@ -14,11 +14,10 @@ void saveImagePayment(context,token,int payId,File imageFile,cartData) async {
   final String urlSaveImagePay = '${Config.API_URL}/ImagePay/save';
 
   var request = http.MultipartRequest('POST', Uri.parse(urlSaveImagePay));
-  request.headers.addAll(
-      {HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
+  request.headers
+      .addAll({HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'});
 
-  var _multipart =
-  await http.MultipartFile.fromPath('picture', imageFile.path);
+  var _multipart = await http.MultipartFile.fromPath('picture', imageFile.path);
 
   request.files.add(_multipart);
   request.fields['payId'] = payId.toString();
@@ -30,16 +29,18 @@ void saveImagePayment(context,token,int payId,File imageFile,cartData) async {
     if (statusRes == 1) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('ชำระเงินสำเร็จ รอการตรวจสอบการชำระเงิน')));
-      if(cartData == 'ไม่แก้ไข'){
-        print(cartData);
+      if (listCartData == 'ไม่แก้ไข') {
+        print(listCartData);
+        Navigator.pop(context);
+      } else {
+        listCartData.forEach((cartData) {
+          editCartStatus(context, token, userId, cartData);
+        });
         Navigator.pop(context);
       }
-      else{
-        editCartStatus(context, token, cartData);
-      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('บันทึกภาพ ชำระเงินผิดพลาด !')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('บันทึกภาพ ชำระเงินผิดพลาด !')));
     }
   });
 }

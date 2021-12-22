@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:app_rmuti_shop/config/config.dart';
 
-Future<List<_Payment>> listPaymentByStatus(
+Future<List<Payment>> listPaymentByStatus(
     token, int userId, String status) async {
   final String urlGetPaymentByUserId = '${Config.API_URL}/Pay/user';
-  List<_Payment> listPayment = [];
-  List<_Payment> listPaymentWait = [];
+  List<Payment> listPayment = [];
+  List<Payment> listPaymentWait = [];
   Map params = Map();
   params['userId'] = userId.toString();
   await http.post(Uri.parse(urlGetPaymentByUserId), body: params, headers: {
@@ -17,13 +17,12 @@ Future<List<_Payment>> listPaymentByStatus(
     print(jsonData);
     var resData = jsonData['data'];
     for (var i in resData) {
-      _Payment _payment = _Payment(
+      Payment _payment = Payment(
           i['payId'],
           i['status'],
           i['userId'],
+          i['orderId'],
           i['marketId'],
-          i['number'],
-          i['itemId'],
           i['detail'],
           i['amount'],
           i['lastNumber'],
@@ -35,23 +34,23 @@ Future<List<_Payment>> listPaymentByStatus(
       listPayment.add(_payment);
     }
     if (status == 'รอดำเนินการ') {
-      List<_Payment> _listPaymentWait1 = listPayment
+      List<Payment> _listPaymentWait1 = listPayment
           .where((element) =>
               element.status.toLowerCase().contains(status.toLowerCase()))
           .toList();
-      List<_Payment> _listPaymentWait2 = listPayment
+      List<Payment> _listPaymentWait2 = listPayment
           .where((element) => element.status
               .toLowerCase()
               .contains('ชำระเงินผิดพลาด'.toLowerCase()))
           .toList();
       listPaymentWait = _listPaymentWait1 + _listPaymentWait2;
     } else if (status == "ประวัติการซื้อ") {
-      List<_Payment> _listPaymentWait1 = listPayment
+      List<Payment> _listPaymentWait1 = listPayment
           .where((element) => element.status
               .toLowerCase()
               .contains('รับสินค้าสำเร็จ'.toLowerCase()))
           .toList();
-      List<_Payment> _listPaymentWait2 = listPayment
+      List<Payment> _listPaymentWait2 = listPayment
           .where((element) => element.status
               .toLowerCase()
               .contains('รีวิวสำเร็จ'.toLowerCase()))
@@ -67,13 +66,12 @@ Future<List<_Payment>> listPaymentByStatus(
   return listPaymentWait;
 }
 
-class _Payment {
+class Payment {
   final int payId;
   final String status;
   final int userId;
+  final int orderId;
   final int marketId;
-  final int number;
-  final int itemId;
   final detail;
   final int amount;
   final int lastNumber;
@@ -83,13 +81,12 @@ class _Payment {
   final String time;
   final String dataTransfer;
 
-  _Payment(
+  Payment(
       this.payId,
       this.status,
       this.userId,
+      this.orderId,
       this.marketId,
-      this.number,
-      this.itemId,
       this.detail,
       this.amount,
       this.lastNumber,

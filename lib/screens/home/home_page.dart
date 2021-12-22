@@ -25,7 +25,7 @@ class _HomePage extends State {
 
   final userId;
   final token;
-  List<_Items> _listItem = [];
+  List<Items> _listItem = [];
   final urlListAllItems = "${Config.API_URL}/Item/list";
   final urlGetImageByItemId = "${Config.API_URL}/images/";
   final snackBarOnFall = SnackBar(content: Text("ผิดพลาด !"));
@@ -37,7 +37,7 @@ class _HomePage extends State {
   void initState() {
     // TODO: implement initState
     super.initState();
-    listItemByUser();
+    listItemAll();
   }
 
   @override
@@ -58,7 +58,7 @@ class _HomePage extends State {
         body: RefreshIndicator(
           onRefresh: _onRefresh,
           child: FutureBuilder(
-            future: listItemByUser(),
+            future: listItemAll(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.data == null) {
                 return Center(child: CircularProgressIndicator());
@@ -238,22 +238,22 @@ class _HomePage extends State {
   }
 
   Future<void> _onRefresh() async {
-    listItemByUser();
+    listItemAll();
     setState(() {});
     await Future.delayed(Duration(seconds: 3));
   }
 
-  Future<List<_Items>> listItemByUser() async {
-    List<_Items> listItem = [];
+  Future<List<Items>> listItemAll() async {
+    List<Items> listItem = [];
     await http.get(Uri.parse(urlListAllItems), headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
-      print(_itemData);
+     // print(_itemData);
       for (var i in _itemData) {
-        _Items _items = _Items(
+        Items _items = Items(
           i['itemId'],
           i['nameItems'],
           i['groupItems'],
@@ -285,7 +285,7 @@ class _HomePage extends State {
         headers: {
           HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
         }).then((res) {
-      print(res.body);
+     // print(res.body);
       Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _statusData = jsonData['status'];
       var _dataImage = jsonData['dataImages'];
@@ -300,7 +300,7 @@ class _HomePage extends State {
   }
 }
 
-class _Items {
+class Items {
   final int itemId;
   final String nameItem;
   final int groupItems;
@@ -317,7 +317,7 @@ class _Items {
   final String dealFinal;
   final String date;
 
-  _Items(
+  Items(
       this.itemId,
       this.nameItem,
       this.groupItems,

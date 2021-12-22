@@ -1,37 +1,20 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/screens/cart/cart_tab/show_list_cart_buy.dart';
 import 'package:app_rmuti_shop/screens/method/item_data_by_itemId.dart';
 import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
-import 'package:app_rmuti_shop/screens/method/save_cart_data_to_order.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-class CardCartByItemId extends StatefulWidget {
-  CardCartByItemId(this.token, this.listCartByItemId, this.userId,this.callBack);
-
-  final token;
-  final List<Cart> listCartByItemId;
-  final int userId;
-  final Function callBack;
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return _CardCartByItemId(token, listCartByItemId, userId,callBack);
-  }
-}
-
-class _CardCartByItemId extends State {
-  _CardCartByItemId(this.token, this.listCartByItemId, this.userId,this.callBack);
+class CardCartByItemId extends StatelessWidget {
+  CardCartByItemId(this.token, this.listCartByItemId, this.userId,
+      this.callBack, this.showAlertDeleteCart);
 
   final token;
   final List<Cart> listCartByItemId;
   final int userId;
   final Function callBack;
+  final Function showAlertDeleteCart;
 
-  int sumPriceTotal = 0;
+  //int sumPriceTotal = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +59,18 @@ class _CardCartByItemId extends State {
                       SizedBox(
                         width: 10,
                       ),
-                      Text('ราคา : ${listCartByItemId[index].priceSell} บาท'),
+                      Text(
+                          'ราคา : ${listCartByItemId[index].priceSell * listCartByItemId[index].number} บาท'),
                       Container(
                           child: listCartByItemId[index].status == 'รอชำระเงิน'
                               ? IconButton(
                                   onPressed: () {
                                     print(
                                         'cartId delete : ${listCartByItemId[index].cartId}');
-                                    _showAlertDeleteCart(context,
-                                        listCartByItemId[index].cartId, index);
+                                    showAlertDeleteCart(
+                                        context,
+                                        listCartByItemId[index].cartId,
+                                        listCartByItemId[index]);
                                   },
                                   icon: Icon(
                                     Icons.highlight_remove,
@@ -165,6 +151,8 @@ class _CardCartByItemId extends State {
                                               primary: Colors.teal),
                                           onPressed: () {
                                             print('Save to Order !!!!!!');
+                                            showListCartBuy(context, token,
+                                                userId, listCartByItemId);
                                             //saveCartDataToOrder(token, listCartByItemId, userId);
                                           },
                                           child: Container(
@@ -189,79 +177,20 @@ class _CardCartByItemId extends State {
 
   Future<int> sumPriceMarket(listGroupData) async {
     int sumPriceMarket = 0;
-    print('กำลังรวมราคาของร้านค้านั้นๆ');
-
+    // print('กำลังรวมราคาของร้านค้านั้นๆ');
+/*
     sumPriceTotal = listCartByItemId
         .map((e) => e.priceSell * e.number)
         .reduce((value, element) => value + element);
 
-    print('ราคารวมทั้งหมด  :  ${sumPriceTotal.toString()}');
+ */
+    // print('ราคารวมทั้งหมด  :  ${sumPriceTotal.toString()}');
 
     sumPriceMarket = listGroupData
         .map((m) => m.priceSell * m.number)
         .reduce((a, b) => a + b);
 
-    print('ราคารวมของร้านค้านั้นๆ  :  ${sumPriceMarket.toString()}');
+    // print('ราคารวมของร้านค้านั้นๆ  :  ${sumPriceMarket.toString()}');
     return sumPriceMarket;
-  }
-
-  void _showAlertDeleteCart(BuildContext context, snapShotId, index) async {
-    print('Show Alert Dialog Image !');
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              'ต้องการลบรายการนี้ ?',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                      child: GestureDetector(
-                          child: Text('ยืนยัน'),
-                          onTap: () {
-                            deleteCart(token, snapShotId, index);
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          })),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                      child: GestureDetector(
-                          child: Text('ยกเลิก'),
-                          onTap: () {
-                            Navigator.pop(context);
-                          })),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  void deleteCart(token, snapShotId, int index) async {
-    print('cartId delete : ${snapShotId.toString()}.....');
-    final urlDeleteByCartId = "${Config.API_URL}/Cart/delete";
-    var statusRes;
-    Map params = Map();
-    params['id'] = snapShotId.toString();
-    await http.post(Uri.parse(urlDeleteByCartId), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      var resData = jsonDecode(res.body);
-      statusRes = resData['status'];
-      if (statusRes == 0) {
-        setState(() {
-          print(res.body);
-          listCartByItemId.removeAt(index);
-          callBack(listCartByItemId.length);
-        });
-      }
-    });
   }
 }

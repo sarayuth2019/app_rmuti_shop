@@ -1,36 +1,35 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
-import 'package:app_rmuti_shop/screens/method/saveImagePayment.dart';
+import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
+import 'package:app_rmuti_shop/screens/method/save_cart_data_to_order.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
+
 
 class PayPage extends StatefulWidget {
-  PayPage(this.token, this.userId, this.cartData);
+  PayPage(this.token, this.userId, this.listCartData);
 
   final token;
   final userId;
-  final cartData;
+  final List<Cart> listCartData;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _PayPage(token, userId, cartData);
+    return _PayPage(token, userId, listCartData);
   }
 }
 
 class _PayPage extends State {
-  _PayPage(this.token, this.userId, this.cartData);
+  _PayPage(this.token, this.userId, this.listCartData);
 
   final token;
   final userId;
-  final cartData;
+  final List<Cart> listCartData;
 
-  final String urlSavePay = '${Config.API_URL}/Pay/save';
   String _bankName = 'ธนาคารไทยพาณิชย์ SCB';
   String _bankNumber = 'xxxxxxxxxx';
   List<String> _listTransferBankName = [
@@ -57,8 +56,18 @@ class _PayPage extends State {
   String? _timeTransfer;
   int? _lastNumber;
 
+  var listDetailCart;
+
   @override
   Widget build(BuildContext context) {
+    amount = listCartData
+        .map((e) => e.priceSell * e.number)
+        .reduce((value, element) => value + element);
+
+    String _listDetailCart;
+    _listDetailCart =
+        '${listCartData.map((e) => "[${e.itemId}:${e.nameItem}/${e.detail}/${e.priceSell}/${e.number}").toList()}';
+    listDetailCart = _listDetailCart.substring(1, _listDetailCart.length - 1);
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -68,6 +77,7 @@ class _PayPage extends State {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
+          //Text('${listDetailCart.toString()}'),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -76,7 +86,7 @@ class _PayPage extends State {
                 style: TextStyle(fontSize: 16),
               ),
               Text(
-                ' ${cartData.priceSell * cartData.number} ',
+                ' ${listCartData.map((e) => e.priceSell * e.number).reduce((value, element) => value + element)} ',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               Text(
@@ -270,8 +280,13 @@ class _PayPage extends State {
                   width: double.infinity,
                   decoration: boxDecorationGrey,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: TextField(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: Text(
+                        '${amount.toString()}',
+                        style: TextStyle(fontSize: 16),
+                      )
+                      /*
+                    TextField(
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         amount = int.parse(value);
@@ -280,7 +295,10 @@ class _PayPage extends State {
                       decoration: InputDecoration(
                           hintText: 'จำนวนเงิน', border: InputBorder.none),
                     ),
-                  ),
+
+                     */
+
+                      ),
                 ),
                 SizedBox(
                   height: 10,
@@ -372,61 +390,45 @@ class _PayPage extends State {
     } else if (amount == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กรุณากรอกจำนวนเงินที่โอน')));
-    } else if (amount != (cartData.priceSell* cartData.number)) {
+    }
+    /*
+    else if (amount != (cartData.priceSell * cartData.number)) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง')));
-    } else if (_lastNumber == null || _lastNumber.toString().length != 4) {
+    }
+
+     */
+    else if (_lastNumber == null || _lastNumber.toString().length != 4) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('กรุณากรอกเลขท้ายบัญชีธนาคาร 4 ตัว')));
     } else if (imageFile == null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กรุณาเพิ่มภาพสลิปการโอนเงิน')));
     } else {
-      print(_bankTransferValue);
-      print(_bankReceiveValue);
-      print(_dateTransfer);
-      print(_timeTransfer);
-      print(amount);
-      print(_lastNumber);
-      _savePayment();
-    }
-  }
+      //_listCarData.add('[${_size.toString()},${_color.toString()},${value.priceSell},${value.number}]');
 
-  void _savePayment() async {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
-    String status = 'รอดำเนินการ';
-    print('save pay ....');
-    Map params = Map();
-    params['userId'] = userId.toString();
-    params['marketId'] = cartData.marketId.toString();
-    params['number'] = cartData.number.toString();
-    params['itemId'] = cartData.itemId.toString();
-    params['detail'] = cartData.detail.toString();
-    params['bankTransfer'] = _bankTransferValue.toString();
-    params['bankReceive'] = _bankReceiveValue.toString();
-    params['date'] = _dateTransfer.toString();
-    params['time'] = '${_timeTransfer.toString()}:00';
-    params['amount'] = amount.toString();
-    params['lastNumber'] = _lastNumber.toString();
-    params['status'] = status.toString();
-    await http.post(Uri.parse(urlSavePay), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      print(res.body);
-      var resData = jsonDecode(utf8.decode(res.bodyBytes));
-      var resStatus = resData['status'];
-      if (resStatus == 1) {
-        var dataPay = resData['data'];
-        var payId = dataPay['payId'];
-        print(payId);
-        saveImagePayment(context, token, payId, imageFile!, cartData);
-      } else {
-        print('save fall !');
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('ชำระเงิน ผิดพลาด !')));
-      }
-    });
+      print(
+          'ธนาคารที่โอน : ${_bankTransferValue.toString()} ==> ${_bankReceiveValue.toString()}');
+      print('วันที่ : ${_dateTransfer.toString()}');
+      print('เวลา : ${_timeTransfer.toString()}');
+      print('จำนวนเงิน : ${amount.toString()}');
+      print('เลขท้าย บช : ${_lastNumber.toString()}');
+      print('detail : ${listDetailCart.toString()}');
+
+      saveCartDataToOrder(
+          context,
+          token,
+          listCartData,
+          listDetailCart,
+          userId,
+          _bankTransferValue,
+          _bankReceiveValue,
+          _dateTransfer,
+          _timeTransfer,
+          amount,
+          _lastNumber,
+          imageFile);
+    }
   }
 
   _onGallery() async {

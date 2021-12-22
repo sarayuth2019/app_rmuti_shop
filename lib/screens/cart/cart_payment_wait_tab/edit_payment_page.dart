@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/screens/method/getImagePayment.dart';
+import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/saveImagePayment.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,7 @@ class _EditPaymentPage extends State {
   _EditPaymentPage(this.token, this.paymentData);
 
   final token;
-  final paymentData;
+  final Payment paymentData;
   File? _imageFile;
   var imageData;
   List _listImagePayment = [];
@@ -212,7 +213,8 @@ class _EditPaymentPage extends State {
                   style: ElevatedButton.styleFrom(primary: Colors.teal),
                   child: Text('บันทึก'),
                   onPressed: () {
-                    _saveStatusPayment(paymentData, 'รอดำเนินการ');
+                    _saveStatusPayment(
+                        paymentData, 'รอดำเนินการ', paymentData.userId);
                   },
                 )
               ],
@@ -223,7 +225,7 @@ class _EditPaymentPage extends State {
     );
   }
 
-  void _saveStatusPayment(_paymentData, statusPayment) async {
+  void _saveStatusPayment(_paymentData, statusPayment, userId) async {
     final String urlSavePay = '${Config.API_URL}/Pay/save';
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
@@ -232,9 +234,10 @@ class _EditPaymentPage extends State {
     Map params = Map();
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
+    params['orderId'] = _paymentData.orderId.toString();
     params['marketId'] = _paymentData.marketId.toString();
-    params['number'] = _paymentData.number.toString();
-    params['itemId'] = _paymentData.itemId.toString();
+    //params['number'] = _paymentData.number.toString();
+    //params['itemId'] = _paymentData.itemId.toString();
     params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
@@ -253,7 +256,7 @@ class _EditPaymentPage extends State {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('บันทึกสถานะสำเร็จ')));
         saveImagePayment(
-            context, token, paymentData.payId, _imageFile!, 'ไม่แก้ไข');
+            context, token, userId, paymentData.payId, _imageFile!, 'ไม่แก้ไข');
       } else {
         print('save fall !');
         ScaffoldMessenger.of(context)

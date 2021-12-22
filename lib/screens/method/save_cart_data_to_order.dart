@@ -1,20 +1,27 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/screens/method/save_payment_data.dart';
 import 'package:http/http.dart' as http;
 
-void saveCartDataToOrder(token, listCartData, userId) async {
+void saveCartDataToOrder(
+    context,
+    token,
+    listCartData,
+    listDetailCart,
+    userId,
+    _bankTransferValue,
+    _bankReceiveValue,
+    _dateTransfer,
+    _timeTransfer,
+    amount,
+    _lastNumber,
+    imageFile) async {
   const String urlSaveCartDataToOrder = '${Config.API_URL}/Order/save';
-  List _listCarData = [];
-  String stringListCart;
   print('SaveCartData to Order');
   print('listSaveCartDataToOrder length : ${listCartData.length}');
-  await listCartData.forEach((value) {
-    var _size = value.detail.split(',')[0];
-    var _color = value.detail.split(',')[1];
-    _listCarData.add('[${_size.toString()},${_color.toString()},${value.priceSell},${value.number}]');
-    //_listCarData.add(DetailCartData(_size, _color, value.priceSell, value.number));
-    print('value detail : ${_listCarData.map((e) => e.toString())}');
-  });
+
+  var statusSaveOrder;
 
   var _dealBegin =
       '${listCartData[0].dealBegin.split('/')[1]}/${listCartData[0].dealBegin.split('/')[0]}/${listCartData[0].dealBegin.split('/')[2]}';
@@ -33,11 +40,11 @@ void saveCartDataToOrder(token, listCartData, userId) async {
   Map params = Map();
   params['itemId'] = listCartData[0].itemId.toString();
   params['marketId'] = listCartData[0].marketId.toString();
-  params['nameOrder'] = listCartData[0].nameItem.toString();
+  //params['nameOrder'] = listCartData[0].nameItem.toString();
   //params['number'] = _number.toString();
   //params['price'] = (itemData.price + _sizePrice + _colorPrice).toString();
   //params['priceSell'] = (itemData.priceSell + _sizePrice + _colorPrice).toString();
-  params['detail'] = _listCarData.map((e) => e).toString();
+  params['detail'] = listDetailCart.toString();
   params['status'] = statusCart.toString();
   params['userId'] = userId.toString();
   params['dealBegin'] = _dealBegin.toString();
@@ -48,12 +55,35 @@ void saveCartDataToOrder(token, listCartData, userId) async {
     HttpHeaders.authorizationHeader: "Bearer ${token.toString()}"
   }).then((res) {
     print(res.body);
+    var resData = jsonDecode(utf8.decode(res.bodyBytes));
+    statusSaveOrder = resData['status'];
+    var dataOrder = resData['data'];
+    var orderId = dataOrder['orderId'];
+    if (statusSaveOrder == 1) {
+      savePayment(
+          context,
+          token,
+          orderId,
+          listCartData,
+          listDetailCart,
+          userId,
+          _bankTransferValue,
+          _bankReceiveValue,
+          _dateTransfer,
+          _timeTransfer,
+          amount,
+          _lastNumber,
+          imageFile);
+    } else {
+      print('Save Order fall !!!!!');
+    }
   });
 }
 
 class DetailCartData {
-  DetailCartData(this.size, this.color, this.price, this.number);
+  DetailCartData(this.nameItem, this.size, this.color, this.price, this.number);
 
+  final String nameItem;
   final String size;
   final String color;
   final int price;
