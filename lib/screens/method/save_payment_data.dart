@@ -10,7 +10,6 @@ void savePayment(
     token,
     orderId,
     listCartData,
-    listDetailCart,
     userId,
     _bankTransferValue,
     _bankReceiveValue,
@@ -32,7 +31,7 @@ void savePayment(
   params['marketId'] = listCartData[0].marketId.toString();
   // params['number'] = cartData.number.toString();
   // params['itemId'] = cartData.itemId.toString();
-  params['detail'] = listDetailCart.toString();
+  //params['detail'] = listDetailCart.toString();
   params['bankTransfer'] = _bankTransferValue.toString();
   params['bankReceive'] = _bankReceiveValue.toString();
   params['date'] = _dateTransfer.toString();

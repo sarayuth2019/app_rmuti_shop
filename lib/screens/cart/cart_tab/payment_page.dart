@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
-import 'package:app_rmuti_shop/screens/method/save_cart_data_to_order.dart';
+import 'package:app_rmuti_shop/screens/method/save_order.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 
 class PayPage extends StatefulWidget {
   PayPage(this.token, this.userId, this.listCartData);
@@ -56,7 +55,6 @@ class _PayPage extends State {
   String? _timeTransfer;
   int? _lastNumber;
 
-  var listDetailCart;
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +62,6 @@ class _PayPage extends State {
         .map((e) => e.priceSell * e.number)
         .reduce((value, element) => value + element);
 
-    String _listDetailCart;
-    _listDetailCart =
-        '${listCartData.map((e) => "[${e.itemId}:${e.nameItem}/${e.detail}/${e.priceSell}/${e.number}").toList()}';
-    listDetailCart = _listDetailCart.substring(1, _listDetailCart.length - 1);
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -405,7 +399,6 @@ class _PayPage extends State {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('กรุณาเพิ่มภาพสลิปการโอนเงิน')));
     } else {
-      //_listCarData.add('[${_size.toString()},${_color.toString()},${value.priceSell},${value.number}]');
 
       print(
           'ธนาคารที่โอน : ${_bankTransferValue.toString()} ==> ${_bankReceiveValue.toString()}');
@@ -413,13 +406,12 @@ class _PayPage extends State {
       print('เวลา : ${_timeTransfer.toString()}');
       print('จำนวนเงิน : ${amount.toString()}');
       print('เลขท้าย บช : ${_lastNumber.toString()}');
-      print('detail : ${listDetailCart.toString()}');
+      print('${listCartData.map((e) => e).toList()}');
 
-      saveCartDataToOrder(
+      saveOrder(
           context,
           token,
           listCartData,
-          listDetailCart,
           userId,
           _bankTransferValue,
           _bankReceiveValue,
