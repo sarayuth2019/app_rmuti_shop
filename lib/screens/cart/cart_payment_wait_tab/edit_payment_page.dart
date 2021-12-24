@@ -229,6 +229,8 @@ class _EditPaymentPage extends State {
     final String urlSavePay = '${Config.API_URL}/Pay/save';
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
+    String _date =
+        '${_paymentData.date.split('/')[1]}/${_paymentData.date.split('/')[0]}/${_paymentData.date.split('/')[2]}';
     //String status = 'ชำระเงินสำเร็จ';
     print('save pay ....');
     Map params = Map();
@@ -238,10 +240,10 @@ class _EditPaymentPage extends State {
     params['marketId'] = _paymentData.marketId.toString();
     //params['number'] = _paymentData.number.toString();
     //params['itemId'] = _paymentData.itemId.toString();
-    params['detail'] = _paymentData.detail.toString();
+    //params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
-    params['date'] = _paymentData.date.toString();
+    params['date'] = _date.toString();
     params['time'] = _paymentData.time.toString();
     params['amount'] = _paymentData.amount.toString();
     params['lastNumber'] = _paymentData.lastNumber.toString();

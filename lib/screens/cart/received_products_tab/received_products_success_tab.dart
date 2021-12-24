@@ -71,7 +71,7 @@ class _ReceivedProductSuccessTab extends State {
                                 children: [
                                   Text('โอนชำระสินค้า : '),
                                   Text(
-                                      'item Id ${snapshot.data[index].itemId}'),
+                                      'Order Id ${snapshot.data[index].orderId}'),
                                 ],
                               ),
                               Text(

@@ -159,11 +159,11 @@ class _CartPaymentSuccessTab extends State {
                                                                 context,
                                                                 MaterialPageRoute(
                                                                     builder: (context) => CreateQRCode(
-                                                                        snapshotDetail
+                                                                        snapshotPayment
                                                                             .data[
                                                                                 index]
                                                                             .payId,
-                                                                        snapshotDetail
+                                                                        snapshotPayment
                                                                             .data[index]
                                                                             .marketId,
                                                                         token)));

@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 
 class ReviewProductPage extends StatefulWidget {
-  ReviewProductPage(this.token, this.userId, this.marketId,this.paymentData);
+  ReviewProductPage(this.token, this.userId, this.marketId, this.paymentData);
 
   final token;
   final int userId;
@@ -17,12 +18,12 @@ class ReviewProductPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _ReviewProductPage(token, userId, marketId,paymentData);
+    return _ReviewProductPage(token, userId, marketId, paymentData);
   }
 }
 
 class _ReviewProductPage extends State {
-  _ReviewProductPage(this.token, this.userId, this.marketId,this.paymentData);
+  _ReviewProductPage(this.token, this.userId, this.marketId, this.paymentData);
 
   final token;
   final int userId;
@@ -108,7 +109,9 @@ class _ReviewProductPage extends State {
     params['marketId'] = marketId.toString();
     params['rating'] = _rating.toString();
     params['content'] = content.text;
-    await http.post(Uri.parse(urlSaveReview), body: params,headers: {HttpHeaders.authorizationHeader:'Bearer ${token.toString()}'}).then((res) {
+    await http.post(Uri.parse(urlSaveReview), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
       print(res.body);
       var jsonDataRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var statusData = jsonDataRes['status'];
@@ -121,24 +124,28 @@ class _ReviewProductPage extends State {
       }
     });
   }
-  void _saveStatusPayment(_paymentData) async {
-   // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
-    String status = 'รีวิวสำเร็จ';
+
+  void _saveStatusPayment(Payment _paymentData) async {
+    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
+    String statusPayment = 'รีวิวสำเร็จ';
+    String _date =
+        '${_paymentData.date.split('/')[1]}/${_paymentData.date.split('/')[0]}/${_paymentData.date.split('/')[2]}';
     print('save pay ....');
     Map params = Map();
     params['payId'] = _paymentData.payId.toString();
     params['userId'] = _paymentData.userId.toString();
+    params['orderId'] = _paymentData.orderId.toString();
     params['marketId'] = _paymentData.marketId.toString();
-    params['number'] = _paymentData.number.toString();
-    params['itemId'] = _paymentData.itemId.toString();
-    params['detail'] = _paymentData.detail.toString();
+    //params['number'] = _paymentData.number.toString();
+    //params['itemId'] = _paymentData.itemId.toString();
+    //params['detail'] = _paymentData.detail.toString();
     params['bankTransfer'] = _paymentData.bankTransfer.toString();
     params['bankReceive'] = _paymentData.bankReceive.toString();
-    params['date'] = _paymentData.date.toString();
+    params['date'] = _date.toString();
     params['time'] = _paymentData.time.toString();
     params['amount'] = _paymentData.amount.toString();
     params['lastNumber'] = _paymentData.lastNumber.toString();
-    params['status'] = status.toString();
+    params['status'] = statusPayment.toString();
     await http.post(Uri.parse(urlSavePay), body: params, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
