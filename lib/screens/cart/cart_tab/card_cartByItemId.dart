@@ -1,7 +1,6 @@
 import 'package:app_rmuti_shop/screens/cart/cart_tab/show_list_cart_buy.dart';
 import 'package:app_rmuti_shop/screens/method/item_data_by_itemId.dart';
 import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
-import 'package:app_rmuti_shop/screens/method/save_detail_order.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -85,46 +84,46 @@ class CardCartByItemId extends StatelessWidget {
               );
             },
           ),
-          Row(
-            children: [
-              FutureBuilder(
-                future: sumPriceMarket(listCartByItemId),
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  if (snapshot.data == null) {
-                    return Text('กำลังโหลด...');
-                  } else {
-                    return Text('ราคารวม : ${snapshot.data} บาท');
-                  }
-                },
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              FutureBuilder(
-                future: listItemDataByItemId(token, listCartByItemId[0].itemId),
-                builder: (BuildContext context,
-                    AsyncSnapshot<dynamic> snapshotItemData) {
-                  if (snapshotItemData.data == null) {
-                    return Text('กำลังโหลด...');
-                  } else {
-                    DateTime _dayNow = DateTime.now();
-                    var stringDealFinal =
-                        '${snapshotItemData.data.dealFinal.split('/')[2]}-${snapshotItemData.data.dealFinal.split('/')[1]}-${snapshotItemData.data.dealFinal.split('/')[0]}';
-                    DateTime _dealFinal = DateTime.parse(stringDealFinal);
-                    return Column(
+          FutureBuilder(
+            future: listItemDataByItemId(token, listCartByItemId[0].itemId),
+            builder: (BuildContext context,
+                AsyncSnapshot<dynamic> snapshotItemData) {
+              if (snapshotItemData.data == null) {
+                return Text('กำลังโหลด...');
+              } else {
+                DateTime _dayNow = DateTime.now();
+                var stringDealFinal =
+                    '${snapshotItemData.data.dealFinal.split('/')[2]}-${snapshotItemData.data.dealFinal.split('/')[1]}-${snapshotItemData.data.dealFinal.split('/')[0]}';
+                DateTime _dealFinal = DateTime.parse(stringDealFinal);
+                return Column(
+                  children: [
+                    Container(
+                        child: snapshotItemData.data.count ==
+                                snapshotItemData.data.countRequest
+                            ? Text('* จำนวนผู้ลงทะเบียนครบแล้ว')
+                            : Container()),
+                    Container(
+                        child: _dayNow.isAfter(
+                                    _dealFinal.add(Duration(days: 1))) ==
+                                true
+                            ? Text('* สิ้นสุดระยะเวลาการลงทะเบียนแล้ว')
+                            : Container()),
+                    Row(
                       children: [
-                        Container(
-                            child: snapshotItemData.data.count ==
-                                    snapshotItemData.data.countRequest
-                                ? Text('* จำนวนผู้ลงทะเบียนครบแล้ว')
-                                : Container()),
-                        Container(
-                            child: _dayNow.isAfter(
-                                        _dealFinal.add(Duration(days: 1))) ==
-                                    true
-                                ? Text('* สิ้นสุดระยะเวลาการลงทะเบียนแล้ว')
-                                : Container()),
+                        FutureBuilder(
+                          future: sumPriceMarket(listCartByItemId),
+                          builder:
+                              (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                            if (snapshot.data == null) {
+                              return Text('กำลังโหลด...');
+                            } else {
+                              return Text('ราคารวม : ${snapshot.data} บาท');
+                            }
+                          },
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
                         Container(
                             child: snapshotItemData.data.count ==
                                         snapshotItemData.data.countRequest ||
@@ -151,9 +150,25 @@ class CardCartByItemId extends StatelessWidget {
                                           style: ElevatedButton.styleFrom(
                                               primary: Colors.teal),
                                           onPressed: () {
-                                            print('Save to Order !!!!!!');
-                                            showListCartBuy(context, token,
-                                                userId, listCartByItemId);
+                                            print(
+                                                '${listCartByItemId.map((e) => e.number).reduce((a, b) => a + b) + (snapshotItemData.data.count)}/${snapshotItemData.data.countRequest}');
+                                            if (listCartByItemId
+                                                        .map((e) => e.number)
+                                                        .reduce(
+                                                            (a, b) => a + b) +
+                                                    (snapshotItemData
+                                                        .data.count) >
+                                                snapshotItemData
+                                                    .data.countRequest) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                      content: Text(
+                                                          'จำนวนสินค้าเกินจากที่ทางร้านกำหนดไว้ !')));
+                                            } else {
+                                              print('Save to Order !!!!!!');
+                                              showListCartBuy(context, token,
+                                                  userId, listCartByItemId);
+                                            }
                                           },
                                           child: Container(
                                             width: double.infinity,
@@ -162,13 +177,14 @@ class CardCartByItemId extends StatelessWidget {
                                             ),
                                           )),
                                     ),
-                                  ))
+                                  )),
                       ],
-                    );
-                  }
-                },
-              )
-            ],
+                    ),
+                    Text('จำนวนผู้ลงทะเบียน : ${snapshotItemData.data.count}/${snapshotItemData.data.countRequest}')
+                  ],
+                );
+              }
+            },
           ),
         ],
       );
