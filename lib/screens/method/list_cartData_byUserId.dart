@@ -48,7 +48,7 @@ class Cart {
   final int cartId;
   final String status;
   final String nameItem;
-  final int number;
+  int number;
   final int price;
   final int priceSell;
   final detail;
