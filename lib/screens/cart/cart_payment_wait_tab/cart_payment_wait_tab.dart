@@ -4,10 +4,8 @@ import 'package:app_rmuti_shop/screens/cart/cart_payment_wait_tab/edit_payment_p
 import 'package:app_rmuti_shop/screens/method/getImagePayment.dart';
 import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 class CartPaymentWaitTab extends StatefulWidget {
   CartPaymentWaitTab(this.token, this.userId);
@@ -189,33 +187,31 @@ class _CartPaymentWaitTab extends State {
             content: SingleChildScrollView(
               child: FutureBuilder(
                 future: getImagePay(token, snapShotPaymentId),
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  if (snapshot.data == null) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<dynamic> snapshotImagePayment) {
+                  if (snapshotImagePayment.data == null) {
                     return Center(child: CircularProgressIndicator());
                   } else {
                     return Container(
-                        height: 250,
-                        child: CarouselSlider.builder(
-                          options: CarouselOptions(
-                              initialPage: 0,
-                              enlargeCenterPage: true,
-                              autoPlay: false),
-                          itemCount: snapshot.data.length,
-                          itemBuilder:
-                              (BuildContext context, int index, int realIndex) {
-                            return Container(
-                                child: snapshot.data.length == 0
-                                    ? Container(
-                                        child: Center(
-                                            child: Text('กำลังโหลดสลีป...')))
-                                    : Container(
-                                        child: Image.memory(
-                                        base64Decode(snapshot.data[index]),
-                                        fit: BoxFit.fill,
-                                      )));
-                          },
-                        ));
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshotImagePayment.data.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  child: Image.memory(
+                                    base64Decode(
+                                        snapshotImagePayment.data[index]),
+                                    fit: BoxFit.fill,
+                                    width: MediaQuery.of(context).size.width*0.7,
+                                  ),
+                                ),
+                              );
+                            }));
                   }
                 },
               ),
