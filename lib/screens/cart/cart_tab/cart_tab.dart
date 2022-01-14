@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:app_rmuti_shop/screens/method/group_cartByMarketId.dart';
-import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
+import 'package:app_rmuti_shop/method/group_cartByMarketId.dart';
+import 'package:app_rmuti_shop/method/list_cartData_byUserId.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'card_cartByMarketId.dart';

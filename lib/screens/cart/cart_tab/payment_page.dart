@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
-import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
-import 'package:app_rmuti_shop/screens/method/save_order.dart';
+import 'package:app_rmuti_shop/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/method/list_cartData_byUserId.dart';
+import 'package:app_rmuti_shop/method/save_order.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

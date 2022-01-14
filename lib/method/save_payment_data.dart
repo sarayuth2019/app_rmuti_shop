@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/method/saveImagePayment.dart';
+import 'package:app_rmuti_shop/method/saveImagePayment.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 

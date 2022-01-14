@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/method/boxdecoration_stype.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart'as http;

@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 
 class EditAccount extends StatefulWidget {
   EditAccount(this.userData, this.imageUser, this.token);

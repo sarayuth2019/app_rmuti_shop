@@ -1,3 +1,6 @@
+
+import 'package:app_rmuti_shop/method/list_cartData_byUserId.dart';
+import 'package:app_rmuti_shop/method/list_notify.dart';
 import 'package:app_rmuti_shop/screens/account/account_page.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_main.dart';
 import 'package:app_rmuti_shop/screens/home/home_page.dart';
@@ -28,8 +31,6 @@ class _MainPage extends State {
 
   final int userId;
   final token;
-
-  final testSnackBar = SnackBar(content: Text("เทสๆสแนคบา"));
   PageController _pageController = PageController();
   int tabNum = 0;
 
@@ -70,12 +71,51 @@ class _MainPage extends State {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: "Cart"),
+              icon: iconNavigationBar(Icon(Icons.shopping_cart),
+                  listCartByUserId(token, userId, 'รอชำระเงิน')),
+              label: "Cart"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_active), label: "Notification"),
+              icon: iconNavigationBar(
+                  Icon(Icons.notifications_active), listNotify(token, userId)),
+              label: "Notification"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "User"),
         ],
       ),
+    );
+  }
+
+  Widget iconNavigationBar(Widget icon, var listCount) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        icon,
+        FutureBuilder(
+          future: listCount,
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.data == null || snapshot.data.length == 0) {
+              return Container(
+                width: 10,
+                height: 10,
+              );
+            } else {
+              return Positioned(
+                  top: -6,
+                  right: -18,
+                  child: CircleAvatar(
+                    radius: 10,
+                    backgroundColor: Colors.red,
+                    child: Text(
+                      '${snapshot.data.length.toString()}',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ));
+            }
+          },
+        )
+      ],
     );
   }
 

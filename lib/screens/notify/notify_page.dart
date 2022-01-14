@@ -1,8 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/method/list_notify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +24,6 @@ class _NotifyPage extends State {
 
   final int userId;
   final token;
-  final String urlListNotifyByUserId = '${Config.API_URL}/UserNotify/list/user';
   final String urlClearAllNotifyByUserId =
       '${Config.API_URL}/UserNotify/deleteByUserId';
   final String urlDeleteNotifyByNotifyId =
@@ -48,7 +46,7 @@ class _NotifyPage extends State {
         ],
       ),
       body: FutureBuilder(
-        future: listNotify(),
+        future: listNotify(token, userId),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.data == null) {
             return Center(child: CircularProgressIndicator());
@@ -137,7 +135,9 @@ class _NotifyPage extends State {
                                               ),
                                             ),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   '${snapshot.data[index].status.split(" ")[0]}',
@@ -200,7 +200,8 @@ class _NotifyPage extends State {
                                 },
                                 icon: Icon(
                                   Icons.highlight_remove,
-                                  color: Colors.red,size: 16,
+                                  color: Colors.red,
+                                  size: 16,
                                 ),
                               ))
                         ],
@@ -216,7 +217,7 @@ class _NotifyPage extends State {
 
   Future<void> _onRefresh() async {
     setState(() {
-      listNotify();
+      listNotify(token, userId);
     });
   }
 
@@ -245,34 +246,4 @@ class _NotifyPage extends State {
       });
     });
   }
-
-  Future<List<_Notify>> listNotify() async {
-    List<_Notify> listNotify = [];
-    Map params = Map();
-    params['user'] = userId.toString();
-    await http.post(Uri.parse(urlListNotifyByUserId), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      var jsonData = jsonDecode(utf8.decode(res.bodyBytes));
-      var resData = jsonData['data'];
-      for (var i in resData) {
-        _Notify _notify = _Notify(i['notifyId'], i['amount'], i['status'],
-            i['userId'], i['payId'], i['createDate']);
-        listNotify.insert(0, _notify);
-      }
-    });
-    return listNotify;
-  }
-}
-
-class _Notify {
-  final int notifyId;
-  final int amount;
-  final String status;
-  final int userId;
-  final int payId;
-  final String createDate;
-
-  _Notify(this.notifyId, this.amount, this.status, this.userId, this.payId,
-      this.createDate);
 }

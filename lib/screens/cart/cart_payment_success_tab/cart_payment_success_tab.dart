@@ -1,9 +1,9 @@
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/method/getDetailOrder.dart';
+import 'package:app_rmuti_shop/method/method_get_item_data.dart';
+import 'package:app_rmuti_shop/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_payment_success_tab/create_qr_core_page.dart';
-import 'package:app_rmuti_shop/screens/method/getDetailOrder.dart';
-import 'package:app_rmuti_shop/screens/method/method_get_item_data.dart';
-import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
-import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

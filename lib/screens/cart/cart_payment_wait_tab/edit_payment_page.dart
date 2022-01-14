@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/method/getImagePayment.dart';
-import 'package:app_rmuti_shop/screens/method/method_listPaymentStatus.dart';
-import 'package:app_rmuti_shop/screens/method/saveImagePayment.dart';
+import 'package:app_rmuti_shop/method/getImagePayment.dart';
+import 'package:app_rmuti_shop/method/method_listPaymentStatus.dart';
+import 'package:app_rmuti_shop/method/saveImagePayment.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

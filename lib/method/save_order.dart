@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
-import 'package:app_rmuti_shop/screens/method/list_cartData_byUserId.dart';
-import 'package:app_rmuti_shop/screens/method/save_detail_order.dart';
-import 'package:app_rmuti_shop/screens/method/save_payment_data.dart';
+import 'package:app_rmuti_shop/method/list_cartData_byUserId.dart';
+import 'package:app_rmuti_shop/method/save_detail_order.dart';
+import 'package:app_rmuti_shop/method/save_payment_data.dart';
 import 'package:http/http.dart' as http;
 
 void saveOrder(context,

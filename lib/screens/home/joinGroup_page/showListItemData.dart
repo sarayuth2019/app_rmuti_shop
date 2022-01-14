@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:app_rmuti_shop/config/config.dart';
+import 'package:app_rmuti_shop/method/boxdecoration_stype.dart';
+import 'package:app_rmuti_shop/method/review_market_method.dart';
 import 'package:app_rmuti_shop/screens/home/joinGroup_page/show_review_page.dart';
-import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
-import 'package:app_rmuti_shop/screens/method/review_market_method.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';

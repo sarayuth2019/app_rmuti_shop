@@ -1,5 +1,5 @@
+import 'package:app_rmuti_shop/method/boxdecoration_stype.dart';
 import 'package:app_rmuti_shop/screens/home/joinGroup_page/joinGroup_page.dart';
-import 'package:app_rmuti_shop/screens/method/boxdecoration_stype.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
