@@ -7,23 +7,25 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class NotifyPage extends StatefulWidget {
-  NotifyPage(this.userId, this.token);
+  NotifyPage(this.userId, this.token,this.callBack);
 
   final int userId;
   final token;
+  final callBack;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _NotifyPage(userId, token);
+    return _NotifyPage(userId, token,callBack);
   }
 }
 
 class _NotifyPage extends State {
-  _NotifyPage(this.userId, this.token);
+  _NotifyPage(this.userId, this.token,this.callBack);
 
   final int userId;
   final token;
+  final callBack;
   final String urlClearAllNotifyByUserId =
       '${Config.API_URL}/UserNotify/deleteByUserId';
   final String urlDeleteNotifyByNotifyId =
@@ -218,6 +220,7 @@ class _NotifyPage extends State {
   Future<void> _onRefresh() async {
     setState(() {
       listNotify(token, userId);
+      callBack();
     });
   }
 
@@ -230,6 +233,7 @@ class _NotifyPage extends State {
         }).then((res) {
       setState(() {
         print(res.body);
+        callBack();
       });
     });
   }
@@ -243,6 +247,7 @@ class _NotifyPage extends State {
         }).then((res) {
       setState(() {
         print(res.body);
+        callBack();
       });
     });
   }

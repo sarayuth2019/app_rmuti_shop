@@ -49,9 +49,9 @@ class _MainPage extends State {
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          HomePage(userId, token),
-          CartMain(userId, token),
-          NotifyPage(userId, token),
+          HomePage(userId, token,callBackMainPage),
+          CartMain(userId, token,callBackMainPage),
+          NotifyPage(userId, token,callBackMainPage),
           AccountPage(userId, token)
         ],
       ),
@@ -133,5 +133,11 @@ class _MainPage extends State {
     print("account logout ! ${_accountID.toString()}");
     Navigator.pushAndRemoveUntil(context,
         MaterialPageRoute(builder: (context) => SingIn()), (route) => false);
+  }
+
+  void callBackMainPage(){
+    setState(() {
+      print(' setState MainPage !!!!!');
+    });
   }
 }

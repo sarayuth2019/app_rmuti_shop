@@ -8,23 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  HomePage(this.userId, this.token);
+  HomePage(this.userId, this.token, this.callBackMainPage);
 
   final userId;
   final token;
+  final callBackMainPage;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _HomePage(userId, token);
+    return _HomePage(userId, token, callBackMainPage);
   }
 }
 
 class _HomePage extends State {
-  _HomePage(this.userId, this.token);
+  _HomePage(this.userId, this.token, this.callBackMainPage);
 
   final userId;
   final token;
+  final callBackMainPage;
+
   List<Items> _listItem = [];
   final urlListAllItems = "${Config.API_URL}/Item/list";
   final urlGetImageByItemId = "${Config.API_URL}/images/";
@@ -51,8 +54,8 @@ class _HomePage extends State {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        SearchPage(token, userId, _listItem)));
+                    builder: (context) => SearchPage(
+                        token, userId, _listItem, callBackMainPage)));
           },
         ),
         body: RefreshIndicator(
@@ -189,7 +192,8 @@ class _HomePage extends State {
                                                                         snapshot
                                                                             .data[index],
                                                                         token,
-                                                                        userId)));
+                                                                        userId,
+                                                                        callBackMainPage)));
                                                       },
                                                       child: ClipRRect(
                                                         borderRadius:
@@ -251,7 +255,7 @@ class _HomePage extends State {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
-     // print(_itemData);
+      // print(_itemData);
       for (var i in _itemData) {
         Items _items = Items(
           i['itemId'],
@@ -285,7 +289,7 @@ class _HomePage extends State {
         headers: {
           HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
         }).then((res) {
-     // print(res.body);
+      // print(res.body);
       Map jsonData = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _statusData = jsonData['status'];
       var _dataImage = jsonData['dataImages'];

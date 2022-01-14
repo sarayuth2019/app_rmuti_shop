@@ -7,25 +7,27 @@ import 'card_cartByMarketId.dart';
 
 
 class CartTab extends StatefulWidget {
-  CartTab(this.token, this.userId, this.statusTab);
+  CartTab(this.token, this.userId, this.statusTab,this.callBackMainPage);
 
   final token;
   final userId;
   final String statusTab;
+  final callBackMainPage;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _CartTab(token, userId, statusTab);
+    return _CartTab(token, userId, statusTab,callBackMainPage);
   }
 }
 
 class _CartTab extends State {
-  _CartTab(this.token, this.userId, this.statusTab);
+  _CartTab(this.token, this.userId, this.statusTab,this.callBackMainPage);
 
   final token;
   final userId;
   final String statusTab;
+  final callBackMainPage;
 
   var listGroupCartDataByMarket;
   var listMarket = [];
@@ -88,7 +90,7 @@ class _CartTab extends State {
                          child: ListGroupCart(
                              token,
                              listGroupCartDataByMarket,
-                             userId,callBack
+                             userId,callBack,callBackMainPage
                          ),
                        );
                      }

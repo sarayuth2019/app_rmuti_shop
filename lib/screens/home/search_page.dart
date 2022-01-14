@@ -4,25 +4,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
-  SearchPage(this.token, this.userId, this._listItem);
+  SearchPage(this.token, this.userId, this._listItem,this.callBackMainPage);
 
   final token;
   final userId;
   final _listItem;
+  final callBackMainPage;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _SearchPage(token, userId, _listItem);
+    return _SearchPage(token, userId, _listItem,callBackMainPage);
   }
 }
 
 class _SearchPage extends State {
-  _SearchPage(this.token, this.userId, this._listItem);
+  _SearchPage(this.token, this.userId, this._listItem,this.callBackMainPage);
 
   final token;
   final userId;
   final List _listItem;
+  final callBackMainPage;
+
   List _listItemSearch = [];
 
 
@@ -84,7 +87,7 @@ class _SearchPage extends State {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) =>
                                   JoinGroupPage(
-                                      _listItemSearch[index], token, userId)));
+                                      _listItemSearch[index], token, userId,callBackMainPage)));
                         },
                         child: Container(
                           width: double.infinity,

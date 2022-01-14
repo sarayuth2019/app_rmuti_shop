@@ -10,25 +10,27 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 
 class ShowListItemData extends StatefulWidget {
-  ShowListItemData(this.itemData, this.token, this.userId);
+  ShowListItemData(this.itemData, this.token, this.userId,this.callBackMainPage);
 
   final itemData;
   final token;
   final int userId;
+  final callBackMainPage;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _ShowListItemData(itemData, token, userId);
+    return _ShowListItemData(itemData, token, userId,callBackMainPage);
   }
 }
 
 class _ShowListItemData extends State {
-  _ShowListItemData(this.itemData, this.token, this.userId);
+  _ShowListItemData(this.itemData, this.token, this.userId,this.callBackMainPage);
 
   final itemData;
   final token;
   final int userId;
+  final callBackMainPage;
 
   final urlGetImageByItemId = "${Config.API_URL}/images/";
   final urlSaveToCart = "${Config.API_URL}/Cart/save";
@@ -536,7 +538,8 @@ class _ShowListItemData extends State {
       var resStatus = resData['status'];
       if (resStatus == 1) {
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess);
+        callBackMainPage();
+        //ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess);
         ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupSuccess2);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(snackBarOnJoinGroupFall);

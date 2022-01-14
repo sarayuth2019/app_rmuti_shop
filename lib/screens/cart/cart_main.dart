@@ -10,23 +10,25 @@ import 'cart_payment_wait_tab/cart_payment_wait_tab.dart';
 
 
 class CartMain extends StatefulWidget {
-  CartMain(this.userId, this.token);
+  CartMain(this.userId, this.token,this.callBack);
 
   final userId;
   final token;
+  final callBack;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _CartMain(userId, token);
+    return _CartMain(userId, token,callBack);
   }
 }
 
 class _CartMain extends State {
-  _CartMain(this.userId, this.token);
+  _CartMain(this.userId, this.token,this.callBack);
 
   final userId;
   final token;
+  final callBack;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class _CartMain extends State {
             ),
             body: TabBarView(
               children: [
-                CartTab(token, userId,'รอชำระเงิน'),
+                CartTab(token, userId,'รอชำระเงิน',callBack),
                 CartPaymentWaitTab(token, userId),
                 CartPaymentSuccessTab(token, userId),
                 ReceivedProductSuccessTab(token, userId)

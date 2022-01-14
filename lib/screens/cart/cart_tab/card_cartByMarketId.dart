@@ -11,29 +11,31 @@ import 'package:http/http.dart' as http;
 
 class ListGroupCart extends StatefulWidget {
   ListGroupCart(
-      this.token, this.listGroupCartDataByMarket, this.userId, this.callBack);
+      this.token, this.listGroupCartDataByMarket, this.userId, this.callBack,this.callBackMainPage);
 
   final token;
   final List<Cart> listGroupCartDataByMarket;
   final int userId;
   final Function callBack;
-
+  final Function callBackMainPage;
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return _ListGroupCartState(
-        token, listGroupCartDataByMarket, userId, callBack);
+        token, listGroupCartDataByMarket, userId, callBack,callBackMainPage);
   }
 }
 
 class _ListGroupCartState extends State {
   _ListGroupCartState(
-      this.token, this.listGroupCartDataByMarket, this.userId, this.callBack);
+      this.token, this.listGroupCartDataByMarket, this.userId, this.callBack,this.callBackMainPage);
 
   final token;
   final List<Cart> listGroupCartDataByMarket;
   final int userId;
   final Function callBack;
+  final Function callBackMainPage;
+
 
   int sumPriceTotal = 0;
   var listItemId = [];
@@ -70,7 +72,7 @@ class _ListGroupCartState extends State {
                         listGroupCartDataByMarket, listItemId[indexItem]);
                     print('list CartByItemId : ${listCartByItemId.length}');
                     return CardCartByItemId(token, listCartByItemId, userId,
-                        callBack, showAlertDeleteCart);
+                        callBack,callBackMainPage);
                   }),
               SizedBox(
                 height: 8,
@@ -102,66 +104,5 @@ class _ListGroupCartState extends State {
         ),
       );
     }
-  }
-
-  void showAlertDeleteCart(BuildContext context, snapShotId, cartDelete) async {
-    print('Show Alert Dialog Image !');
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              'ต้องการลบรายการนี้ ?',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                      child: GestureDetector(
-                          child: Text('ยืนยัน'),
-                          onTap: () {
-                            deleteCart(token, snapShotId, cartDelete);
-                            setState(() {
-                              Navigator.pop(context);
-                            });
-                          })),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                      child: GestureDetector(
-                          child: Text('ยกเลิก'),
-                          onTap: () {
-                            Navigator.pop(context);
-                          })),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  void deleteCart(token, snapShotId, cartDelete) async {
-    print('cartId delete : ${snapShotId.toString()}.....');
-    final urlDeleteByCartId = "${Config.API_URL}/Cart/delete";
-    var statusRes;
-    Map params = Map();
-    params['id'] = snapShotId.toString();
-    await http.post(Uri.parse(urlDeleteByCartId), body: params, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
-    }).then((res) {
-      var resData = jsonDecode(res.body);
-      statusRes = resData['status'];
-      if (statusRes == 0) {
-        setState(() {
-          print(res.body);
-          listGroupCartDataByMarket.remove(cartDelete);
-          //listCartByItemId.remove(cartDelete);
-          callBack(listGroupCartDataByMarket.length);
-        });
-      }
-    });
   }
 }

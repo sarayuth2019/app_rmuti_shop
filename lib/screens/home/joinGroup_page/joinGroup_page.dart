@@ -6,25 +6,27 @@ import 'package:flutter/material.dart';
 
 
 class JoinGroupPage extends StatefulWidget {
-  JoinGroupPage(this.itemData, this.token, this.userId);
+  JoinGroupPage(this.itemData, this.token, this.userId,this.callBackMainPage);
 
   final itemData;
   final token;
   final userId;
+  final callBackMainPage;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _JoinGroupPage(itemData, token, userId);
+    return _JoinGroupPage(itemData, token, userId,callBackMainPage);
   }
 }
 
 class _JoinGroupPage extends State {
-  _JoinGroupPage(this.itemData, this.token, this.userId);
+  _JoinGroupPage(this.itemData, this.token, this.userId,this.callBackMainPage);
 
   final itemData;
   final token;
   final userId;
+  final callBackMainPage;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class _JoinGroupPage extends State {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ShowListImageItem(token, itemData.itemId),
-              ShowListItemData(itemData, token, userId)
+              ShowListItemData(itemData, token, userId,callBackMainPage)
             ],
           ),
         ),

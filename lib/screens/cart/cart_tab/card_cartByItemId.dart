@@ -1,34 +1,38 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/method/item_data_by_itemId.dart';
 import 'package:app_rmuti_shop/method/list_cartData_byUserId.dart';
 import 'package:app_rmuti_shop/screens/cart/cart_tab/show_list_cart_buy.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart'as http;
 
 class CardCartByItemId extends StatefulWidget {
   CardCartByItemId(this.token, this.listCartByItemId, this.userId,
-      this.callBack, this.showAlertDeleteCart);
+      this.callBack, this.callBackMainPage);
 
   final token;
   final List<Cart> listCartByItemId;
   final int userId;
   final Function callBack;
-  final Function showAlertDeleteCart;
+  final Function callBackMainPage;
 
   @override
   _CardCartByItemIdState createState() =>
       _CardCartByItemIdState(
-          token, listCartByItemId, userId, callBack, showAlertDeleteCart);
+          token, listCartByItemId, userId, callBack, callBackMainPage);
 }
 
 class _CardCartByItemIdState extends State<CardCartByItemId> {
   _CardCartByItemIdState(this.token, this.listCartByItemId, this.userId,
-      this.callBack, this.showAlertDeleteCart);
+      this.callBack, this.callBackMainPage);
 
   final token;
   List<Cart> listCartByItemId;
   final int userId;
   final Function callBack;
-  final Function showAlertDeleteCart;
+  final Function callBackMainPage;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +98,7 @@ class _CardCartByItemIdState extends State<CardCartByItemId> {
                                 print(
                                     'cartId delete : ${listCartByItemId[index]
                                         .cartId}');
-                                showAlertDeleteCart(
+                                showDialogDelete(
                                     context,
                                     listCartByItemId[index].cartId,
                                     listCartByItemId[index]);
@@ -273,5 +277,67 @@ class _CardCartByItemIdState extends State<CardCartByItemId> {
 
     // print('ราคารวมของร้านค้านั้นๆ  :  ${sumPriceMarket.toString()}');
     return sumPriceMarket;
+  }
+
+  void showDialogDelete(BuildContext context, snapShotId, cartDelete) async {
+    print('Show Alert Dialog Image !');
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'ต้องการลบรายการนี้ ?',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      child: GestureDetector(
+                          child: Text('ยืนยัน'),
+                          onTap: () {
+                            deleteCart(token, snapShotId, cartDelete);
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          })),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      child: GestureDetector(
+                          child: Text('ยกเลิก'),
+                          onTap: () {
+                            Navigator.pop(context);
+                          })),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void deleteCart(token, snapShotId, cartDelete) async {
+    print('cartId delete : ${snapShotId.toString()}.....');
+    final urlDeleteByCartId = "${Config.API_URL}/Cart/delete";
+    var statusRes;
+    Map params = Map();
+    params['id'] = snapShotId.toString();
+    await http.post(Uri.parse(urlDeleteByCartId), body: params, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
+    }).then((res) {
+      var resData = jsonDecode(res.body);
+      statusRes = resData['status'];
+      if (statusRes == 0) {
+        setState(() {
+          print(res.body);
+          //listGroupCartDataByMarket.remove(cartDelete);
+          listCartByItemId.remove(cartDelete);
+          callBack(listCartByItemId.length);
+          callBackMainPage();
+        });
+      }
+    });
   }
 }
