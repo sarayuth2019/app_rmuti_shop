@@ -50,6 +50,7 @@ class _HomePage extends State {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.search),
           backgroundColor: Colors.teal,
+          mini: true,
           onPressed: () {
             Navigator.push(
                 context,
