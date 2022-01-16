@@ -1,4 +1,3 @@
-
 import 'package:app_rmuti_shop/method/boxdecoration_stype.dart';
 import 'package:app_rmuti_shop/method/group_cartByMarketId.dart';
 import 'package:app_rmuti_shop/method/list_cartData_byUserId.dart';
@@ -7,32 +6,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ListGroupCart extends StatefulWidget {
-  ListGroupCart(
-      this.token, this.listGroupCartDataByMarket, this.userId, this.callBack,this.callBackMainPage);
+  ListGroupCart(this.token, this.listGroupCartDataByMarket, this.userId,
+      this.callBack, this.callBackMainPage, this.removeListCart);
 
   final token;
   final List<Cart> listGroupCartDataByMarket;
   final int userId;
   final Function callBack;
   final Function callBackMainPage;
+  final Function removeListCart;
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _ListGroupCartState(
-        token, listGroupCartDataByMarket, userId, callBack,callBackMainPage);
+    return _ListGroupCartState(token, listGroupCartDataByMarket, userId,
+        callBack, callBackMainPage, removeListCart);
   }
 }
 
 class _ListGroupCartState extends State {
-  _ListGroupCartState(
-      this.token, this.listGroupCartDataByMarket, this.userId, this.callBack,this.callBackMainPage);
+  _ListGroupCartState(this.token, this.listGroupCartDataByMarket, this.userId,
+      this.callBack, this.callBackMainPage, this.removeListCart);
 
   final token;
   final List<Cart> listGroupCartDataByMarket;
   final int userId;
   final Function callBack;
   final Function callBackMainPage;
-
+  final Function removeListCart;
 
   int sumPriceTotal = 0;
   var listItemId = [];
@@ -46,7 +47,7 @@ class _ListGroupCartState extends State {
       _listItemId.add(element.itemId);
     });
     listItemId = _listItemId.toSet().toList();
-    print('listItem length : ${listItemId.length}');
+    // print('listItem length : ${listItemId.length}');
     if (listGroupCartDataByMarket.length == 0) {
       return Container();
     } else {
@@ -67,9 +68,15 @@ class _ListGroupCartState extends State {
                     ///////////////// ListCartByItemId ////////////////////////
                     listCartByItemId = listGroupCartByItemId(
                         listGroupCartDataByMarket, listItemId[indexItem]);
-                    print('list CartByItemId : ${listCartByItemId.length}');
-                    return CardCartByItemId(token, listCartByItemId, userId,
-                        callBack,callBackMainPage);
+                    // print('list CartByItemId : ${listCartByItemId.length}');
+                    return CardCartByItemId(
+                        token,
+                        listCartByItemId,
+                        userId,
+                        callBack,
+                        callBackMainPage,
+                        removeListCart,
+                        removeListGroupCartByMarket);
                   }),
               SizedBox(
                 height: 8,
@@ -81,17 +88,22 @@ class _ListGroupCartState extends State {
                   children: [
                     Text('ราคาสินค้าทั้งหมด : '),
                     Text(
-                        "${listGroupCartDataByMarket.map((e) => e.priceSell * e.number).reduce((value, element) => value + element)} บาท"),
+                      "${listGroupCartDataByMarket.map((e) => e.priceSell * e.number).reduce((value, element) => value + element)}",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(' บาท'),
                     SizedBox(
                       width: 8,
                     ),
                     ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Colors.teal),
-                        onPressed: () {
-                          showListCartBuy(context, token, userId,
-                              listGroupCartDataByMarket);
-                        },
-                        child: Text('ชำระเงินทั้งหมด')),
+                      style: ElevatedButton.styleFrom(primary: Colors.teal),
+                      onPressed: () {
+                        showListCartBuy(
+                            context, token, userId, listGroupCartDataByMarket);
+                      },
+                      child: Text('ชำระเงินทั้งหมด'),
+                    )
                   ],
                 ),
               )
@@ -101,5 +113,13 @@ class _ListGroupCartState extends State {
         ),
       );
     }
+  }
+
+  void removeListGroupCartByMarket(cartDelete) {
+    setState(() {
+      listGroupCartDataByMarket.remove(cartDelete);
+      print(
+          'listGroupCartDataByMarket.length ====>> ${listGroupCartDataByMarket.length}');
+    });
   }
 }
