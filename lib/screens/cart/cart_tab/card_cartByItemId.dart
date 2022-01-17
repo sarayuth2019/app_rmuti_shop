@@ -241,7 +241,7 @@ class _CardCartByItemIdState extends State<CardCartByItemId> {
                                   )
                                 : Center(
                                     child: Container(
-                                      height: 20,
+                                      height: 30,
                                       width: 90,
                                       child: ElevatedButton(
                                           style: ElevatedButton.styleFrom(
