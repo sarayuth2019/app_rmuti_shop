@@ -21,7 +21,7 @@ void showListCartBuy(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 21 * double.parse(listCartBuy.length.toString()),
+                    height: 42 * double.parse(listCartBuy.length.toString()),
                     width: 600,
                     child: ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
@@ -29,13 +29,45 @@ void showListCartBuy(
                       shrinkWrap: true,
                       itemCount: listCartBuy.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Row(
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('${listCartBuy[index].nameItem}'),
-                            Text(' : ราคา ${listCartBuy[index].priceSell}'),
-                            Text(' x ${listCartBuy[index].number}'),
-                            Text(
-                                ' = ${listCartBuy[index].priceSell * listCartBuy[index].number} บาท'),
+                            Row(
+                              children: [
+                                Text('${listCartBuy[index].nameItem}'),
+                                Text(' : ราคา ${listCartBuy[index].priceSell}'),
+                                Text(' x ${listCartBuy[index].number}'),
+                                Text(
+                                    ' = ${listCartBuy[index].priceSell * listCartBuy[index].number} บาท'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                    child: listCartBuy[index]
+                                                .detail
+                                                .split(',')[0] ==
+                                            'null'
+                                        ? Container()
+                                        : Text(
+                                            'ขนาด : ${(listCartBuy[index].detail.split(',')[0]).split(':')[0]}',
+                                            style: TextStyle(fontSize: 14),
+                                          )),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                    child: listCartBuy[index]
+                                                .detail
+                                                .split(',')[1] ==
+                                            'null'
+                                        ? Container()
+                                        : Text(
+                                            'สี : ${(listCartBuy[index].detail.split(',')[1]).split(':')[0]}',
+                                            style: TextStyle(fontSize: 14),
+                                          )),
+                              ],
+                            ),
                           ],
                         );
                       },
@@ -65,8 +97,8 @@ void showListCartBuy(
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            PayPage(token, userId, listCartBuy)));
+                                        builder: (context) => PayPage(
+                                            token, userId, listCartBuy)));
                               },
                               child: Text('ชำระเงิน')),
                           ElevatedButton(
