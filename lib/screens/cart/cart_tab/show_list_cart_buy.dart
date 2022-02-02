@@ -35,10 +35,9 @@ void showListCartBuy(
                             Row(
                               children: [
                                 Text('${listCartBuy[index].nameItem}'),
-                                Text(' : ราคา ${listCartBuy[index].priceSell}'),
+                                //Text(' : ราคา ${listCartBuy[index].priceSell}'),
                                 Text(' x ${listCartBuy[index].number}'),
-                                Text(
-                                    ' = ${listCartBuy[index].priceSell * listCartBuy[index].number} บาท'),
+                                //Text(' = ${listCartBuy[index].priceSell * listCartBuy[index].number} บาท'),
                               ],
                             ),
                             Row(
