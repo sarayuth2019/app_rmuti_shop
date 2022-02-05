@@ -121,6 +121,7 @@ class _HomePage extends State {
                                   color: Colors.teal,
                                   width: double.infinity,
                                   child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -163,74 +164,72 @@ class _HomePage extends State {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 8.0, right: 8.0, bottom: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: _fontSize),
-                                            ),
-                                            Container(
-                                              child: snapshot.data[index]
-                                                              .count ==
-                                                          snapshot.data[index]
-                                                              .countRequest ||
-                                                      _dayNow.isAfter(_dealFinal
-                                                              .add(Duration(
-                                                                  days: 1))) ==
-                                                          true
-                                                  ? Container()
-                                                  : GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    JoinGroupPage(
-                                                                        snapshot
-                                                                            .data[index],
-                                                                        token,
-                                                                        userId,
-                                                                        callBackMainPage)));
-                                                      },
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                        child: Container(
-                                                            color:
-                                                                Colors.orange,
-                                                            height: 20,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 5.0,
-                                                                      right:
-                                                                          5.0),
-                                                              child: Text(
-                                                                'เข้าร่วม',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            )),
-                                                      ),
-                                                    ),
-                                            )
-                                          ],
+                                        child: Text(
+                                          "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: _fontSize),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
+                              Positioned(
+                                top: 6,
+                                right: 6,
+                                child: Container(
+                                  child: snapshot.data[index]
+                                      .count ==
+                                      snapshot.data[index]
+                                          .countRequest ||
+                                      _dayNow.isAfter(_dealFinal
+                                          .add(Duration(
+                                          days: 1))) ==
+                                          true
+                                      ? Container()
+                                      : GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  JoinGroupPage(
+                                                      snapshot
+                                                          .data[index],
+                                                      token,
+                                                      userId,
+                                                      callBackMainPage)));
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius:
+                                      BorderRadius
+                                          .circular(5),
+                                      child: Container(
+                                          color:
+                                          Colors.orange,
+                                          height: 22,
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets
+                                                .only(
+                                                left: 10.0,
+                                                right:
+                                                10.0),
+                                            child: Text(
+                                              'เข้าร่วม',
+                                              style: TextStyle(
+                                                  color: Colors
+                                                      .white,
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .bold),
+                                            ),
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         ),
