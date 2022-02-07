@@ -102,7 +102,7 @@ void showListCartBuy(
                               child: Text('ชำระเงิน')),
                           ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  primary: Colors.teal),
+                                  primary: Colors.grey),
                               onPressed: () {
                                 Navigator.pop(context);
                               },

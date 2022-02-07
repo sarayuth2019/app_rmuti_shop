@@ -46,6 +46,7 @@ void saveOrder(context,
   params['marketId'] = listCartData[0].marketId.toString();
   params['status'] = statusCart.toString();
   params['userId'] = userId.toString();
+  params['priceSell'] = amount.toString();
   params['dealBegin'] = _dealBegin.toString();
   params['dealFinal'] = _dealFinal.toString();
   params['dateBegin'] = _dateBegin.toString();

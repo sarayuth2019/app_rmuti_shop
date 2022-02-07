@@ -29,8 +29,8 @@ class _HomePage extends State {
   final callBackMainPage;
 
   List<Items> _listItem = [];
-  //final urlListAllItems = "${Config.API_URL}/Item/list";
-  final urlListAllItems = "${Config.API_URL}/Item/ListProduct";
+  final urlListAllItems = "${Config.API_URL}/Item/list";
+  //final urlListAllItems = "${Config.API_URL}/Item/ListProduct";
   final urlGetImageByItemId = "${Config.API_URL}/images/";
   final snackBarOnFall = SnackBar(content: Text("ผิดพลาด !"));
   DateTime _dayNow = DateTime.now();
