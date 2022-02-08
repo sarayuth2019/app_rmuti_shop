@@ -29,8 +29,8 @@ class _HomePage extends State {
   final callBackMainPage;
 
   List<Items> _listItem = [];
-  final urlListAllItems = "${Config.API_URL}/Item/list";
-  //final urlListAllItems = "${Config.API_URL}/Item/ListProduct";
+  //final urlListAllItems = "${Config.API_URL}/Item/list";
+  final urlListAllItems = "${Config.API_URL}/Item/ListProduct";
   final urlGetImageByItemId = "${Config.API_URL}/images/";
   final snackBarOnFall = SnackBar(content: Text("ผิดพลาด !"));
   DateTime _dayNow = DateTime.now();
@@ -256,7 +256,7 @@ class _HomePage extends State {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
-      // print(_itemData);
+      print(_itemData);
       for (var i in _itemData) {
         Items _items = Items(
           i['itemId'],
