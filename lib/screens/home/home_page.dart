@@ -256,7 +256,7 @@ class _HomePage extends State {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
-      print(_itemData);
+      //print(_itemData);
       for (var i in _itemData) {
         Items _items = Items(
           i['itemId'],
