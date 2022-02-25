@@ -341,11 +341,11 @@ class _ShowListItemData extends State {
                     style: TextStyle(fontSize: 14),
                   ),
                   Text(
-                    "จำนวนคนที่ต้องการ ${itemData.countRequest} คน",
+                    "จำนวนที่ต้องการขาย ${itemData.countRequest}",
                     style: TextStyle(fontSize: 14),
                   ),
                   Text(
-                    "มีผู้เข้าร่วมแล้ว ${itemData.count} คน",
+                    "ลงทะเบียนซื้อแล้ว ${itemData.count}",
                     style: TextStyle(fontSize: 14),
                   ),
                 ],
@@ -389,7 +389,7 @@ class _ShowListItemData extends State {
         ),
         Container(
             child: itemData.count == itemData.countRequest
-                ? Text('* จำนวนผู้ลงทะเบียนครบแล้ว')
+                ? Text('* จำนวนสินค้าที่ต้องการขายครบแล้ว')
                 : Container()),
         Container(
             child: _dayNow.isAfter(_dealFinal.add(Duration(days: 1))) == true

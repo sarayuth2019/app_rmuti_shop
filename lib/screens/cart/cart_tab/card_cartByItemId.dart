@@ -186,7 +186,7 @@ class _CardCartByItemIdState extends State<CardCartByItemId> {
                     Container(
                         child: snapshotItemData.data.count ==
                                 snapshotItemData.data.countRequest
-                            ? Text('* จำนวนผู้ลงทะเบียนครบแล้ว')
+                            ? Text('* จำนวนที่ต้องการขายครบแล้ว')
                             : Container()),
                     Container(
                         child: _dayNow.isAfter(
@@ -277,8 +277,13 @@ class _CardCartByItemIdState extends State<CardCartByItemId> {
                                   )),
                       ],
                     ),
-                    Text(
-                        'จำนวนผู้ลงทะเบียน : ${snapshotItemData.data.count}/${snapshotItemData.data.countRequest}')
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: Text(
+                            'จำนวนสินค้าที่ต้องการขาย : ${snapshotItemData.data.count}/${snapshotItemData.data.countRequest}'),
+                      ),
+                    )
                   ],
                 );
               }

@@ -41,7 +41,7 @@ class _SingUp extends State {
       key: _snackBarKey,
       appBar: AppBar(
         backgroundColor: Colors.teal,
-        title: Text("Sing Up"),
+        title: Text("สมัครสมาชิก"),
       ),
       body: SingleChildScrollView(
         child: Form(

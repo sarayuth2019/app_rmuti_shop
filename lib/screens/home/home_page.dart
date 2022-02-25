@@ -166,7 +166,7 @@ class _HomePage extends State {
                                         padding: const EdgeInsets.only(
                                             left: 8.0, right: 8.0, bottom: 8),
                                         child: Text(
-                                          "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการลงชื่อ ${snapshot.data[index].countRequest} มีคนลงแล้ว ${snapshot.data[index].count}",
+                                          "ราคา ${snapshot.data[index].priceSell} จาก ${snapshot.data[index].price} ต้องการขาย ${snapshot.data[index].countRequest} ลงทะเบียนซื้อแล้ว ${snapshot.data[index].count}",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: _fontSize),
@@ -253,6 +253,7 @@ class _HomePage extends State {
     await http.get(Uri.parse(urlListAllItems), headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${token.toString()}'
     }).then((res) {
+      //print(res.body);
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
