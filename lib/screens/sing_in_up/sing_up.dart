@@ -138,7 +138,7 @@ class _SingUp extends State {
                   style: ElevatedButton.styleFrom(primary: Colors.teal),
                   onPressed: onSingUp,
                   child: Text(
-                    "Sing up",
+                    "สมัครสมาชิก",
                     style: TextStyle(color: Colors.white),
                   ),
                 )
