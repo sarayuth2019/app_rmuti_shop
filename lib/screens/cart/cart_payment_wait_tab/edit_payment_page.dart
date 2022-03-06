@@ -176,22 +176,25 @@ class _EditPaymentPage extends State {
                         'หมายเหตุ : ',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'การชำระเงินของท่านผิดพลาด โปรดตรวจสอบสลีปของท่าน',
-                            style: TextStyle(fontSize: _fontSize),
-                          ),
-                          Text(
-                            'หากจำนวนเงินไม่ตรงกับราคาสินค้า กรุณาโอนเพิ่ม',
-                            style: TextStyle(fontSize: _fontSize),
-                          ),
-                          Text(
-                            'พร้อมเพิ่มหลักฐานการโอนเงินที่ได้โอนเพิ่ม',
-                            style: TextStyle(fontSize: _fontSize),
-                          ),
-                        ],
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'การชำระเงินของท่านผิดพลาด โปรดตรวจสอบสลีปของท่าน',
+                              style: TextStyle(fontSize: _fontSize),
+                            ),
+                            Text(
+                              'หากจำนวนเงินไม่ตรงกับราคาสินค้า กรุณาโอนเพิ่ม',
+                              style: TextStyle(fontSize: _fontSize),
+                            ),
+                            Text(
+                              'พร้อมเพิ่มหลักฐานการโอนเงินที่ได้โอนเพิ่ม',
+                              style: TextStyle(fontSize: _fontSize),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
