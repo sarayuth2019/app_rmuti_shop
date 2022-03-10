@@ -131,6 +131,7 @@ class _CartTab extends State {
     Future.delayed(Duration(seconds: 3));
     setState(() {
       listCartByUserId(token, userId, statusTab);
+      callBackMainPage();
     });
   }
 }

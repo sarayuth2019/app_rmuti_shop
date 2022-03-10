@@ -97,17 +97,20 @@ class _NotifyPage extends State {
                                                 ),
                                               ],
                                             ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    '${snapshot.data[index].status.split(" ")[1]} '),
-                                                Text(
-                                                  ' ${snapshot.data[index].status.split(" ")[2]}',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ],
+                                            SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                      '${snapshot.data[index].status.split(" ")[1]} '),
+                                                  Text(
+                                                    ' ${snapshot.data[index].status.split(" ")[2]}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                             SizedBox(height: 10),
                                             Row(

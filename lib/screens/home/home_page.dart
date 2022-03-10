@@ -257,31 +257,36 @@ class _HomePage extends State {
       print("listItem By Account Success");
       Map _jsonRes = jsonDecode(utf8.decode(res.bodyBytes)) as Map;
       var _itemData = _jsonRes['data'];
-      //print(_itemData);
-      for (var i in _itemData) {
-        Items _items = Items(
-          i['itemId'],
-          i['nameItems'],
-          i['groupItems'],
-          i['price'],
-          i['priceSell'],
-          i['count'],
-          i['size'],
-          i['colors'],
-          i['countRequest'],
-          i['marketId'],
-          i['dateBegin'],
-          i['dateFinal'],
-          i['dealBegin'],
-          i['dealFinal'],
-          i['createDate'],
-        );
-        listItem.insert(0, _items);
+      if(_itemData == null){
+        return _listItem;
       }
+      else{
+        for (var i in _itemData) {
+          Items _items = Items(
+            i['itemId'],
+            i['nameItems'],
+            i['groupItems'],
+            i['price'],
+            i['priceSell'],
+            i['count'],
+            i['size'],
+            i['colors'],
+            i['countRequest'],
+            i['marketId'],
+            i['dateBegin'],
+            i['dateFinal'],
+            i['dealBegin'],
+            i['dealFinal'],
+            i['createDate'],
+          );
+          listItem.insert(0, _items);
+        }
+        print("Products All : ${listItem.length}");
+        _listItem = listItem;
+      }
+      //print(_itemData);
     });
-    print("Products All : ${listItem.length}");
-    _listItem = listItem;
-    return listItem;
+    return _listItem;
   }
 
   Future<void> getImage(_itemId) async {

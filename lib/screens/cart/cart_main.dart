@@ -39,6 +39,7 @@ class _CartMain extends State {
         child: SafeArea(
           child: Scaffold(
             appBar: TabBar(
+              isScrollable: true,
               labelColor: Colors.teal,
               tabs: [
                 Tab(text: 'รอชำระเงิน'),

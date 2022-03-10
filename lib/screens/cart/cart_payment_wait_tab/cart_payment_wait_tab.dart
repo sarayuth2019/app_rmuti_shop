@@ -150,7 +150,7 @@ class _CartPaymentWaitTab extends State {
                                                                     index])));
                                               },
                                               child:
-                                                  Text('เพิ่มสลีปการโอนเงิน')),
+                                                  Text('แก้ไขการชำระเงิน')),
                                         ),
                                       ),
                               ),

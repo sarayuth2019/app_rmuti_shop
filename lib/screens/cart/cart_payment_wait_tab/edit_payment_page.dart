@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:app_rmuti_shop/config/config.dart';
 import 'package:app_rmuti_shop/method/getImagePayment.dart';
+import 'package:app_rmuti_shop/method/list_bankmarket.dart';
 import 'package:app_rmuti_shop/method/method_listPaymentStatus.dart';
 import 'package:app_rmuti_shop/method/saveImagePayment.dart';
 import 'package:clipboard/clipboard.dart';
@@ -31,8 +32,6 @@ class _EditPaymentPage extends State {
   File? _imageFile;
   var imageData;
   List _listImagePayment = [];
-  var _bankNumber = 'xxxxxxxxxx';
-  String _bankName = 'ธนาคารไทยพาณิชย์ SCB';
 
   double _fontSize = 12;
 
@@ -49,181 +48,221 @@ class _EditPaymentPage extends State {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Container(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'ราคาสินค้า',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      ' ${paymentData.amount} ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    Text(
-                      'บาท',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                Text(
-                  'ชำระเงินผ่านทาง',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('${_bankNumber.toString()}'),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                        height: 20,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: (Colors.teal)),
-                            onPressed: () {
-                              FlutterClipboard.copy(_bankNumber).then((value) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text('Copy Bank Number !')));
-                              });
-                            },
-                            child: Text('copy')))
-                  ],
-                ),
-                Text('${_bankName.toString()}',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-          FutureBuilder(
-            future: getImagePay(token, paymentData.payId),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.data == null) {
-                return Center(child: Text('กำลังโหลด...'));
-              } else {
-                if (_imageFile == null) {
-                  _listImagePayment = snapshot.data;
-                } else {
-                  print(
-                      '_listImagePayment.length : ${_listImagePayment.length}');
-                }
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 310,
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            //shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _listImagePayment.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 14.0, left: 14.0),
-                                child: Container(
-                                  height: 300,
-                                  width: 180,
-                                  child: Image.memory(
-                                    base64Decode(_listImagePayment[index]),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        Container(
-                            child: snapshot.data.length ==
-                                    _listImagePayment.length
-                                ? Container(
-                                    decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: Colors.grey[400]!),
-                                    ),
-                                    height: 310,
-                                    width: 180,
-                                    child:
-                                        Center(child: Text('สลีปการโอนเงิน')),
-                                  )
-                                : Container())
-                      ],
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
               child: Column(
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'หมายเหตุ : ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        'ราคาสินค้า',
+                        style: TextStyle(fontSize: 16),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'การชำระเงินของท่านผิดพลาด โปรดตรวจสอบสลีปของท่าน',
-                              style: TextStyle(fontSize: _fontSize),
-                            ),
-                            Text(
-                              'หากจำนวนเงินไม่ตรงกับราคาสินค้า กรุณาโอนเพิ่ม',
-                              style: TextStyle(fontSize: _fontSize),
-                            ),
-                            Text(
-                              'พร้อมเพิ่มหลักฐานการโอนเงินที่ได้โอนเพิ่ม',
-                              style: TextStyle(fontSize: _fontSize),
-                            ),
-                          ],
-                        ),
+                      Text(
+                        ' ${paymentData.amount} ',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                      Text(
+                        'บาท',
+                        style: TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
+                  Text(
+                    'ชำระเงินผ่านทาง',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  FutureBuilder(
+                    future: listBankMarket(token, 1),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshotListBankMarket) {
+                      if (snapshotListBankMarket.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshotListBankMarket.data.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          '${snapshotListBankMarket.data[index].nameBank.toString()}',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold)),
+                                      Text(
+                                          'ชื่อบัญชี : ${snapshotListBankMarket.data[index].bankAccountName.toString()}',
+                                          style: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontWeight: FontWeight.bold)),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'เลขบัญชี : ${snapshotListBankMarket.data[index].bankNumber}',
+                                            style: TextStyle(
+                                                color: Colors.grey[600]),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                              height: 20,
+                                              child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          primary:
+                                                              (Colors.teal)),
+                                                  onPressed: () {
+                                                    FlutterClipboard.copy(
+                                                            snapshotListBankMarket
+                                                                .data[index]
+                                                                .bankNumber
+                                                                .toString())
+                                                        .then((value) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(SnackBar(
+                                                              content: Text(
+                                                                  'Copy Bank Number !')));
+                                                    });
+                                                  },
+                                                  child: Text('copy')))
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      }
+                    },
+                  )
                 ],
               ),
             ),
-          ),
-          Container(
-            child: Column(
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.teal),
-                  child: Text('เพิ่มสลีปการโอนเงิน'),
-                  onPressed: () {
-                    _onGallery();
-                  },
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.teal),
-                  child: Text('บันทึก'),
-                  onPressed: () {
-                    _saveStatusPayment(
-                        paymentData, 'รอดำเนินการ', paymentData.userId);
-                  },
-                )
-              ],
+            FutureBuilder(
+              future: getImagePay(token, paymentData.payId),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.data == null) {
+                  return Center(child: Text('กำลังโหลด...'));
+                } else {
+                  if (_imageFile == null) {
+                    _listImagePayment = snapshot.data;
+                  } else {
+                    print(
+                        '_listImagePayment.length : ${_listImagePayment.length}');
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 310,
+                      width: double.infinity,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _listImagePayment.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 14.0, left: 14.0),
+                                  child: Container(
+                                    height: 300,
+                                    width: 180,
+                                    child: Image.memory(
+                                      base64Decode(_listImagePayment[index]),
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            Container(
+                                child: snapshot.data.length ==
+                                        _listImagePayment.length
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          _onGallery();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.grey[400]!),
+                                          ),
+                                          height: 310,
+                                          width: 180,
+                                          child: Center(
+                                              child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.add),
+                                              Text('เพิ่มสลีปการโอนเงิน'),
+                                            ],
+                                          )),
+                                        ),
+                                      )
+                                    : Container())
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  children: [
+                    Text(
+                      'หมายเหตุ',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'การชำระเงินของท่านผิดพลาด โปรดตรวจสอบสลีปของท่าน',
+                      style: TextStyle(fontSize: _fontSize),
+                    ),
+                    Text(
+                      'หากจำนวนเงินไม่ตรงกับราคาสินค้า กรุณาโอนเพิ่ม',
+                      style: TextStyle(fontSize: _fontSize),
+                    ),
+                    Text(
+                      'พร้อมเพิ่มหลักฐานการโอนเงินที่ได้โอนเพิ่ม',
+                      style: TextStyle(fontSize: _fontSize),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.teal),
+              child: Text('บันทึกการแก้ไข'),
+              onPressed: () {
+                _saveStatusPayment(
+                    paymentData, 'รอดำเนินการ', paymentData.userId);
+              },
+            )
+          ],
+        ),
       ),
     );
   }
