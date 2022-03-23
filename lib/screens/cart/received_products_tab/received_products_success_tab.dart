@@ -102,7 +102,7 @@ class _ReceivedProductSuccessTab extends State {
                                                       userId,
                                                       snapshot
                                                           .data[index].marketId,
-                                                      snapshot.data[index])));
+                                                      snapshot.data[index],_onRefresh)));
                                     },
                                     child: Text('รีวิวร้านค้า',style: TextStyle(fontWeight: FontWeight.bold),),
                                   )

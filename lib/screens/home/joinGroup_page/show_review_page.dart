@@ -93,9 +93,12 @@ class _ShowReviewPage extends State {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "${listReview[index].content}",
-                            style: TextStyle(color: Colors.black),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Text(
+                              "${listReview[index].content}",
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                           Text("${listReview[index].createDate}")
                         ],

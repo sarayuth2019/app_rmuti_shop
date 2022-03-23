@@ -8,27 +8,29 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 
 class ReviewProductPage extends StatefulWidget {
-  ReviewProductPage(this.token, this.userId, this.marketId, this.paymentData);
+  ReviewProductPage(this.token, this.userId, this.marketId, this.paymentData, this.callBack);
 
   final token;
   final int userId;
   final int marketId;
   final paymentData;
+  final callBack;
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _ReviewProductPage(token, userId, marketId, paymentData);
+    return _ReviewProductPage(token, userId, marketId, paymentData,callBack);
   }
 }
 
 class _ReviewProductPage extends State {
-  _ReviewProductPage(this.token, this.userId, this.marketId, this.paymentData);
+  _ReviewProductPage(this.token, this.userId, this.marketId, this.paymentData, this.callBack);
 
   final token;
   final int userId;
   final int marketId;
   final paymentData;
+  final callBack;
 
   final snackBarOnReview = SnackBar(content: Text("กำลังบันทึกการรีวิว..."));
   final snackBarOnReviewSuccess =
@@ -117,7 +119,7 @@ class _ReviewProductPage extends State {
       var statusData = jsonDataRes['status'];
       if (statusData == 1) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarOnReviewSuccess);
-        _saveStatusPayment(paymentData);
+        _saveStatusPayment(paymentData,callBack);
         Navigator.of(context).pop();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(snackBarOnReviewFall);
@@ -125,7 +127,7 @@ class _ReviewProductPage extends State {
     });
   }
 
-  void _saveStatusPayment(Payment _paymentData) async {
+  void _saveStatusPayment(Payment _paymentData,callBack) async {
     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('กำลังดำเนินการ...')));
     String statusPayment = 'รีวิวสำเร็จ';
     String _date =
@@ -153,8 +155,9 @@ class _ReviewProductPage extends State {
       var resData = jsonDecode(utf8.decode(res.bodyBytes));
       var resStatus = resData['status'];
       if (resStatus == 1) {
+        callBack();
         setState(() {
-          //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('รับสินค้า สำเร็จ')));
+
         });
       } else {
         print('save fall !');

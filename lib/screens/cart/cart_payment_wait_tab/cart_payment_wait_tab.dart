@@ -207,7 +207,7 @@ class _CartPaymentWaitTab extends State {
                                     base64Decode(
                                         snapshotImagePayment.data[index]),
                                     fit: BoxFit.fill,
-                                    width: MediaQuery.of(context).size.width*0.7,
+                                    width: MediaQuery.of(context).size.width*0.6,
                                   ),
                                 ),
                               );
