@@ -102,7 +102,7 @@ class _AccountPage extends State {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "User ID : ${snapshot.data.id}",
+                                  "User Id : ${snapshot.data.id}",
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
